@@ -20,7 +20,6 @@ import ts from 'typescript-eslint';
 
 import ember from 'eslint-plugin-ember/recommended';
 
-
 import eslintConfigPrettier from 'eslint-config-prettier';
 import qunit from 'eslint-plugin-qunit';
 import n from 'eslint-plugin-n';
@@ -46,7 +45,6 @@ export default defineConfig([
   ember.configs.base,
   ember.configs.gjs,
   ember.configs.gts,
-  
   eslintConfigPrettier,
   /**
    * https://eslint.org/docs/latest/use/configure/configuration-files#configuring-linter-options

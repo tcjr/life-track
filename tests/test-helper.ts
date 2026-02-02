@@ -1,4 +1,3 @@
-
 import Application from 'life-track/app';
 import config from 'life-track/config/environment';
 import * as QUnit from 'qunit';
