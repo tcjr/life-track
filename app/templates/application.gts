@@ -1,8 +1,24 @@
+import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 
-<template>
-  {{pageTitle "LifeTrack"}}
-  <h2 class="bg-primary text-primary-content">Welcome to Ember</h2>
+interface ApplicationComponentSignature {
+  Args: {
+    model: {
+      notices: Array<{ text: string }>;
+    };
+  };
+}
 
-  {{outlet}}
-</template>
+export default class Application extends Component<ApplicationComponentSignature> {
+  <template>
+    {{pageTitle "LifeTrack"}}
+    <h2 class="bg-primary text-primary-content">Welcome to Ember</h2>
+
+    {{#each @model.notices as |notice|}}
+      NOTICE:
+      {{notice.text}}
+    {{/each}}
+
+    {{outlet}}
+  </template>
+}

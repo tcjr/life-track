@@ -2,8 +2,14 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    // match /{document=**} {
+    //   allow read, write: if false;
+    // }
+
+    // Let anyone read notices, but nobody can write them
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }
