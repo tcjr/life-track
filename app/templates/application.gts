@@ -9,6 +9,7 @@ import type {
   DocumentSnapshot,
   FirestoreDataConverter,
 } from 'firebase/firestore';
+import { FirestoreBasicQuery } from 'life-track/resources/firestore-basic-query';
 import { FirestoreDoc } from 'life-track/resources/firestore-doc';
 
 interface ApplicationComponentSignature {
@@ -41,6 +42,10 @@ const noticeConverter: FirestoreDataConverter<Notice> = {
 
 export default class Application extends Component<ApplicationComponentSignature> {
   @use oneNotice = FirestoreDoc(() => this.inputId, noticeConverter, {
+    verbose: true,
+  });
+
+  @use allNotices = FirestoreBasicQuery('notices', noticeConverter, {
     verbose: true,
   });
 
@@ -87,6 +92,21 @@ export default class Application extends Component<ApplicationComponentSignature
         NO NOTICE
       {{/if}}
     {{/let}}
+
+    <hr />
+    ALL NOTICES (with text field):
+    {{#if this.allNotices}}
+      <ul>
+        {{#each this.allNotices as |notice|}}
+          <li>
+            {{notice.text}}
+            ({{notice.id}})
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      NO NOTICES MATCH QUERY
+    {{/if}}
 
     {{outlet}}
   </template>
