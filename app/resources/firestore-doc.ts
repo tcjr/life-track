@@ -62,7 +62,7 @@ export function FirestoreDoc<AppModelType = Record<string, unknown>>(
 
     const log = (...args: unknown[]) => {
       if (options.verbose) {
-        console.log(`[🔥${documentPath}] `, ...args);
+        console.log(`[🔥Doc ${documentPath}] `, ...args);
       }
     };
     log('in resource() ...');

@@ -1,4 +1,4 @@
-import { hash } from '@ember/helper';
+// import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -9,7 +9,8 @@ import type {
   DocumentSnapshot,
   FirestoreDataConverter,
 } from 'firebase/firestore';
-import { FirestoreBasicQuery } from 'life-track/resources/firestore-basic-query';
+// import { FirestoreBasicQuery } from 'life-track/resources/firestore-basic-query';
+import { FirestoreCollection } from 'life-track/resources/firestore-collection';
 import { FirestoreDoc } from 'life-track/resources/firestore-doc';
 
 interface ApplicationComponentSignature {
@@ -45,7 +46,7 @@ export default class Application extends Component<ApplicationComponentSignature
     verbose: true,
   });
 
-  @use allNotices = FirestoreBasicQuery('notices', noticeConverter, {
+  @use allNotices = FirestoreCollection('notices', noticeConverter, {
     verbose: true,
   });
 
@@ -68,6 +69,7 @@ export default class Application extends Component<ApplicationComponentSignature
 
     <hr />
     <input
+      aria-label="notice id"
       type="text"
       placeholder="notice id"
       {{on "input" this.updateNoticeId}}

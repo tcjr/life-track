@@ -1,12 +1,7 @@
-//
-// WIP, not ready for use yet
-//
 import { cell, resource, resourceFactory } from 'ember-resources';
 import {
   onSnapshot,
   query,
-  // where,
-  // orderBy,
   collection,
   type FirestoreDataConverter,
 } from 'firebase/firestore';
@@ -19,14 +14,36 @@ const DEFAULT_OPTIONS: ResourceOptions = {
   verbose: false,
 };
 
-export function FirestoreBasicQuery<AppModelType = Record<string, unknown>>(
+/**
+ * Resource representing a Firestore collection at the given `collectionName`.
+ * The collection documents (after conversion) are the resource's value as an array.
+ * This is a simplified version of FirestoreBasicQuery that does not suport any query parameters.
+ *
+ * Usage:
+ *  * In component GTS files:
+ *
+ * ```gts
+ *   @use things = FirestoreCollection('things', thingsConverter, { verbose: true });
+ *
+ *  <template>
+ *    <ul>
+ *      {{#each this.things as |thing|}}
+ *        <li>{{thing.id}}</li>
+ *      {{/each}}
+ *    </ul>
+ *  </template>
+ * ```
+ *
+ * @param collectionName The name of the collection
+ * @param converter FirestoreDataConverter to use for converting the documents
+ */
+export function FirestoreCollection<AppModelType = Record<string, unknown>>(
   collectionName: string,
-  // queryConstraint: QueryConstraint,
   converter: FirestoreDataConverter<AppModelType>,
   options: ResourceOptions = DEFAULT_OPTIONS
 ) {
   console.log(
-    'NEW FIRESTORE BASIC QUERY RESOURCE FOR COLLECTION:',
+    'NEW FIRESTORE COLLECTION RESOURCE',
     collectionName,
     converter,
     options
@@ -35,7 +52,7 @@ export function FirestoreBasicQuery<AppModelType = Record<string, unknown>>(
   return resource(({ on, owner }) => {
     const log = (...args: unknown[]) => {
       if (options.verbose) {
-        console.log(`[🔥Query ${collectionName}] `, ...args);
+        console.log(`[🔥Collection ${collectionName}] `, ...args);
       }
     };
 
@@ -47,19 +64,17 @@ export function FirestoreBasicQuery<AppModelType = Record<string, unknown>>(
     );
 
     log('building query');
-    const q = query(
-      collectionRef
-      // Use some nonsense until we have real constraints
-      // where('text', '!=', null)
-    );
+    const q = query(collectionRef);
 
     // This is where the actual data is stored.
     const data = cell<AppModelType[]>([]);
 
-    log('setting up onSnapshot listener for query');
+    log('setting up onSnapshot listener for collection');
     const unsub = onSnapshot(q, (querySnapshot) => {
       const results: AppModelType[] = [];
-      log(`received query snapshot with ${querySnapshot.size} documents`);
+      log(
+        `received collection query snapshot with ${querySnapshot.size} documents`
+      );
       querySnapshot.forEach((docSnap) => {
         const docData = docSnap.data();
         results.push(docData);
@@ -69,7 +84,7 @@ export function FirestoreBasicQuery<AppModelType = Record<string, unknown>>(
     });
 
     on.cleanup(() => {
-      log('Cleaning up Firestore basic query listener');
+      log('Cleaning up Firestore collection listener');
       unsub();
     });
 
@@ -80,4 +95,4 @@ export function FirestoreBasicQuery<AppModelType = Record<string, unknown>>(
 }
 
 // You have to do this registration so the resource can be used in templates.
-resourceFactory(FirestoreBasicQuery);
+resourceFactory(FirestoreCollection);
