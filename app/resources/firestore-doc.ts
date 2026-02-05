@@ -1,4 +1,4 @@
-import { cell, resource } from 'ember-resources';
+import { cell, resource, resourceFactory } from 'ember-resources';
 import {
   onSnapshot,
   doc,
@@ -56,6 +56,7 @@ export function FirestoreDoc<AppModelType = Record<string, unknown>>(
   converter: FirestoreDataConverter<AppModelType>,
   options: ResourceOptions = DEFAULT_OPTIONS
 ) {
+  console.log('NEW FIRESTORE DOC RESOURCE FOR PATH:', path, converter, options);
   return resource(({ on, owner }) => {
     const documentPath = typeof path === 'function' ? path() : path;
 
@@ -105,3 +106,6 @@ export function FirestoreDoc<AppModelType = Record<string, unknown>>(
     return () => data.current;
   });
 }
+
+// You have to do this registration so the resource can be used in templates.
+resourceFactory(FirestoreDoc);

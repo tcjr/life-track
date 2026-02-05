@@ -1,3 +1,4 @@
+import { hash } from '@ember/helper';
 import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -74,6 +75,18 @@ export default class Application extends Component<ApplicationComponentSignature
     {{else}}
       NO NOTICE
     {{/if}}
+
+    <hr />
+
+    {{#let (FirestoreDoc "notices/friend" noticeConverter) as |notice|}}
+      SOMETHING:
+      {{#if notice}}
+        {{notice.text}}
+        ({{notice.id}})
+      {{else}}
+        NO NOTICE
+      {{/if}}
+    {{/let}}
 
     {{outlet}}
   </template>
