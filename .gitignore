@@ -13,6 +13,8 @@
 /npm-debug.log*
 /testem.log
 /yarn-error.log
+/firestore-debug.log
+/firebase-debug.log
 
 # ember-try
 /.node_modules.ember-try/
@@ -23,3 +25,6 @@
 
 # broccoli-debug
 /DEBUG/
+
+# Firebase emulators data
+/firebase-dev-data/
