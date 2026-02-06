@@ -107,12 +107,6 @@ importers:
       ember-cli-babel:
         specifier: ^8.2.0
         version: 8.2.0(@babel/core@7.29.0)
-      ember-cli-deprecation-workflow:
-        specifier: ^3.4.0
-        version: 3.4.0(ember-source@6.10.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
-      ember-load-initializers:
-        specifier: ^3.0.1
-        version: 3.0.1(ember-source@6.10.0(@glimmer/component@2.0.0)(rsvp@4.8.5))
       ember-modifier:
         specifier: ^4.2.2
         version: 4.2.2(@babel/core@7.29.0)
@@ -2924,12 +2918,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.12.0
 
-  ember-cli-deprecation-workflow@3.4.0:
-    resolution: {integrity: sha512-Ksrmib4mjD4xa0dqFgxJLBwkSp9EVYH6jSqe2NpODlBKEAZhsVzQj5wKPnC1dXfK3Erq/r1Fh3q4g46FZiCUiw==}
-    engines: {node: '>= 18'}
-    peerDependencies:
-      ember-source: '>= 3.28.0'
-
   ember-cli-get-component-path-option@1.0.0:
     resolution: {integrity: sha512-k47TDwcJ2zPideBCZE8sCiShSxQSpebY2BHcX2DdipMmBox5gsfyVrbKJWIHeSTTKyEUgmBIvQkqTOozEziCZA==}
 
@@ -2974,12 +2962,6 @@ packages:
     peerDependenciesMeta:
       '@typescript-eslint/parser':
         optional: true
-
-  ember-load-initializers@3.0.1:
-    resolution: {integrity: sha512-qV3vxJKw5+7TVDdtdLPy8PhVsh58MlK8jwzqh5xeOwJPNP7o0+BlhvwoIlLYTPzGaHdfjEIFCgVSyMRGd74E1g==}
-    engines: {node: '>= 18.*'}
-    peerDependencies:
-      ember-source: '>= 5'
 
   ember-modifier@4.2.2:
     resolution: {integrity: sha512-pPYBAGyczX0hedGWQFQOEiL9s45KS9efKxJxUQkMLjQyh+1Uef1mcmAGsdw2KmvNupITkE/nXxmVO1kZ9tt3ag==}
@@ -9266,14 +9248,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-cli-deprecation-workflow@3.4.0(ember-source@6.10.0(@glimmer/component@2.0.0)(rsvp@4.8.5)):
-    dependencies:
-      '@babel/core': 7.29.0
-      ember-cli-babel: 8.2.0(@babel/core@7.29.0)
-      ember-source: 6.10.0(@glimmer/component@2.0.0)(rsvp@4.8.5)
-    transitivePeerDependencies:
-      - supports-color
-
   ember-cli-get-component-path-option@1.0.0: {}
 
   ember-cli-is-package-missing@1.0.0: {}
@@ -9481,10 +9455,6 @@ snapshots:
     transitivePeerDependencies:
       - eslint
       - typescript
-
-  ember-load-initializers@3.0.1(ember-source@6.10.0(@glimmer/component@2.0.0)(rsvp@4.8.5)):
-    dependencies:
-      ember-source: 6.10.0(@glimmer/component@2.0.0)(rsvp@4.8.5)
 
   ember-modifier@4.2.2(@babel/core@7.29.0):
     dependencies:
