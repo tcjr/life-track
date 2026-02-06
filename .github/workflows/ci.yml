@@ -49,21 +49,5 @@ jobs:
           cache: pnpm
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm build
-
-      - name: Show dist files
-        run: |
-          echo "dist contents:"
-          ls -la dist || true
-
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          retention-days: 7
-
       - name: Run Tests
         run: pnpm test
