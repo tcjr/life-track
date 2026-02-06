@@ -50,8 +50,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Tests
-        run: pnpm test
+      - name: Build for tests
+        run: pnpm test-build
 
       - name: Show dist files
         run: |
@@ -64,3 +64,6 @@ jobs:
           name: dist
           path: dist
           retention-days: 7
+      
+      - name: Run actual tests
+        run: pnpm test-test
