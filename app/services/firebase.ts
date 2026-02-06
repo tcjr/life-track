@@ -10,6 +10,9 @@ import {
   connectAuthEmulator,
   type User,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -76,6 +79,28 @@ export default class FirebaseService extends Service {
         this.signedInUser = null;
       }
     });
+  }
+
+  async loginWithGooglePopup() {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(this.auth, provider);
+      console.log('[service:firebase] Google login successful');
+    } catch (error) {
+      console.error('[service:firebase] Google login failed', error);
+      // You might want to throw the error or handle it more gracefully in the UI
+      throw error;
+    }
+  }
+
+  async logout() {
+    try {
+      await signOut(this.auth);
+      console.log('[service:firebase] User signed out');
+    } catch (error) {
+      console.error('[service:firebase] Logout failed', error);
+      throw error;
+    }
   }
 
   @tracked signedInUser: User | null = null;

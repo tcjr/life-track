@@ -3,6 +3,9 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import type FirebaseService from 'life-track/services/firebase';
+import type RouterService from '@ember/routing/router-service';
+import { action } from '@ember/object';
+import { on } from '@ember/modifier';
 
 interface ApplicationComponentSignature {
   Args: {
@@ -12,6 +15,18 @@ interface ApplicationComponentSignature {
 
 export default class Application extends Component<ApplicationComponentSignature> {
   @service declare firebase: FirebaseService;
+  @service declare router: RouterService; // Inject router service
+
+  @action
+  async logout() {
+    try {
+      await this.firebase.logout();
+      this.router.transitionTo('login'); // Redirect to login page after logout
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // TODO: Display a user-friendly error message
+    }
+  }
 
   <template>
     {{pageTitle "LifeTrack"}}
@@ -23,15 +38,30 @@ export default class Application extends Component<ApplicationComponentSignature
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
-          <li>
-            <LinkTo @route="login">Login</LinkTo>
-          </li>
-          <li>
-            <LinkTo @route="authenticated.settings">Settings</LinkTo>
-          </li>
-          <li>
-            <LinkTo @route="authenticated.notices">Notices</LinkTo>
-          </li>
+          {{#if this.firebase.signedInUser}}
+            <li>
+              <span>{{this.firebase.signedInUser.email}}</span>
+            </li>
+            <li>
+              <LinkTo @route="authenticated.settings">Settings</LinkTo>
+            </li>
+            <li>
+              <LinkTo @route="authenticated.notices">Notices</LinkTo>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                {{on "click" this.logout}}
+              >
+                Logout
+              </button>
+            </li>
+          {{else}}
+            <li>
+              <LinkTo @route="login">Login</LinkTo>
+            </li>
+          {{/if}}
         </ul>
       </div>
     </div>
@@ -39,7 +69,11 @@ export default class Application extends Component<ApplicationComponentSignature
     {{outlet}}
     <div class="mt-20">
       <hr />
-      <pre>Signed-in user: {{JSON.stringify this.firebase.signedInUser}}</pre>
+      <pre>Signed-in user: {{JSON.stringify
+          this.firebase.signedInUser
+          null
+          2
+        }}</pre>
 
     </div>
   </template>

@@ -12,16 +12,13 @@ export default class AuthenticatedRoute extends Route {
   @service declare router: RouterService;
 
   async beforeModel() {
-    const auth = this.firebase.auth;
+    await this.firebase.auth.authStateReady();
 
-    // ensures that the auth state is settled, that is either logged-in or not
-    await auth.authStateReady();
-
-    if (!auth.currentUser) {
+    if (!this.firebase.signedInUser) {
       console.log('Not logged-in, redirecting to login route');
       this.router.transitionTo('login');
     } else {
-      console.log('Logged-in, current user is ', auth.currentUser);
+      console.log('Logged-in, current user is ', this.firebase.signedInUser);
     }
   }
 }
