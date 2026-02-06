@@ -1,14 +1,47 @@
 rules_version = '2';
 
 service cloud.firestore {
+
+  // Utilities
+  // ----------------------------------------
+
+  // Functions cause deploy-time warnings when they are unused, so commenting out
+  // until we have auth
+  
+  // function isSignedIn() {
+  //   return request.auth.uid != null;
+  // }
+
   match /databases/{database}/documents {
-    // match /{document=**} {
-    //   allow read, write: if false;
+    // A user is an admin if they have a document in the admin-users collection
+    // Functions cause deploy-time warnings when they are unused, so commenting out
+    // until we have auth
+    // function isAdmin() {
+    //   return exists(/databases/$(database)/documents/admin-users/$(request.auth.uid));
     // }
 
-    // Let anyone read notices, but nobody can write them
+    // Users
+    // ====================================================
+
+    match /users/{userId} {
+      allow write: if request.auth.uid == userId;
+      allow read: if request.auth.uid == userId;
+    }
+
+    // Admin users
+    // ====================================================
+
+    // Used in security rules, no access to clients
+    match /admin-users/{userId} {
+      allow write: if false;
+      allow read: if false;
+    }
+
+    // Notices
+    // ====================================================
+
     match /notices/{noticeId} {
-      allow read: if true;
+      allow read: if true; // when we have auth, make this isSignedIn();
       allow write: if false;
     }
   }
