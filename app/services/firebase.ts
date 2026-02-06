@@ -4,7 +4,13 @@ import {
   type FirebaseApp,
   //type FirebaseOptions,
 } from 'firebase/app';
-import { getAuth, type Auth, connectAuthEmulator } from 'firebase/auth';
+import {
+  getAuth,
+  type Auth,
+  connectAuthEmulator,
+  type User,
+  onAuthStateChanged,
+} from 'firebase/auth';
 import {
   getFirestore,
   type Firestore,
@@ -13,6 +19,7 @@ import {
 
 import { firebaseConfig } from '../config/firebase';
 import type Owner from '@ember/owner';
+import { tracked } from '@glimmer/tracking';
 
 export default class FirebaseService extends Service {
   app: FirebaseApp;
@@ -54,7 +61,24 @@ export default class FirebaseService extends Service {
         '[service:firebase]🔥 Using Firestore production (no emulation)'
       );
     }
+
+    // listen for changes to the user's sign-in state
+    console.log('[service:firebase]🔥 Listening for login changes');
+
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // User is signed in.
+        console.log('[service:firebase]🔥 User is signed in', user);
+        this.signedInUser = user;
+      } else {
+        // User is signed out.
+        console.log('[service:firebase]🔥 User is signed out');
+        this.signedInUser = null;
+      }
+    });
   }
+
+  @tracked signedInUser: User | null = null;
 }
 
 declare module '@ember/service' {
