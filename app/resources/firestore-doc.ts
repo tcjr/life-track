@@ -56,7 +56,15 @@ export function FirestoreDoc<AppModelType = Record<string, unknown>>(
   converter: FirestoreDataConverter<AppModelType>,
   options: ResourceOptions = DEFAULT_OPTIONS
 ) {
-  console.log('NEW FIRESTORE DOC RESOURCE FOR PATH:', path, converter, options);
+  if (options.verbose) {
+    console.log(
+      'NEW FIRESTORE DOC RESOURCE FOR PATH:',
+      path,
+      converter,
+      options
+    );
+  }
+
   return resource(({ on, owner }) => {
     const documentPath = typeof path === 'function' ? path() : path;
 

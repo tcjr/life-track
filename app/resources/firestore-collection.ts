@@ -17,7 +17,6 @@ const DEFAULT_OPTIONS: ResourceOptions = {
 /**
  * Resource representing a Firestore collection at the given `collectionName`.
  * The collection documents (after conversion) are the resource's value as an array.
- * This is a simplified version of FirestoreBasicQuery that does not suport any query parameters.
  *
  * Usage:
  *  * In component GTS files:
@@ -42,13 +41,14 @@ export function FirestoreCollection<AppModelType = Record<string, unknown>>(
   converter: FirestoreDataConverter<AppModelType>,
   options: ResourceOptions = DEFAULT_OPTIONS
 ) {
-  console.log(
-    'NEW FIRESTORE COLLECTION RESOURCE',
-    collectionName,
-    converter,
-    options
-  );
-
+  if (options.verbose) {
+    console.log(
+      'NEW FIRESTORE COLLECTION RESOURCE',
+      collectionName,
+      converter,
+      options
+    );
+  }
   return resource(({ on, owner }) => {
     const log = (...args: unknown[]) => {
       if (options.verbose) {
