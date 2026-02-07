@@ -2,25 +2,25 @@
 
 ## Project Overview
 
-`life-track` is an Ember.js application designed to track various aspects of life, with a specific focus on "notices". It utilizes Vite for its build process and leverages Firebase for backend services, including Authentication and Firestore. The project is built with TypeScript, manages dependencies with pnpm, and incorporates Tailwind CSS with DaisyUI for a modern and responsive user interface.
+`life-track` is an Ember.js application designed to track various aspects of life. It utilizes Vite for its build process and leverages Firebase for backend services, including Authentication and Firestore. The project is built with TypeScript, manages dependencies with pnpm, and incorporates Tailwind CSS with DaisyUI for a modern and responsive user interface.
 
 ## Technologies Used
 
-*   **Framework:** Ember.js
-*   **Language:** TypeScript
-*   **Package Manager:** pnpm
-*   **Build Tool:** Vite
-*   **Styling:** Tailwind CSS, DaisyUI
-*   **Backend/Database:** Firebase (Authentication, Firestore)
+- **Framework:** Ember.js
+- **Language:** TypeScript
+- **Package Manager:** pnpm
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS, DaisyUI
+- **Backend/Database:** Firebase (Authentication, Firestore)
 
 ## Building and Running
 
 ### Prerequisites
 
-*   Git
-*   Node.js (>= 20)
-*   pnpm
-*   Google Chrome (recommended for development)
+- Git
+- Node.js (>= 20)
+- pnpm
+- Google Chrome (recommended for development)
 
 ### Installation
 
@@ -104,7 +104,7 @@ pnpm deploy-rules
 
 ## Development Conventions
 
-*   **Code Style:** Enforced with ESLint and Prettier.
-*   **Templating:** Ember Template Lint for `.hbs` and `.gts` files.
-*   **Type Checking:** TypeScript with `@glint/ember-tsc`.
-*   **Testing:** QUnit and Ember Test Helpers for unit and integration tests. Note: Integration tests for components interacting with Firestore may require specific setup for test data (as indicated by `TODO`s in test files).
+- **Code Style:** Enforced with ESLint and Prettier.
+- **Templating:** Ember Template Lint for `.gts` files.
+- **Type Checking:** TypeScript with `@glint/ember-tsc`.
+- **Testing:** QUnit and Ember Test Helpers for unit and integration tests. Note: Integration tests for components interacting with Firestore may require specific setup for test data (as indicated by `TODO`s in test files).
