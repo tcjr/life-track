@@ -8,9 +8,9 @@ service cloud.firestore {
   // Functions cause deploy-time warnings when they are unused, so commenting out
   // until we have auth
   
-  // function isSignedIn() {
-  //   return request.auth.uid != null;
-  // }
+  function isSignedIn() {
+    return request.auth.uid != null;
+  }
 
   match /databases/{database}/documents {
     // A user is an admin if they have a document in the admin-users collection
@@ -20,10 +20,10 @@ service cloud.firestore {
     //   return exists(/databases/$(database)/documents/admin-users/$(request.auth.uid));
     // }
 
-    // Users
+    // App Users
     // ====================================================
 
-    match /users/{userId} {
+    match /app-users/{userId} {
       allow write: if request.auth.uid == userId;
       allow read: if request.auth.uid == userId;
     }
@@ -41,7 +41,7 @@ service cloud.firestore {
     // ====================================================
 
     match /notices/{noticeId} {
-      allow read: if true; // when we have auth, make this isSignedIn();
+      allow read: if isSignedIn();
       allow write: if false;
     }
   }

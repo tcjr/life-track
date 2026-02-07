@@ -34,7 +34,7 @@ export default class Application extends Component<ApplicationComponentSignature
 
     <div class="navbar bg-base-100 shadow-sm">
       <div class="flex-1">
-        <LinkTo @route="index" class="btn btn-ghost text-xl">LT</LinkTo>
+        <LinkTo @route="application" class="btn btn-ghost text-xl">LT</LinkTo>
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
@@ -67,14 +67,13 @@ export default class Application extends Component<ApplicationComponentSignature
     </div>
 
     {{outlet}}
-    <div class="mt-20">
-      <hr />
+    <div class="mt-96">
+      {{!-- <hr />
       <pre>Signed-in user: {{JSON.stringify
           this.firebase.signedInUser
           null
           2
-        }}</pre>
-
+        }}</pre> --}}
     </div>
   </template>
 }

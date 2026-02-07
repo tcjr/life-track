@@ -29,6 +29,11 @@ export default class FirebaseService extends Service {
   auth: Auth;
   db: Firestore;
 
+  /**
+   * This is the Firebase auth User.
+   */
+  @tracked signedInUser: User | null = null;
+
   constructor(owner: Owner) {
     super(owner);
 
@@ -66,16 +71,16 @@ export default class FirebaseService extends Service {
     }
 
     // listen for changes to the user's sign-in state
-    console.log('[service:firebase]🔥 Listening for login changes');
+    console.log('[service:firebase] Listening for login changes');
 
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
         // User is signed in.
-        console.log('[service:firebase]🔥 User is signed in', user);
+        console.log('[service:firebase] User is signed in', user);
         this.signedInUser = user;
       } else {
         // User is signed out.
-        console.log('[service:firebase]🔥 User is signed out');
+        console.log('[service:firebase] User is signed out');
         this.signedInUser = null;
       }
     });
@@ -102,8 +107,6 @@ export default class FirebaseService extends Service {
       throw error;
     }
   }
-
-  @tracked signedInUser: User | null = null;
 }
 
 declare module '@ember/service' {
