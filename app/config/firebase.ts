@@ -1,8 +1,10 @@
+// Nothing in this file is secret; this is all public
 export const firebaseConfig = {
-  apiKey: 'AIzaSyDckErcDM7eJlej40C7ntIHHQ3-04wqD_4',
-  authDomain: 'life-track-77259.firebaseapp.com',
-  projectId: 'life-track-77259',
-  storageBucket: 'life-track-77259.firebasestorage.app',
-  messagingSenderId: '870691745458',
-  appId: '1:870691745458:web:0ee58de0eb24cc33eae3ab',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string,
+  messagingSenderId: import.meta.env
+    .VITE_FIREBASE_MESSAGING_SENDER_ID as string,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID as string,
 };
