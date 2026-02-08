@@ -5,7 +5,7 @@ import { AppUserSchema } from './app-user';
 import { Timestamp } from 'firebase/firestore';
 
 const schema = {
-  appUsers: {
+  'app-users': {
     zod: AppUserSchema,
   },
   notices: {
