@@ -1,7 +1,5 @@
 import Component from '@glimmer/component';
 import { use } from 'ember-resources';
-import { noticeConverter } from 'life-track/models/notice';
-import { FirestoreCollection } from 'life-track/resources/firestore-collection';
 import { pageTitle } from 'ember-page-title';
 import { FirestoreQuery } from 'life-track/resources/firestore-query';
 import { Timestamp } from 'firebase/firestore';
@@ -15,10 +13,6 @@ export interface NoticesSignature {
 }
 
 export default class Notices extends Component<NoticesSignature> {
-  @use allNotices = FirestoreCollection('notices', noticeConverter, {
-    verbose: true,
-  });
-
   // Only show notices where the current date is between startAt and endAt.
   @use currentNotices = FirestoreQuery('notices', {
     name: 'current notices',

@@ -11,19 +11,24 @@ import { type DocumentOutput, type QuerySpecification } from 'zod-firebase';
 type CollectionDocumentOutput<K extends keyof typeof collections> =
   DocumentOutput<(typeof collections)[K]['zod']>;
 
+// Preserve schema-aware typing by using the parameter type of the
+// collection's `prepare` method. This ties this type to the specific
+// collection `K` so callers get proper autocompletion and checks.
+type CollectQuerySpec<K extends keyof typeof collections> = Parameters<
+  (typeof collections)[K]['prepare']
+>[0] & {
+  verbose?: boolean;
+};
+
 // SchemaType is something like <typeof NoticeSchema>
 export function FirestoreQuery<K extends keyof typeof collections>(
   collectionName: K,
-  // Preserve schema-aware typing by using the parameter type of the
-  // collection's `prepare` method. This ties `querySpec` to the specific
-  // collection `K` so callers get proper autocompletion and checks.
-  querySpec: Parameters<(typeof collections)[K]['prepare']>[0] & {
-    verbose?: boolean;
-  }
+  querySpec: CollectQuerySpec<K>
 ) {
   type DocOut = CollectionDocumentOutput<K>;
 
   const collectionToQuery = collections[collectionName];
+  // NOTE: I'm not sure why I need to cast here
   const queryName = (querySpec as QuerySpecification).name;
   const isVerbose = Boolean(querySpec.verbose);
 
@@ -37,7 +42,6 @@ export function FirestoreQuery<K extends keyof typeof collections>(
   }
 
   return resource(({ on }) => {
-    // const queryName = (querySpec as any)?.name ?? collectionName;
     const log = (...args: unknown[]) => {
       if (isVerbose) {
         console.log(`[Query ${queryName}] `, ...args);
