@@ -3,6 +3,8 @@ import { use } from 'ember-resources';
 import { noticeConverter } from 'life-track/models/notice';
 import { FirestoreCollection } from 'life-track/resources/firestore-collection';
 import { pageTitle } from 'ember-page-title';
+import { FirestoreQuery } from 'life-track/resources/firestore-query';
+import { Timestamp } from 'firebase/firestore';
 
 const asLocal = (date: Date) => {
   return date.toLocaleDateString();
@@ -17,17 +19,17 @@ export default class Notices extends Component<NoticesSignature> {
     verbose: true,
   });
 
-  // Since we don't have a proper collection query support yet, we're going to do
-  // client-side filtering of the notices. We only want to show notices where
-  // the current date is between the startAt and endAt dates.
-
-  get currentNotices() {
-    if (!this.allNotices) {
-      return [];
-    }
-    // TODO: filter these
-    return this.allNotices;
-  }
+  // Only show notices where the current date is between startAt and endAt.
+  @use currentNotices = FirestoreQuery('notices', {
+    name: 'current notices',
+    limit: 10,
+    orderBy: [['startAt', 'asc']],
+    where: [
+      ['startAt', '<', Timestamp.fromDate(new Date())],
+      ['endAt', '>', Timestamp.fromDate(new Date())],
+    ],
+    verbose: true,
+  });
 
   <template>
     {{pageTitle "Notices"}}
