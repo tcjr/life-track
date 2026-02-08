@@ -13,16 +13,26 @@ export default class Notices extends Component<NoticesSignature> {
     verbose: true,
   });
 
+  // Since we don't have a proper collection query support yet, we're going to do
+  // client-side filtering of the notices. We only want to show notices where
+  // the current date is between the startAt and endAt dates.
+
+  get currentNotices() {
+    if (!this.allNotices) {
+      return [];
+    }
+    // TODO: filter these
+    return this.allNotices;
+  }
+
   <template>
     {{pageTitle "Notices"}}
     <div ...attributes>
-      {{#if this.allNotices}}
-        {{#each this.allNotices as |notice|}}
-          <div role="alert" class="alert">
-            <span>{{notice.text}}</span>
-          </div>
-        {{/each}}
-      {{/if}}
+      {{#each this.currentNotices as |notice|}}
+        <div role="alert" class="alert">
+          <span>{{notice.text}}</span>
+        </div>
+      {{/each}}
     </div>
   </template>
 }
