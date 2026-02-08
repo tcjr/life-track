@@ -38,6 +38,7 @@ export function zodFirestoreConverter<
             cvt[key] = data[key].toDate();
           } else {
             // just copy non-Timestamp values
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             cvt[key] = data[key];
           }
           return cvt;
