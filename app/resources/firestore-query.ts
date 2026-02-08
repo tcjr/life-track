@@ -4,7 +4,7 @@ import {
   onSnapshot,
   QuerySnapshot,
 } from 'firebase/firestore';
-import { collections } from 'life-track/models/zod-collections';
+import { collections } from 'life-track/models/collections';
 import { type DocumentOutput, type QuerySpecification } from 'zod-firebase';
 
 // Use a mapped type to extract the document output type for each collection

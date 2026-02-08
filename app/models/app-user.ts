@@ -1,11 +1,10 @@
 import { z } from 'zod';
-import { zodFirestoreConverter } from './utils';
+import { type DocumentInput, type DocumentOutput } from 'zod-firebase';
 
 export const AppUserSchema = z.object({
   isSetup: z.boolean(),
   theme: z.enum(['light', 'dark', 'system']),
 });
 
-export type AppUser = z.infer<typeof AppUserSchema> & { id: string };
-
-export const appUserConverter = zodFirestoreConverter(AppUserSchema);
+export type AppUser = DocumentOutput<typeof AppUserSchema>;
+export type AppUserInput = DocumentInput<typeof AppUserSchema>;

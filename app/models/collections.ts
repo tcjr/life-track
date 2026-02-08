@@ -1,8 +1,4 @@
-import {
-  collectionsBuilder,
-  type DocumentInput,
-  type DocumentOutput,
-} from 'zod-firebase';
+import { collectionsBuilder } from 'zod-firebase';
 
 import { NoticeSchema } from './notice';
 import { AppUserSchema } from './app-user';
@@ -16,16 +12,6 @@ const schema = {
     zod: NoticeSchema,
   },
 } as const;
-
-// export type AppUserOutput = SchemaDocumentOutput<typeof schema.appUsers>;
-// export type NoticeOutput = SchemaDocumentOutput<typeof schema.notices>;
-
-// TODO: remove "Output" from these type names
-export type AppUserOutput = DocumentOutput<typeof AppUserSchema>;
-export type NoticeOutput = DocumentOutput<typeof NoticeSchema>;
-
-export type AppUserInput = DocumentInput<typeof AppUserSchema>;
-export type NoticeInput = DocumentInput<typeof NoticeSchema>;
 
 // build type-safe collections
 export const collections = collectionsBuilder(schema, {
