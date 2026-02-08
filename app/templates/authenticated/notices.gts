@@ -4,6 +4,10 @@ import { noticeConverter } from 'life-track/models/notice';
 import { FirestoreCollection } from 'life-track/resources/firestore-collection';
 import { pageTitle } from 'ember-page-title';
 
+const asLocal = (date: Date) => {
+  return date.toLocaleDateString();
+};
+
 export interface NoticesSignature {
   Element: HTMLDivElement;
 }
@@ -29,9 +33,17 @@ export default class Notices extends Component<NoticesSignature> {
     {{pageTitle "Notices"}}
     <div ...attributes>
       {{#each this.currentNotices as |notice|}}
-        <div role="alert" class="alert">
-          <span>{{notice.text}}</span>
+
+        <div role="alert" class="alert alert-vertical sm:alert-horizontal">
+          <div>
+            <h3 class="font-bold">{{notice.text}}</h3>
+            <div class="text-xs">Valid from
+              {{asLocal notice.startAt}}
+              through
+              {{asLocal notice.endAt}}</div>
+          </div>
         </div>
+
       {{/each}}
     </div>
   </template>
