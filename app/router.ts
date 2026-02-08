@@ -7,5 +7,12 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  // Add route declarations here
+  this.route('login');
+  this.route('setup-profile');
+
+  // The authenticated route is a parent route that requires authentication.
+  this.route('authenticated', { path: '' }, function () {
+    this.route('settings');
+    this.route('notices');
+  });
 });
