@@ -1,8 +1,9 @@
-import type {
-  DocumentData,
-  QueryDocumentSnapshot,
-  FirestoreDataConverter,
-  SnapshotOptions,
+import {
+  type DocumentData,
+  type QueryDocumentSnapshot,
+  type FirestoreDataConverter,
+  type SnapshotOptions,
+  Timestamp,
 } from 'firebase/firestore';
 import { z } from 'zod';
 
@@ -17,19 +18,41 @@ export function zodFirestoreConverter<
     toFirestore(document: T): DocumentData {
       // Validate before writing
       const validated = schema.parse(document);
+
+      // TODO: Dates probably need to be converted to Timestamp
+
       return validated as DocumentData;
     },
 
     fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
       const data = snapshot.data(options);
       console.log('Raw data from Firestore:', data);
+
+      // Go through the data (top-level only) and convert any Timestamp values
+      // to JavaScript Date values.
+      // TODO: Check efficiency of this; maybe look for a way that is more efficient.
+      const convertedData = Object.keys(data).reduce<DocumentData>(
+        (cvt, key) => {
+          if (data[key] instanceof Timestamp) {
+            // replace Timestamp with Date
+            cvt[key] = data[key].toDate();
+          } else {
+            // just copy non-Timestamp values
+            cvt[key] = data[key];
+          }
+          return cvt;
+        },
+        {}
+      );
+
+      console.log('converted, before validation:', convertedData);
+
       // Validate and add useful properties (e.g., id)
-      const validated = schema.parse(data);
+      const validated = schema.parse(convertedData);
       const appModelData = Object.defineProperties(validated, {
         id: { value: snapshot.id },
-        //_ref: { value: () => snapshot.ref },
       });
-      console.log('Converted data:', appModelData);
+      console.log('Converted & validated data:', appModelData);
       return appModelData as T;
     },
   };
