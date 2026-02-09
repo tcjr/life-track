@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import FirebaseService from 'life-track/services/firebase';
+import FirebaseService from '#services/firebase';
 import { on } from '@ember/modifier';
 import type RouterService from '@ember/routing/router-service';
 

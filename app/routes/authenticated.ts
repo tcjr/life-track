@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import type FirebaseService from 'life-track/services/firebase';
+import type FirebaseService from '#services/firebase';
 import type RouterService from '@ember/routing/router-service';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 

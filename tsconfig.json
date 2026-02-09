@@ -4,8 +4,12 @@
   "compilerOptions": {
     "allowJs": true,
     "paths": {
-      "life-track/tests/*": ["./tests/*"],
-      "life-track/*": ["./app/*"],
+      "#app/*": ["./app/*"],
+      "#components/*": ["./app/components/*"],
+      "#models/*": ["./app/models/*"],
+      "#resources/*": ["./app/resources/*"],
+      "#services/*": ["./app/services/*"],
+      "#tests/*": ["./tests/*"],
       "*": ["./types/*"]
     },
     "types": [

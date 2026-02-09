@@ -6,6 +6,15 @@
   "repository": "",
   "license": "MIT",
   "author": "",
+  "type": "module",
+  "imports": {
+    "#app/*": "./app/*",
+    "#components/*": "./app/components/*",
+    "#models/*": "./app/models/*",
+    "#resources/*": "./app/resources/*",
+    "#services/*": "./app/services/*",
+    "#tests/*": "./tests/*"
+  },
   "exports": {
     "./tests/*": "./tests/*",
     "./*": "./app/*"
