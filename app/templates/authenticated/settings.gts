@@ -27,6 +27,9 @@ export default class Settings extends Component<SettingsSignature> {
   );
 
   changeTheme = async (evt: Event) => {
+    if (!this.appUserDoc) {
+      return;
+    }
     const newTheme = (evt.currentTarget as HTMLInputElement).value as Theme;
     const id = this.appUserDoc._id;
     await collections['app-users'].update(id, { theme: newTheme });
