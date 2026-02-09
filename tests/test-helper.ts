@@ -1,5 +1,5 @@
-import Application from 'life-track/app';
-import config, { enterTestMode } from 'life-track/config/environment';
+import Application from '#app/app';
+import config, { enterTestMode } from '#app/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';

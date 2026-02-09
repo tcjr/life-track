@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'life-track/tests/helpers';
+import { setupRenderingTest } from '#tests/helpers';
 import { render } from '@ember/test-helpers';
 
 module('Integration | Component | basic', function (hooks) {

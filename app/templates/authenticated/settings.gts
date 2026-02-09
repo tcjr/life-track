@@ -3,9 +3,9 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import { use } from 'ember-resources';
-import { collections } from 'life-track/models/collections';
-import { FirestoreDocument } from 'life-track/resources/firestore-document';
-import type FirebaseService from 'life-track/services/firebase';
+import { collections } from '#models/collections';
+import { FirestoreDocument } from '#resources/firestore-document';
+import type FirebaseService from '#services/firebase';
 
 function eq<T>(a: T, b: T) {
   return a === b;

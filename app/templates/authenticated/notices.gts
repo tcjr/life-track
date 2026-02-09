@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { use } from 'ember-resources';
 import { pageTitle } from 'ember-page-title';
-import { FirestoreQuery } from 'life-track/resources/firestore-query';
+import { FirestoreQuery } from '#resources/firestore-query';
 import { Timestamp } from 'firebase/firestore';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';

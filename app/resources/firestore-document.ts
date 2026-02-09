@@ -1,6 +1,6 @@
 import { cell, resource, resourceFactory } from 'ember-resources';
 import { DocumentSnapshot, onSnapshot } from 'firebase/firestore';
-import { collections } from 'life-track/models/collections';
+import { collections } from '#models/collections';
 import { type DocumentOutput } from 'zod-firebase';
 
 // Use a mapped type to extract the document output type for each collection
@@ -62,6 +62,9 @@ export function FirestoreDocument<K extends keyof typeof collections>(
 
   return resource(({ on }) => {
     const documentId = typeof id === 'function' ? id() : id;
+    if (!documentId) {
+      return null;
+    }
     const log = (...args: unknown[]) => {
       if (isVerbose) {
         console.log(`[🔥Doc ${documentId} (${collectionName})] `, ...args);
