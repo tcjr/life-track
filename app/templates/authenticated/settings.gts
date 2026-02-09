@@ -1,78 +1,59 @@
-import type Owner from '@ember/owner';
+import { on } from '@ember/modifier';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { pageTitle } from 'ember-page-title';
-import { onSnapshot, query } from 'firebase/firestore';
+import { use } from 'ember-resources';
 import { collections } from 'life-track/models/collections';
-import { type Notice } from 'life-track/models/notice';
+import { FirestoreDocument } from 'life-track/resources/firestore-document';
+import type FirebaseService from 'life-track/services/firebase';
+
+function eq<T>(a: T, b: T) {
+  return a === b;
+}
 
 export interface SettingsSignature {
-  Args: object;
   Element: HTMLDivElement;
 }
 
+const THEMES = ['light', 'dark', 'system'] as const;
+type Theme = (typeof THEMES)[number];
+
 export default class Settings extends Component<SettingsSignature> {
-  @tracked allNotices: Notice[] = [];
-  @tracked allNoticesViaQuery: Notice[] = [];
-  @tracked allNoticesViaPreparedQuery: Notice[] = [];
+  @service declare firebase: FirebaseService;
+  @use appUserDoc = FirestoreDocument(
+    'app-users',
+    () => this.firebase.signedInUser!.uid,
+    { verbose: true }
+  );
 
-  constructor(owner: Owner, args: SettingsSignature['Args']) {
-    super(owner, args);
-    const allNoticesPromise = collections.notices.findMany({
-      name: 'ten notices',
-      limit: 10,
-    });
-    allNoticesPromise.then((data) => {
-      this.allNotices = data;
-      console.log('allNotices ', this.allNotices);
-    });
-
-    const qsPromise = collections.notices.query({
-      name: 'more stuff',
-      limit: 10,
-    });
-    qsPromise.then((qs) => {
-      console.log('qs is ', qs);
-      const docs: Notice[] = [];
-      qs.forEach((doc) => {
-        docs.push(doc.data());
-      });
-      this.allNoticesViaQuery = docs;
-      console.log('allNoticesViaQuery ', this.allNoticesViaQuery);
-    });
-
-    const coll = collections.notices;
-
-    const prepared = coll.prepare({
-      name: 'noticesprepared',
-      limit: 10,
-    });
-    const preparedQuery = query(prepared);
-    onSnapshot(preparedQuery, (qs) => {
-      console.log('ON SNAPSHOT');
-      console.log('qs is ', qs);
-      const docs: Notice[] = [];
-      qs.forEach((doc) => {
-        docs.push(doc.data());
-      });
-      this.allNoticesViaPreparedQuery = docs;
-      console.log(
-        'allNoticesViaPreparedQuery ',
-        this.allNoticesViaPreparedQuery
-      );
-    });
-  }
+  changeTheme = async (evt: Event) => {
+    const newTheme = (evt.currentTarget as HTMLInputElement).value as Theme;
+    const id = this.appUserDoc._id;
+    await collections['app-users'].update(id, { theme: newTheme });
+    console.log('updated theme');
+  };
 
   <template>
     {{pageTitle "Settings"}}
     <div ...attributes>
       <h2>Settings (authenticated)</h2>
 
-      <ul>
-        {{#each this.allNoticesViaQuery as |notice|}}
-          <li>Notice: {{notice.text}}</li>
-        {{/each}}
-      </ul>
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Theme</legend>
+        <select
+          class="select"
+          {{on "change" this.changeTheme}}
+          aria-label="choose theme"
+        >
+          <option disabled>Pick a theme</option>
+          {{#each THEMES as |themeName|}}
+            <option
+              selected={{if (eq this.appUserDoc.theme themeName) "selected"}}
+            >{{themeName}}</option>
+          {{/each}}
+        </select>
+      </fieldset>
+
     </div>
   </template>
 }
