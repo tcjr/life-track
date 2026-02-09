@@ -1,12 +1,11 @@
 import { z } from 'zod';
-import { zodFirestoreConverter } from './utils';
+import { type DocumentInput, type DocumentOutput } from 'zod-firebase';
 
 export const NoticeSchema = z.object({
   text: z.string(),
-  startAt: z.date(),
-  endAt: z.date(),
+  validFrom: z.date(),
+  validTo: z.date(),
 });
 
-export type Notice = z.infer<typeof NoticeSchema> & { id: string };
-
-export const noticeConverter = zodFirestoreConverter(NoticeSchema);
+export type Notice = DocumentOutput<typeof NoticeSchema>;
+export type NoticeInput = DocumentInput<typeof NoticeSchema>;
