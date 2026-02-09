@@ -38,11 +38,11 @@ type Options = {
  * ```
  *
  * @param collectionName collection name
- * @param id id (without collection prefix)
+ * @param id id or function that returns an id
  */
 export function FirestoreDocument<K extends keyof typeof collections>(
   collectionName: K,
-  id: string,
+  id: string | (() => string),
   options: Options = {}
 ) {
   type DocOut = CollectionDocumentOutput<K>;
@@ -61,16 +61,17 @@ export function FirestoreDocument<K extends keyof typeof collections>(
   }
 
   return resource(({ on }) => {
+    const documentId = typeof id === 'function' ? id() : id;
     const log = (...args: unknown[]) => {
       if (isVerbose) {
-        console.log(`[🔥Doc ${id} (${collectionName})] `, ...args);
+        console.log(`[🔥Doc ${documentId} (${collectionName})] `, ...args);
       }
     };
     // This is where the actual data is stored.
     const data = cell<DocOut>();
 
     // This doc ref will have the zod converters already attached
-    const docRef = collectionToQuery.read.doc(id);
+    const docRef = collectionToQuery.read.doc(documentId);
     log('docref is ', docRef);
 
     log('setting up onSnapshot listener for document');

@@ -23,25 +23,21 @@ type CollectQuerySpec<K extends keyof typeof collections> = Parameters<
 // SchemaType is something like <typeof NoticeSchema>
 export function FirestoreQuery<K extends keyof typeof collections>(
   collectionName: K,
-  querySpec: CollectQuerySpec<K>
+  querySpec: CollectQuerySpec<K> | (() => CollectQuerySpec<K>)
 ) {
   type DocOut = CollectionDocumentOutput<K>;
 
   const collectionToQuery = collections[collectionName];
-  // NOTE: I'm not sure why I need to cast here
-  const queryName = (querySpec as QuerySpecification).name;
-  const isVerbose = Boolean(querySpec.verbose);
-
-  if (isVerbose) {
-    console.log(
-      `SETTING UP FIRESTORE QUERY`,
-      collectionName,
-      queryName,
-      querySpec
-    );
-  }
 
   return resource(({ on }) => {
+    // Resolve our reactive querySpec inside this resouce function to ensure
+    // it will cleanup and re-run when it changes.
+    const actualQuerySpec =
+      typeof querySpec === 'function' ? querySpec() : querySpec;
+
+    const queryName = (actualQuerySpec as QuerySpecification).name;
+    const isVerbose = Boolean(actualQuerySpec.verbose);
+
     const log = (...args: unknown[]) => {
       if (isVerbose) {
         console.log(`[Query ${queryName}] `, ...args);
@@ -51,11 +47,11 @@ export function FirestoreQuery<K extends keyof typeof collections>(
     const data = cell<DocOut[]>([]);
 
     log('building query');
-    // Call prepare with the typed `querySpec`. We still cast the prepared
+    // Call prepare with the typed `actualQuerySpec`. We still cast the prepared
     // query to `any` for `onSnapshot` because the firebase overloads are
     // difficult to satisfy across the library's converters.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-    const prepared = collectionToQuery.prepare(querySpec as any);
+    const prepared = collectionToQuery.prepare(actualQuerySpec as any);
 
     log('setting up onSnapshot listener for query');
     const unsub = onSnapshot(
