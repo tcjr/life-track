@@ -62,7 +62,7 @@ export function FirestoreDocument<K extends keyof typeof collections>(
 
   return resource(({ on }) => {
     const documentId = typeof id === 'function' ? id() : id;
-    if (!id) {
+    if (!documentId) {
       return null;
     }
     const log = (...args: unknown[]) => {
