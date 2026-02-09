@@ -112,14 +112,14 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0(@babel/core@7.29.0)
       ember-modifier:
-        specifier: ^4.2.2
-        version: 4.2.2(@babel/core@7.29.0)
+        specifier: ^4.3.0
+        version: 4.3.0(@babel/core@7.29.0)
       ember-page-title:
         specifier: ^9.0.3
         version: 9.0.3
       ember-primitives:
         specifier: ^0.53.0
-        version: 0.53.0(@babel/core@7.29.0)(@ember/test-helpers@5.4.1(@babel/core@7.29.0)(@glint/template@1.7.4))(@ember/test-waiters@4.1.1(@glint/template@1.7.4))(@glimmer/component@2.0.0)(@glint/template@1.7.4)(ember-modifier@4.2.2(@babel/core@7.29.0))(ember-resources@7.0.7(@glimmer/component@2.0.0)(@glint/template@1.7.4))
+        version: 0.53.0(@babel/core@7.29.0)(@ember/test-helpers@5.4.1(@babel/core@7.29.0)(@glint/template@1.7.4))(@ember/test-waiters@4.1.1(@glint/template@1.7.4))(@glimmer/component@2.0.0)(@glint/template@1.7.4)(ember-modifier@4.3.0(@babel/core@7.29.0))(ember-resources@7.0.7(@glimmer/component@2.0.0)(@glint/template@1.7.4))
       ember-qunit:
         specifier: ^9.0.4
         version: 9.0.4(@ember/test-helpers@5.4.1(@babel/core@7.29.0)(@glint/template@1.7.4))(@glint/template@1.7.4)(qunit@2.25.0)
@@ -3301,8 +3301,8 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
-  ember-modifier@4.2.2:
-    resolution: {integrity: sha512-pPYBAGyczX0hedGWQFQOEiL9s45KS9efKxJxUQkMLjQyh+1Uef1mcmAGsdw2KmvNupITkE/nXxmVO1kZ9tt3ag==}
+  ember-modifier@4.3.0:
+    resolution: {integrity: sha512-O0rirSLQbGg0VJ/NqoQ4uN1bh2iAekZC/Ykma+FkjCM2ofrO38u+d8n3+AK6uVWeMJmogGX2KL+Is5fofoInJg==}
 
   ember-page-title@9.0.3:
     resolution: {integrity: sha512-fedRHUsvq8tIZgOii8jTrfAyeq+la/9H5eAzhNNwEyzo7nDMmqK2SxsyBUGXprd8fOacsPabLlzlucMi/4mUpA==}
@@ -10590,12 +10590,10 @@ snapshots:
       - eslint
       - typescript
 
-  ember-modifier@4.2.2(@babel/core@7.29.0):
+  ember-modifier@4.3.0(@babel/core@7.29.0):
     dependencies:
       '@embroider/addon-shim': 1.10.2
       decorator-transforms: 2.3.1(@babel/core@7.29.0)
-      ember-cli-normalize-entity-name: 1.0.0
-      ember-cli-string-utils: 1.1.0
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -10607,7 +10605,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  ember-primitives@0.53.0(@babel/core@7.29.0)(@ember/test-helpers@5.4.1(@babel/core@7.29.0)(@glint/template@1.7.4))(@ember/test-waiters@4.1.1(@glint/template@1.7.4))(@glimmer/component@2.0.0)(@glint/template@1.7.4)(ember-modifier@4.2.2(@babel/core@7.29.0))(ember-resources@7.0.7(@glimmer/component@2.0.0)(@glint/template@1.7.4)):
+  ember-primitives@0.53.0(@babel/core@7.29.0)(@ember/test-helpers@5.4.1(@babel/core@7.29.0)(@glint/template@1.7.4))(@ember/test-waiters@4.1.1(@glint/template@1.7.4))(@glimmer/component@2.0.0)(@glint/template@1.7.4)(ember-modifier@4.3.0(@babel/core@7.29.0))(ember-resources@7.0.7(@glimmer/component@2.0.0)(@glint/template@1.7.4)):
     dependencies:
       '@babel/runtime': 7.28.6
       '@ember/test-waiters': 4.1.1(@glint/template@1.7.4)
@@ -10617,7 +10615,7 @@ snapshots:
       '@glimmer/component': 2.0.0
       decorator-transforms: 2.3.1(@babel/core@7.29.0)
       ember-element-helper: 0.8.8
-      ember-modifier: 4.2.2(@babel/core@7.29.0)
+      ember-modifier: 4.3.0(@babel/core@7.29.0)
       ember-resources: 7.0.7(@glimmer/component@2.0.0)(@glint/template@1.7.4)
       form-data-utils: 0.6.0
       reactiveweb: 1.9.1(@babel/core@7.29.0)(@ember/test-waiters@4.1.1(@glint/template@1.7.4))(@glimmer/component@2.0.0)(@glint/template@1.7.4)
