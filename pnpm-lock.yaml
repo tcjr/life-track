@@ -165,6 +165,9 @@ importers:
       qunit-dom:
         specifier: ^3.5.0
         version: 3.5.0
+      reactiveweb:
+        specifier: ^1.9.1
+        version: 1.9.1(@babel/core@7.29.0)(@ember/test-waiters@4.1.1(@glint/template@1.7.4))(@glimmer/component@2.0.0)(@glint/template@1.7.4)
       stylelint:
         specifier: ^17.1.1
         version: 17.1.1(typescript@5.9.3)
