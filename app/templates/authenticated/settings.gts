@@ -3,6 +3,7 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import type FirebaseService from '#services/firebase';
+import type { AppUserInput } from '#models/app-user';
 import Doc from '#components/doc';
 import { fn } from '@ember/helper';
 
@@ -24,7 +25,10 @@ export default class Settings extends Component<SettingsSignature> {
     return this.firebase.signedInUser!.uid || '';
   }
 
-  onFormSubmit = async (docOps, evt: Event) => {
+  onFormSubmit = async (
+    docOps: { update: (data: Partial<AppUserInput>) => Promise<void> },
+    evt: Event
+  ) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.currentTarget as HTMLFormElement);
