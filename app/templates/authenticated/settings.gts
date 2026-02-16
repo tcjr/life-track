@@ -52,9 +52,9 @@ export default class Settings extends Component<SettingsSignature> {
 
       <Doc @collection="app-users" @id={{this.uid}}>
         <:loaded as |appUser ops|>
+          {{!log "ref for the doc is" (ops.ref)}}
 
           <form {{on "submit" (fn this.onFormSubmit ops)}}>
-
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Theme</legend>
               <select class="select" name="theme" aria-label="choose theme">

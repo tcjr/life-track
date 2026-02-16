@@ -11,6 +11,10 @@ type CollectionDocumentOutput<K extends keyof typeof collections> =
 type CollectionDocumentInput<K extends keyof typeof collections> =
   DocumentInput<(typeof collections)[K]['zod']>;
 
+interface GenericCollection {
+  update: (id: string, data: unknown) => Promise<void>;
+}
+
 interface DocSignature<K extends keyof typeof collections> {
   Args: {
     collection: K;
@@ -58,9 +62,12 @@ export default class Doc<K extends keyof typeof collections> extends Component<
       // For the document update, we partially apply the id as the first
       // argument and return the new function.
       update: (data: Partial<CollectionDocumentInput<K>>) =>
-        // Cast to any because TS struggles with correlated union types here.
-        // We know data matches the collection because both are derived from K.
-        (this._collection as any).update(this.args.id, data),
+        // Casting to GenericCollection to avoid 'any' lint errors while
+        // handling correlated union types.
+        (this._collection as unknown as GenericCollection).update(
+          this.args.id,
+          data
+        ),
     };
   }
 
