@@ -50,7 +50,10 @@ export default class Settings extends Component<SettingsSignature> {
 
       <hr />
 
-      <Doc @collection="app-users" @id={{this.uid}}>
+      <Doc @collection="app-users" @id="{{this.uid}}">
+        <:error>
+          Error!
+        </:error>
         <:loaded as |appUser ops|>
           {{!log "ref for the doc is" (ops.ref)}}
 

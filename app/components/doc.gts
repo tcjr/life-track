@@ -1,5 +1,8 @@
 import Component from '@glimmer/component';
-import { getPromiseState } from 'reactiveweb/get-promise-state';
+import {
+  getPromiseState,
+  type Error as PromiseStateError,
+} from 'reactiveweb/get-promise-state';
 import { type DocumentInput, type DocumentOutput } from 'zod-firebase';
 import { collections } from '#models/collections';
 import type { DocumentReference } from 'firebase/firestore';
@@ -11,10 +14,6 @@ type CollectionDocumentOutput<K extends keyof typeof collections> =
 type CollectionDocumentInput<K extends keyof typeof collections> =
   DocumentInput<(typeof collections)[K]['zod']>;
 
-interface GenericCollection {
-  update: (id: string, data: unknown) => Promise<void>;
-}
-
 interface DocSignature<K extends keyof typeof collections> {
   Args: {
     collection: K;
@@ -22,7 +21,7 @@ interface DocSignature<K extends keyof typeof collections> {
   };
   Blocks: {
     loading: [];
-    error: [];
+    error: [error: PromiseStateError];
     loaded: [
       document: CollectionDocumentOutput<K>,
       colExtras: {
@@ -43,9 +42,9 @@ export default class Doc<K extends keyof typeof collections> extends Component<
   }
 
   state = getPromiseState(() => {
-    console.log(
-      `in ${this.args.collection} collection, getting doc with id ${this.args.id}`
-    );
+    if (!this.args.id) {
+      throw new Error('No id provided');
+    }
     return this._collection.findById(this.args.id);
   });
 
@@ -62,12 +61,10 @@ export default class Doc<K extends keyof typeof collections> extends Component<
       // For the document update, we partially apply the id as the first
       // argument and return the new function.
       update: (data: Partial<CollectionDocumentInput<K>>) =>
-        // Casting to GenericCollection to avoid 'any' lint errors while
-        // handling correlated union types.
-        (this._collection as unknown as GenericCollection).update(
-          this.args.id,
-          data
-        ),
+        // Casting to 'any' to avoid lint errors while handling correlated
+        // union types.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+        (this._collection as any).update(this.args.id, data),
     };
   }
 
@@ -80,7 +77,7 @@ export default class Doc<K extends keyof typeof collections> extends Component<
       {{/if}}
     {{else if this.state.error}}
       {{#if (has-block "error")}}
-        {{yield to="error"}}
+        {{yield this.state.error to="error"}}
       {{else}}
         Error
       {{/if}}
