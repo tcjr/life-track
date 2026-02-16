@@ -1,11 +1,26 @@
 import Component from '@glimmer/component';
 import { getPromiseState } from 'reactiveweb/get-promise-state';
-import { type Collection, type DocumentOutput } from 'zod-firebase';
+import { type DocumentInput, type DocumentOutput } from 'zod-firebase';
 import { collections } from '#models/collections';
+import type { DocumentReference } from 'firebase/firestore';
+
+type Rest<T extends any[]> = T extends [any, ...infer U] ? U : never;
+const partial = <T extends any[], R>(
+  fn: (...args: T) => R,
+  ...partials: [T[0]] // Specifically type the first argument
+) => {
+  // Return a new function that closes over the partial arguments
+  return (...args: Rest<T>) => {
+    return fn(...([...partials, ...args] as T));
+  };
+};
 
 // Use a mapped type to extract the document output type for each collection
 type CollectionDocumentOutput<K extends keyof typeof collections> =
   DocumentOutput<(typeof collections)[K]['zod']>;
+
+type CollectionDocumentInput<K extends keyof typeof collections> =
+  DocumentInput<(typeof collections)[K]['zod']>;
 
 interface DocSignature<K extends keyof typeof collections> {
   Args: {
@@ -17,7 +32,12 @@ interface DocSignature<K extends keyof typeof collections> {
     error: [];
     loaded: [
       document: CollectionDocumentOutput<K>,
-      //  col: Collection
+      colExtras: {
+        /** This is the collection update() function with the first argument
+         * curried to the document id. */
+        update: (data: CollectionDocumentInput<K>) => Promise<void>;
+        ref: () => DocumentReference;
+      },
     ];
   };
 }
@@ -40,6 +60,18 @@ export default class Doc<K extends keyof typeof collections> extends Component<
     return this.state.resolved as CollectionDocumentOutput<K>;
   }
 
+  get typedDocumentExtras() {
+    return {
+      // For the document ref, we partially apply the id as the first
+      // argument and return the new function.
+      ref: partial(this._collection.read.doc, this.args.id),
+
+      // For the document update, we partially apply the id as the first
+      // argument and return the new function.
+      update: partial(this._collection.update, this.args.id),
+    };
+  }
+
   <template>
     {{#if this.state.isLoading}}
       {{#if (has-block "loading")}}
@@ -55,7 +87,7 @@ export default class Doc<K extends keyof typeof collections> extends Component<
       {{/if}}
     {{else if this.state.resolved}}
       {{#if (has-block "loaded")}}
-        {{yield this.typedResolved this._collection to="loaded"}}
+        {{yield this.typedResolved this.typedDocumentExtras to="loaded"}}
       {{else}}
         Success
       {{/if}}
