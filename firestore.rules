@@ -26,6 +26,16 @@ service cloud.firestore {
     match /app-users/{userId} {
       allow write: if request.auth.uid == userId;
       allow read: if request.auth.uid == userId;
+
+      match /bps/{measurementId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
+      }
+
+      match /glucoses/{measurementId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
+      }
     }
 
     // Admin users
