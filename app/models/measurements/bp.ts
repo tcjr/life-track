@@ -8,5 +8,5 @@ export const BpMeasurementSchema = z.object({
   timestamp: z.date(),
 });
 
-export type Bp = DocumentOutput<typeof BpMeasurementSchema>;
-export type BpInput = DocumentInput<typeof BpMeasurementSchema>;
+export type BpMeasurement = DocumentOutput<typeof BpMeasurementSchema>;
+export type BpMeasurementInput = DocumentInput<typeof BpMeasurementSchema>;

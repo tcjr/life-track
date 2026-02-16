@@ -7,5 +7,9 @@ export const GlucoseMeasurementSchema = z.object({
   timestamp: z.date(),
 });
 
-export type Glucose = DocumentOutput<typeof GlucoseMeasurementSchema>;
-export type GlucoseInput = DocumentInput<typeof GlucoseMeasurementSchema>;
+export type GlucoseMeasurement = DocumentOutput<
+  typeof GlucoseMeasurementSchema
+>;
+export type GlucoseMeasurementInput = DocumentInput<
+  typeof GlucoseMeasurementSchema
+>;

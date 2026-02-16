@@ -6,6 +6,23 @@ import type FirebaseService from '#services/firebase';
 import type RouterService from '@ember/routing/router-service';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
+import { type FlashMessagesService } from 'ember-cli-flash';
+
+const flashAlertClass = (flashType: string) => {
+  switch (flashType) {
+    case 'success':
+      return 'alert-success';
+    case 'error':
+    case 'danger':
+      return 'alert-error';
+    case 'warning':
+      return 'alert-warning';
+    case 'info':
+      return 'alert-info';
+    default:
+      return 'alert-info';
+  }
+};
 
 interface ApplicationComponentSignature {
   Args: {
@@ -15,7 +32,8 @@ interface ApplicationComponentSignature {
 
 export default class Application extends Component<ApplicationComponentSignature> {
   @service declare firebase: FirebaseService;
-  @service declare router: RouterService; // Inject router service
+  @service declare router: RouterService;
+  @service declare flashMessages: FlashMessagesService;
 
   @action
   async logout() {
@@ -40,11 +58,20 @@ export default class Application extends Component<ApplicationComponentSignature
 
   <template>
     {{pageTitle "LifeTrack"}}
+    {{! Toast messages appear at the bottom. The CSS takes care of the positioning. }}
+    <div class="toast">
+      {{#each this.flashMessages.queue as |flash|}}
+        <div class="alert {{flashAlertClass flash.type}}">
+          <span>{{flash.message}}</span>
+        </div>
+      {{/each}}
+    </div>
+
     <h2 class="bg-primary text-primary-content">Welcome to Ember</h2>
 
     <div class="navbar bg-base-100 shadow-sm">
       <div class="flex-1">
-        <LinkTo @route="application" class="btn btn-ghost text-xl">LT</LinkTo>
+        <LinkTo @route="application" class="btn btn-ghost text-xl">home</LinkTo>
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
@@ -56,7 +83,7 @@ export default class Application extends Component<ApplicationComponentSignature
               <LinkTo @route="authenticated.settings">Settings</LinkTo>
             </li>
             <li>
-              <LinkTo @route="authenticated.notices">Notices</LinkTo>
+              <LinkTo @route="authenticated.measurements">Measurements</LinkTo>
             </li>
             <li>
               <button
@@ -77,13 +104,9 @@ export default class Application extends Component<ApplicationComponentSignature
     </div>
 
     {{outlet}}
+
     <div class="mt-96">
-      {{!-- <hr />
-      <pre>Signed-in user: {{JSON.stringify
-          this.firebase.signedInUser
-          null
-          2
-        }}</pre> --}}
+
     </div>
   </template>
 }

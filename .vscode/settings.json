@@ -1,4 +1,14 @@
 {
   "css.validate": false,
-  "stylelint.validate": ["css"]
+  "stylelint.validate": ["css"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "glimmer-js",
+    "glimmer-ts",
+    "gjs",
+    "gts"
+  ]
 }

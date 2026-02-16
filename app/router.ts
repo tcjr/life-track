@@ -14,5 +14,8 @@ Router.map(function () {
   this.route('authenticated', { path: '' }, function () {
     this.route('settings');
     this.route('notices');
+    this.route('measurements');
+    this.route('new-bp');
+    this.route('new-glucose');
   });
 });
