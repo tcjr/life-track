@@ -2,9 +2,9 @@ import { on } from '@ember/modifier';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
-import { collections } from '#models/collections';
 import type FirebaseService from '#services/firebase';
 import Doc from '#components/doc';
+import { fn } from '@ember/helper';
 
 function eq<T>(a: T, b: T) {
   return a === b;
@@ -24,15 +24,18 @@ export default class Settings extends Component<SettingsSignature> {
     return this.firebase.signedInUser!.uid || '';
   }
 
-  onFormSubmit = async (evt: Event) => {
+  onFormSubmit = async (docOps, evt: Event) => {
     evt.preventDefault();
+
     const formData = new FormData(evt.currentTarget as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    // console.log('data', data);
+
     // We want to be sure to only update certain fields
     const dataToUpdate = { theme: data.theme as Theme };
 
-    await collections['app-users'].update(this.uid, dataToUpdate);
+    // Use the document-specific updater to change the data.
+    await docOps.update(dataToUpdate);
+
     console.log(`${this.uid} updated`);
   };
 
@@ -44,18 +47,13 @@ export default class Settings extends Component<SettingsSignature> {
       <hr />
 
       <Doc @collection="app-users" @id={{this.uid}}>
-        <:loaded as |appUser|>
+        <:loaded as |appUser ops|>
 
-          <form {{on "submit" this.onFormSubmit}}>
+          <form {{on "submit" (fn this.onFormSubmit ops)}}>
 
             <fieldset class="fieldset">
               <legend class="fieldset-legend">Theme</legend>
-              <select
-                class="select"
-                {{!on "change" this.changeTheme}}
-                name="theme"
-                aria-label="choose theme"
-              >
+              <select class="select" name="theme" aria-label="choose theme">
                 <option disabled>Pick a theme</option>
                 {{#each THEMES as |themeName|}}
                   <option
