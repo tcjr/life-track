@@ -32,8 +32,8 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
       );
       this.flashMessages.success('Glucose added');
     } catch (e) {
-      this.flashMessages.danger('Error adding glucose');
-      console.log('attempted data', updateData);
+      this.flashMessages.danger('Error adding glucose measurement');
+      console.log('attempted data', updateData, e);
     }
   };
 

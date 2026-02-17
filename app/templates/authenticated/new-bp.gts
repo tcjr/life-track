@@ -7,6 +7,7 @@ import { collections } from '#app/models/collections.ts';
 import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import { LinkTo } from '@ember/routing';
+import type { FlashMessagesService } from 'ember-cli-flash';
 
 interface NewBpSignature {
   // Args: {};
@@ -15,6 +16,7 @@ interface NewBpSignature {
 
 export default class NewBp extends Component<NewBpSignature> {
   @service declare firebase: FirebaseService;
+  @service declare flashMessages: FlashMessagesService;
 
   handleSubmit = async (e: Event) => {
     e.preventDefault();
@@ -25,10 +27,14 @@ export default class NewBp extends Component<NewBpSignature> {
       heartRate: Number(formData.heartRate),
       timestamp: new Date(),
     };
-    console.log(updateData);
 
-    await collections['app-users'](this.firebase.uid).bps.add(updateData);
-    console.log('BP added');
+    try {
+      await collections['app-users'](this.firebase.uid).bps.add(updateData);
+      this.flashMessages.success('BP added');
+    } catch (e) {
+      this.flashMessages.danger('Error adding BP measurement');
+      console.log('attempted data', updateData, e);
+    }
   };
 
   get prefillValues() {
