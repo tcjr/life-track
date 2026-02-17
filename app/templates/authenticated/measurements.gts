@@ -94,7 +94,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
           {{#each this.allBps as |bp|}}
             <tr>
               <td>
-                {{bp.diastolic}}/{{bp.systolic}}
+                {{bp.systolic}}/{{bp.diastolic}}
               </td>
               <td>
                 {{bp.heartRate}}
