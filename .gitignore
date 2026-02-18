@@ -5,6 +5,9 @@
 # dependencies
 /node_modules/
 
+# ephemeral test output
+/tests/**/__screenshots__/
+
 # misc
 .env
 *.local

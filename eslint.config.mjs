@@ -21,7 +21,7 @@ import ts from 'typescript-eslint';
 import ember from 'eslint-plugin-ember/recommended';
 
 import eslintConfigPrettier from 'eslint-config-prettier';
-import qunit from 'eslint-plugin-qunit';
+import vitest from '@vitest/eslint-plugin';
 import n from 'eslint-plugin-n';
 
 import babelParser from '@babel/eslint-parser/experimental-worker';
@@ -85,10 +85,27 @@ export default defineConfig([
   },
   {
     files: ['tests/**/*-test.{js,gjs,ts,gts}'],
-    plugins: {
-      qunit,
+    plugins: { vitest },
+    rules: {
+      ...vitest.configs.recommended.rules,
+      // When using testing-library-ember, the types for the event triggers are
+      // not correctly typed; the calls are wrapped in promises, but the types
+      // do not reflect this. So we turn this rule off to allow us to await
+      // the trigger calls.
+      '@typescript-eslint/await-thenable': 'off',
+
+      // ember-vitest adds applicationTest() and renderingTest() alternatives to
+      // the default test() function. This registers these functions, so this
+      // rule won't flag the usage of `expect`.
+      'vitest/no-standalone-expect': [
+        'error',
+        {
+          additionalTestBlockFunctions: ['renderingTest'],
+        },
+      ],
     },
   },
+
   /**
    * CJS node files
    */
