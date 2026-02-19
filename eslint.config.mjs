@@ -103,6 +103,12 @@ export default defineConfig([
           additionalTestBlockFunctions: ['renderingTest'],
         },
       ],
+
+      // ember-vitest's recommended way to provide the app container is with
+      // code like this:
+      //   renderingTest.scoped({ app: ({}, use) => use(App) });
+      // Relaxing the no-empty-pattern rule allows this code.
+      'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
     },
   },
 

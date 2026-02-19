@@ -11,7 +11,7 @@ interface InputNumberSignature {
   Element: HTMLDivElement;
 }
 
-export default class NewBp extends Component<InputNumberSignature> {
+export default class InputNumber extends Component<InputNumberSignature> {
   @tracked currentValue: number = parseInt(this.args.value.toString());
 
   increment = () => {
@@ -24,7 +24,11 @@ export default class NewBp extends Component<InputNumberSignature> {
   };
 
   <template>
-    <div class="flex gap-2 items-center justify-between" ...attributes>
+    <div
+      class="flex gap-2 items-center justify-between"
+      ...attributes
+      data-component="InputNumber"
+    >
       <button
         type="button"
         class="btn btn-circle btn-secondary btn-lg text-4xl"

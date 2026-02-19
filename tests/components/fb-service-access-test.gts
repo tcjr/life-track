@@ -1,7 +1,6 @@
 import { describe, expect, vi } from 'vitest';
 import { renderingTest } from 'ember-vitest';
 import { render } from '@ember/test-helpers';
-//import JustUid from '#components/just-uid.gts';
 import App from '#app/app.ts';
 import type { User } from 'firebase/auth';
 import type FirebaseService from '#app/services/firebase.ts';

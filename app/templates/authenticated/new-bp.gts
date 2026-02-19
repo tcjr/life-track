@@ -9,7 +9,6 @@ import type FirebaseService from '#app/services/firebase.ts';
 import { LinkTo } from '@ember/routing';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
-import { fn } from '@ember/helper';
 
 interface NewBpSignature {
   // Args: {};
