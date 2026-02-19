@@ -7,6 +7,7 @@ import type Owner from '@ember/owner';
 import type FirebaseService from '#app/services/firebase.ts';
 import { service } from '@ember/service';
 import { collections } from '#app/models/collections.ts';
+import type { TOC } from '@ember/component/template-only';
 
 const dtf = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
@@ -17,9 +18,27 @@ const dtf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
-const asLocal = (date: Date) => {
-  return dtf.format(date);
-};
+interface BpItemSignature {
+  Args: { bp: BpMeasurement };
+}
+const BpItem = <template>
+  <div class="badge badge-info">
+    BP:
+    {{@bp.systolic}}/{{@bp.diastolic}}
+    HR:
+    {{@bp.heartRate}}
+  </div>
+</template> satisfies TOC<BpItemSignature>;
+
+interface GlucoseItemSignature {
+  Args: { glucose: GlucoseMeasurement };
+}
+const GlucoseItem = <template>
+  <div class="badge badge-success">
+    Glucose:
+    {{@glucose.value}}
+  </div>
+</template> satisfies TOC<GlucoseItemSignature>;
 
 export interface MeasurementsSignature {
   Args: { model: unknown };
@@ -45,6 +64,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
     const bps = await collections['app-users'](this.uid).bps.findMany({
       name: 'all-bps',
       limit: 100,
+      orderBy: [['timestamp', 'desc']],
     });
     this.allBps = bps;
   };
@@ -54,65 +74,91 @@ export default class Measurements extends Component<MeasurementsSignature> {
       {
         name: 'all-glucoses',
         limit: 100,
+        orderBy: [['timestamp', 'desc']],
       }
     );
     this.allGlucoses = glucoses;
   };
 
+  /*
+    Returns the data in allGlucoses and allBps grouped by day.  It should have
+    this format:
+
+    [
+      {
+        date: "2022-02-19", // This is a calendar date
+        bps: [
+          {
+            systolic: 120,
+            diastolic: 80,
+            heartRate: 70,
+            timestamp: TS // This is the timestamp from the db
+          }
+          ...
+        ],
+        glucoses: [
+          {
+            value: 120,
+            timestamp: TS // This is the timestamp from the db
+          }
+          ...
+        ]
+      }
+      ...
+    ]
+  */
+  get measurementsByDay() {
+    const grouped: Record<
+      string,
+      { date: string; bps: BpMeasurement[]; glucoses: GlucoseMeasurement[] }
+    > = {};
+
+    for (const bp of this.allBps) {
+      const date = bp.timestamp.toISOString().split('T')[0] || 'NO DATE';
+      if (!grouped[date]) {
+        grouped[date] = { date, bps: [], glucoses: [] };
+      }
+      grouped[date].bps.push(bp);
+    }
+
+    for (const glucose of this.allGlucoses) {
+      const date = glucose.timestamp.toISOString().split('T')[0] || 'NO DATE';
+      if (!grouped[date]) {
+        grouped[date] = { date, bps: [], glucoses: [] };
+      }
+      grouped[date].glucoses.push(glucose);
+    }
+
+    const result = Object.values(grouped);
+    result.sort((a, b) => b.date.localeCompare(a.date));
+
+    return result;
+  }
+
   <template>
     {{pageTitle "Measurements"}}
+    {{log "EVERYTHING" this.measurementsByDay}}
     <div ...attributes>
       <h1>Measurements</h1>
       <a href="/new-measurement" class="link">New Measurement...</a>
       <hr />
-      <a href="/new-bp" class="link">New BP...</a>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>BP</th>
-            <th>HR</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.allBps as |bp|}}
-            <tr>
-              <td>
-                {{bp.systolic}}/{{bp.diastolic}}
-              </td>
-              <td>
-                {{bp.heartRate}}
-              </td>
-              <td>
-                {{asLocal bp.timestamp}}
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
 
-      <a href="/new-glucose" class="link">New Glucose...</a>
+      <ul class="list bg-base-100 rounded-box shadow-md">
+        {{#each this.measurementsByDay as |day|}}
+          <li class="list-row">
+            <div>{{day.date}}</div>
+            <div>
+              {{#each day.bps as |bp|}}
+                <BpItem @bp={{bp}} />
+              {{/each}}
+              {{#each day.glucoses as |glucose|}}
+                <GlucoseItem @glucose={{glucose}} />
+              {{/each}}
+            </div>
+          </li>
+        {{/each}}
+      </ul>
 
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Glucose</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.allGlucoses as |glucose|}}
-            <tr>
-              <td>
-                {{glucose.value}}
-              </td>
-              <td>
-                {{asLocal glucose.timestamp}}
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
     </div>
   </template>
 }
