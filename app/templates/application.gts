@@ -1,4 +1,3 @@
-import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
@@ -71,7 +70,7 @@ export default class Application extends Component<ApplicationComponentSignature
 
     <div class="navbar bg-base-100 shadow-sm">
       <div class="flex-1">
-        <LinkTo @route="application" class="btn btn-ghost text-xl">home</LinkTo>
+        <a href="/" class="btn btn-ghost text-xl">home</a>
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
@@ -80,10 +79,10 @@ export default class Application extends Component<ApplicationComponentSignature
               <span>{{this.firebase.signedInUser.email}}</span>
             </li>
             <li>
-              <LinkTo @route="authenticated.settings">Settings</LinkTo>
+              <a href="/settings">Settings</a>
             </li>
             <li>
-              <LinkTo @route="authenticated.measurements">Measurements</LinkTo>
+              <a href="/measurements">Measurements</a>
             </li>
             <li>
               <button
@@ -96,7 +95,7 @@ export default class Application extends Component<ApplicationComponentSignature
             </li>
           {{else}}
             <li>
-              <LinkTo @route="login">Login</LinkTo>
+              <a href="/login">Login</a>
             </li>
           {{/if}}
         </ul>

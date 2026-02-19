@@ -6,12 +6,10 @@ import type { BpMeasurementInput } from '#app/models/measurements/bp.ts';
 import { collections } from '#app/models/collections.ts';
 import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
-import { LinkTo } from '@ember/routing';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
 
 interface NewBpSignature {
-  // Args: {};
   Element: HTMLDivElement;
 }
 
@@ -49,14 +47,6 @@ export default class NewBp extends Component<NewBpSignature> {
   <template>
     {{pageTitle "New BP"}}
     <div ...attributes>
-      <div class="breadcrumbs text-sm mb-4">
-        <ul>
-          <li><LinkTo
-              @route="authenticated.measurements"
-            >Measurements</LinkTo></li>
-          <li>New Blood Pressure Measurement</li>
-        </ul>
-      </div>
 
       <form {{on "submit" this.handleSubmit}}>
         <div class="text-2xl font-bold text-center">Blood Pressure</div>
