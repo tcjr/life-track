@@ -24,7 +24,11 @@ export default class InputNumber extends Component<InputNumberSignature> {
   };
 
   <template>
-    <div class="flex gap-2 items-center justify-between" ...attributes>
+    <div
+      class="flex gap-2 items-center justify-between"
+      ...attributes
+      data-component="InputNumber"
+    >
       <button
         type="button"
         class="btn btn-circle btn-secondary btn-lg text-4xl"
