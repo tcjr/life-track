@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import { LinkTo } from '@ember/routing';
 import type { FlashMessagesService } from 'ember-cli-flash';
+import InputNumber from '#app/components/input-number.gts';
 
 interface NewGlucoseSignature {
   // Args: {};
@@ -33,7 +34,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
       this.flashMessages.success('Glucose added');
     } catch (e) {
       this.flashMessages.danger('Error adding glucose measurement');
-      console.log('attempted data', updateData, e);
+      console.error('attempted data', updateData, e);
     }
   };
 
@@ -57,14 +58,15 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
 
       <h1>New Glucose</h1>
       <form {{on "submit" this.handleSubmit}}>
-        <label for="value">Value</label>
-        <input
-          type="number"
-          id="value"
-          name="value"
-          value={{this.prefillValues.value}}
-        />
-        <button type="submit" class="btn">Submit</button>
+        <div class="text-2xl font-bold text-center">Glucose</div>
+        <div class="flex flex-col">
+          <label for="value" class="text-center italic text-sm">mg/dL</label>
+          <InputNumber @name="value" @value={{this.prefillValues.value}} />
+        </div>
+        <button
+          type="submit"
+          class="btn btn-secondary btn-xl w-full mt-6"
+        >Save</button>
       </form>
     </div>
   </template>

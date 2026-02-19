@@ -9,7 +9,6 @@ import type FirebaseService from '#app/services/firebase.ts';
 import { LinkTo } from '@ember/routing';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
-import { fn } from '@ember/helper';
 
 interface NewBpSignature {
   // Args: {};
@@ -35,7 +34,7 @@ export default class NewBp extends Component<NewBpSignature> {
       this.flashMessages.success('BP added');
     } catch (e) {
       this.flashMessages.danger('Error adding BP measurement');
-      console.log('attempted data', updateData, e);
+      console.error('attempted data', updateData, e);
     }
   };
 
@@ -46,10 +45,6 @@ export default class NewBp extends Component<NewBpSignature> {
       heartRate: '70',
     };
   }
-
-  changeValue = (newValue: number, field: string) => {
-    console.log(field, newValue);
-  };
 
   <template>
     {{pageTitle "New BP"}}

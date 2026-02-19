@@ -11,7 +11,7 @@ interface InputNumberSignature {
   Element: HTMLDivElement;
 }
 
-export default class NewBp extends Component<InputNumberSignature> {
+export default class InputNumber extends Component<InputNumberSignature> {
   @tracked currentValue: number = parseInt(this.args.value.toString());
 
   increment = () => {
@@ -36,6 +36,7 @@ export default class NewBp extends Component<InputNumberSignature> {
         id={{@name}}
         value={{this.currentValue}}
         class="w-full bg-primary text-primary-content text-5xl font-bold text-center rounded-full"
+        inputmode="numeric"
         {{! NOTE: we might want to disable this }}
       />
       <button

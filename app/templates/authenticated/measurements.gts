@@ -22,12 +22,6 @@ const asLocal = (date: Date) => {
   return dtf.format(date);
 };
 
-const randomBetween = (min: number, max: number) => {
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-};
-
 export interface MeasurementsSignature {
   Args: { model: unknown };
   Element: HTMLDivElement;
@@ -45,11 +39,10 @@ export default class Measurements extends Component<MeasurementsSignature> {
   }
 
   get uid() {
-    return this.firebase.signedInUser!.uid || '';
+    return this.firebase.uid;
   }
 
   loadBps = async () => {
-    console.log('loading bps');
     const bps = await collections['app-users'](this.uid).bps.findMany({
       name: 'all-bps',
       limit: 100,
@@ -58,7 +51,6 @@ export default class Measurements extends Component<MeasurementsSignature> {
   };
 
   loadGlucoses = async () => {
-    console.log('loading glucoses');
     const glucoses = await collections['app-users'](this.uid).glucoses.findMany(
       {
         name: 'all-glucoses',
@@ -66,15 +58,6 @@ export default class Measurements extends Component<MeasurementsSignature> {
       }
     );
     this.allGlucoses = glucoses;
-  };
-
-  addBpData = async () => {
-    await collections['app-users'](this.uid).bps.add({
-      diastolic: randomBetween(120, 150),
-      systolic: randomBetween(80, 100),
-      heartRate: randomBetween(70, 110),
-      timestamp: new Date(),
-    });
   };
 
   <template>
