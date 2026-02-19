@@ -50,6 +50,11 @@ export default class FirebaseService extends Service {
     this.db = getFirestore(this.app);
   }
 
+  // Convenience getter for the current user's uid
+  get uid() {
+    return this.signedInUser?.uid || '';
+  }
+
   // This method bootstraps the use of emulators based on environment variables.
   // It's currently synchrnous, but might be made asynchronous if we want to
   // do something like load a remote startup file.

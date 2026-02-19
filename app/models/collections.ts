@@ -3,10 +3,18 @@ import { collectionsBuilder } from 'zod-firebase';
 import { NoticeSchema } from './notice';
 import { AppUserSchema } from './app-user';
 import { Timestamp } from 'firebase/firestore';
+import { BpMeasurementSchema } from './measurements/bp';
+import { GlucoseMeasurementSchema } from './measurements/glucose';
 
 const schema = {
   'app-users': {
     zod: AppUserSchema,
+    bps: {
+      zod: BpMeasurementSchema,
+    },
+    glucoses: {
+      zod: GlucoseMeasurementSchema,
+    },
   },
   notices: {
     zod: NoticeSchema,
