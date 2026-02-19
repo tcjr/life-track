@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#app/components/input-number.gts';
+import type RouterService from '@ember/routing/router-service';
 
 interface NewGlucoseSignature {
   Element: HTMLDivElement;
@@ -16,6 +17,7 @@ interface NewGlucoseSignature {
 export default class NewGlucose extends Component<NewGlucoseSignature> {
   @service declare firebase: FirebaseService;
   @service declare flashMessages: FlashMessagesService;
+  @service declare router: RouterService;
 
   handleSubmit = async (e: Event) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         updateData
       );
       this.flashMessages.success('Glucose added');
+      this.router.transitionTo('authenticated.new-measurement');
     } catch (e) {
       this.flashMessages.danger('Error adding glucose measurement');
       console.error('attempted data', updateData, e);

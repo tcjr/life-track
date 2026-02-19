@@ -63,6 +63,8 @@ export default class Measurements extends Component<MeasurementsSignature> {
     {{pageTitle "Measurements"}}
     <div ...attributes>
       <h1>Measurements</h1>
+      <a href="/new-measurement" class="link">New Measurement...</a>
+      <hr />
       <a href="/new-bp" class="link">New BP...</a>
       <table class="table">
         <thead>

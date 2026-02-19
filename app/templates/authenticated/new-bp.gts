@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
+import type RouterService from '@ember/routing/router-service';
 
 interface NewBpSignature {
   Element: HTMLDivElement;
@@ -16,6 +17,7 @@ interface NewBpSignature {
 export default class NewBp extends Component<NewBpSignature> {
   @service declare firebase: FirebaseService;
   @service declare flashMessages: FlashMessagesService;
+  @service declare router: RouterService;
 
   handleSubmit = async (e: Event) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ export default class NewBp extends Component<NewBpSignature> {
     try {
       await collections['app-users'](this.firebase.uid).bps.add(updateData);
       this.flashMessages.success('BP added');
+      this.router.transitionTo('authenticated.new-measurement');
     } catch (e) {
       this.flashMessages.danger('Error adding BP measurement');
       console.error('attempted data', updateData, e);
