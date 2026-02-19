@@ -4,7 +4,7 @@ import { find, render } from '@ember/test-helpers';
 import App from '#app/app.ts';
 import NewBp from '#app/templates/authenticated/new-bp.gts';
 
-describe('Component | basic', () => {
+describe('Template | authenticated/new-bp', () => {
   renderingTest.scoped({ app: ({}, use) => use(App) });
 
   renderingTest('it has correct intitial values', async () => {
