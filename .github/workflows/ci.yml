@@ -50,4 +50,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
       - name: Run Tests
+        env:
+          VITE_USE_FIRESTORE_EMULATOR: true
+          VITE_USE_AUTH_EMULATOR: true
         run: pnpm test
