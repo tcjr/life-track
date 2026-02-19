@@ -37,9 +37,10 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc --noEmit",
-    "start": "vite",
+    "start": "concurrently \"pnpm:start:*\" --names \"start:\" --prefixColors auto",
+    "start:ember": "vite dev -- --clearScreen false",
+    "start:emulators": "firebase emulators:start --only auth,firestore --import=./firebase-dev-data --export-on-exit",
     "test": "vitest run",
-    "start-emulators": "firebase emulators:start --only auth,firestore --import=./firebase-dev-data --export-on-exit",
     "deploy-rules": "firebase deploy --only firestore:rules"
   },
   "dependencies": {
