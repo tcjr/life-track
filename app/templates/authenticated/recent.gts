@@ -139,7 +139,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
 
   <template>
     {{pageTitle "Measurements"}}
-    {{log "EVERYTHING" this.measurementsByDay}}
+    {{!log "EVERYTHING" this.measurementsByDay}}
     <div ...attributes>
       <h1 class="text-3xl font-bold">Recent Items</h1>
       <div class="text-right">
@@ -158,8 +158,10 @@ export default class Measurements extends Component<MeasurementsSignature> {
                   using a helpers?
                 }}
                 {{#if (eq dm.type "bp")}}
+                  {{! @glint-expect-error We know it's a bp, but glint doesn't }}
                   <BpItem @bp={{dm.item}} />
                 {{else if (eq dm.type "glucose")}}
+                  {{! @glint-expect-error We know it's a glucose, but glint doesn't }}
                   <GlucoseItem @glucose={{dm.item}} />
                 {{/if}}
               {{/each}}
