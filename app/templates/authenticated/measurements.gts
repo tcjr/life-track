@@ -9,14 +9,9 @@ import { service } from '@ember/service';
 import { collections } from '#app/models/collections.ts';
 import type { TOC } from '@ember/component/template-only';
 
-const dtf = new Intl.DateTimeFormat('en-US', {
-  weekday: 'short',
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-});
+function eq<T>(a: T, b: T) {
+  return a === b;
+}
 
 interface BpItemSignature {
   Args: { bp: BpMeasurement };
@@ -86,53 +81,28 @@ export default class Measurements extends Component<MeasurementsSignature> {
 
     [
       {
-        date: "2022-02-19", // This is a calendar date
-        bps: [
+        date: "2022-02-19", // This is a calendar date in the local timezone
+        items: [
+          // These are sorted by timestamp ascending
           {
-            systolic: 120,
-            diastolic: 80,
-            heartRate: 70,
-            timestamp: TS // This is the timestamp from the db
-          }
-          ...
+            type: "bp", 
+            item: {
+              systolic: 120,
+              diastolic: 80,
+              heartRate: 70,
+              timestamp: TS
+            },
+          },
+          { type: "gluclose", item: { ... } },
+          { type: "gluclose", item: { ... } },
+          { type: "bp", item: { ... } }
         ],
-        glucoses: [
-          {
-            value: 120,
-            timestamp: TS // This is the timestamp from the db
-          }
-          ...
-        ]
       }
       ...
     ]
   */
   get measurementsByDay() {
-    const grouped: Record<
-      string,
-      { date: string; bps: BpMeasurement[]; glucoses: GlucoseMeasurement[] }
-    > = {};
-
-    for (const bp of this.allBps) {
-      const date = bp.timestamp.toISOString().split('T')[0] || 'NO DATE';
-      if (!grouped[date]) {
-        grouped[date] = { date, bps: [], glucoses: [] };
-      }
-      grouped[date].bps.push(bp);
-    }
-
-    for (const glucose of this.allGlucoses) {
-      const date = glucose.timestamp.toISOString().split('T')[0] || 'NO DATE';
-      if (!grouped[date]) {
-        grouped[date] = { date, bps: [], glucoses: [] };
-      }
-      grouped[date].glucoses.push(glucose);
-    }
-
-    const result = Object.values(grouped);
-    result.sort((a, b) => b.date.localeCompare(a.date));
-
-    return result;
+    return [];
   }
 
   <template>
@@ -148,11 +118,12 @@ export default class Measurements extends Component<MeasurementsSignature> {
           <li class="list-row">
             <div>{{day.date}}</div>
             <div>
-              {{#each day.bps as |bp|}}
-                <BpItem @bp={{bp}} />
-              {{/each}}
-              {{#each day.glucoses as |glucose|}}
-                <GlucoseItem @glucose={{glucose}} />
+              {{#each day.items as |dm|}}
+                {{#if (eq dm.type "bp")}}
+                  <BpItem @bp={{dm.item}} />
+                {{else if (eq dm.type "glucose")}}
+                  <GlucoseItem @glucose={{dm.item}} />
+                {{/if}}
               {{/each}}
             </div>
           </li>

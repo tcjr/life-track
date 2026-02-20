@@ -66,46 +66,47 @@ export default class Application extends Component<ApplicationComponentSignature
       {{/each}}
     </div>
 
-    <h2 class="bg-primary text-primary-content">Welcome to Ember</h2>
+    <div class="container mx-auto px-4">
 
-    <div class="navbar bg-base-100 shadow-sm">
-      <div class="flex-1">
-        <a href="/" class="btn btn-ghost text-xl">home</a>
+      <div class="navbar bg-base-100 shadow-sm">
+        <div class="flex-1">
+          <a href="/" class="btn btn-ghost text-xl">home</a>
+        </div>
+        <div class="flex-none">
+          <ul class="menu menu-horizontal px-1">
+            {{#if this.firebase.signedInUser}}
+              <li>
+                <span>{{this.firebase.signedInUser.email}}</span>
+              </li>
+              <li>
+                <a href="/settings">Settings</a>
+              </li>
+              <li>
+                <a href="/measurements">Measurements</a>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm"
+                  {{on "click" this.logout}}
+                >
+                  Logout
+                </button>
+              </li>
+            {{else}}
+              <li>
+                <a href="/login">Login</a>
+              </li>
+            {{/if}}
+          </ul>
+        </div>
       </div>
-      <div class="flex-none">
-        <ul class="menu menu-horizontal px-1">
-          {{#if this.firebase.signedInUser}}
-            <li>
-              <span>{{this.firebase.signedInUser.email}}</span>
-            </li>
-            <li>
-              <a href="/settings">Settings</a>
-            </li>
-            <li>
-              <a href="/measurements">Measurements</a>
-            </li>
-            <li>
-              <button
-                type="button"
-                class="btn btn-ghost btn-sm"
-                {{on "click" this.logout}}
-              >
-                Logout
-              </button>
-            </li>
-          {{else}}
-            <li>
-              <a href="/login">Login</a>
-            </li>
-          {{/if}}
-        </ul>
+
+      {{outlet}}
+
+      <div class="mt-96">
+
       </div>
-    </div>
-
-    {{outlet}}
-
-    <div class="mt-96">
-
     </div>
   </template>
 }
