@@ -11,9 +11,16 @@ export default class Index extends Component<IndexSignature> {
     <div ...attributes>
       <h3 class="text-3xl font-bold text-center mb-5">What do you want to do?</h3>
       <ul class="flex flex-col gap-4">
-        <li><a class="btn btn-primary btn-xl w-full" href="/new-measurement">New
-            Measurement
-          </a></li>
+        <li>
+          <a class="btn btn-primary btn-xl w-full" href="/new-measurement">
+            Track New...
+          </a>
+        </li>
+        <li>
+          <a class="btn btn-primary btn-xl w-full" href="/recent">
+            View Recent Items
+          </a>
+        </li>
       </ul>
     </div>
   </template>

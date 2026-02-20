@@ -32,7 +32,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         updateData
       );
       this.flashMessages.success('Glucose added');
-      this.router.transitionTo('authenticated.new-measurement');
+      this.router.transitionTo('authenticated.index');
     } catch (e) {
       this.flashMessages.danger('Error adding glucose measurement');
       console.error('attempted data', updateData, e);

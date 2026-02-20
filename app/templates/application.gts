@@ -75,15 +75,12 @@ export default class Application extends Component<ApplicationComponentSignature
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1">
             {{#if this.firebase.signedInUser}}
-              <li>
-                <span>{{this.firebase.signedInUser.email}}</span>
-              </li>
-              <li>
+              {{!-- <li>
+                <span>{{this.firebase.signedInUser.displayName}}</span>
+              </li> --}}
+              {{! <li>
                 <a href="/settings">Settings</a>
-              </li>
-              <li>
-                <a href="/measurements">Measurements</a>
-              </li>
+              </li> }}
               <li>
                 <button
                   type="button"

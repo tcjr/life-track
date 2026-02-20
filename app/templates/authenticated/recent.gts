@@ -47,31 +47,27 @@ export default class Measurements extends Component<MeasurementsSignature> {
 
   constructor(owner: Owner, args: MeasurementsSignature['Args']) {
     super(owner, args);
-    void this.loadBps();
-    void this.loadGlucoses();
+    void this.loadAllData();
   }
 
   get uid() {
     return this.firebase.uid;
   }
 
-  loadBps = async () => {
-    const bps = await collections['app-users'](this.uid).bps.findMany({
-      name: 'all-bps',
-      limit: 100,
-      orderBy: [['timestamp', 'desc']],
-    });
-    this.allBps = bps;
-  };
-
-  loadGlucoses = async () => {
-    const glucoses = await collections['app-users'](this.uid).glucoses.findMany(
-      {
-        name: 'all-glucoses',
-        limit: 100,
+  loadAllData = async () => {
+    const [bps, glucoses] = await Promise.all([
+      collections['app-users'](this.uid).bps.findMany({
+        name: 'all-bps',
+        limit: 1000,
         orderBy: [['timestamp', 'desc']],
-      }
-    );
+      }),
+      collections['app-users'](this.uid).glucoses.findMany({
+        name: 'all-glucoses',
+        limit: 1000,
+        orderBy: [['timestamp', 'desc']],
+      }),
+    ]);
+    this.allBps = bps;
     this.allGlucoses = glucoses;
   };
 
@@ -102,16 +98,54 @@ export default class Measurements extends Component<MeasurementsSignature> {
     ]
   */
   get measurementsByDay() {
-    return [];
+    const combined: (
+      | { type: 'bp'; item: BpMeasurement }
+      | { type: 'glucose'; item: GlucoseMeasurement }
+    )[] = [
+      ...this.allBps.map((bp) => ({ type: 'bp' as const, item: bp })),
+      ...this.allGlucoses.map((glucose) => ({
+        type: 'glucose' as const,
+        item: glucose,
+      })),
+    ];
+
+    const byDay: Record<
+      string,
+      (
+        | { type: 'bp'; item: BpMeasurement }
+        | { type: 'glucose'; item: GlucoseMeasurement }
+      )[]
+    > = {};
+
+    for (const measurement of combined) {
+      const date = measurement.item.timestamp
+        .toISOString()
+        .split('T')[0] as string;
+      if (!byDay[date]) {
+        byDay[date] = [];
+      }
+      byDay[date].push(measurement);
+    }
+
+    return Object.entries(byDay)
+      .map(([date, items]) => ({
+        date,
+        items: items.sort(
+          (a, b) => a.item.timestamp.getTime() - b.item.timestamp.getTime()
+        ),
+      }))
+      .sort((a, b) => b.date.localeCompare(a.date));
   }
 
   <template>
     {{pageTitle "Measurements"}}
     {{log "EVERYTHING" this.measurementsByDay}}
     <div ...attributes>
-      <h1>Measurements</h1>
-      <a href="/new-measurement" class="link">New Measurement...</a>
-      <hr />
+      <h1 class="text-3xl font-bold">Recent Items</h1>
+      <div class="text-right">
+        <a href="/new-measurement" class="btn btn-primary">Add New...</a>
+
+      </div>
 
       <ul class="list bg-base-100 rounded-box shadow-md">
         {{#each this.measurementsByDay as |day|}}
@@ -119,6 +153,10 @@ export default class Measurements extends Component<MeasurementsSignature> {
             <div>{{day.date}}</div>
             <div>
               {{#each day.items as |dm|}}
+                {{!
+                  I think we might be able to clean up the type errors here by
+                  using a helpers?
+                }}
                 {{#if (eq dm.type "bp")}}
                   <BpItem @bp={{dm.item}} />
                 {{else if (eq dm.type "glucose")}}

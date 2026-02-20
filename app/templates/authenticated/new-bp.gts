@@ -32,7 +32,7 @@ export default class NewBp extends Component<NewBpSignature> {
     try {
       await collections['app-users'](this.firebase.uid).bps.add(updateData);
       this.flashMessages.success('BP added');
-      this.router.transitionTo('authenticated.new-measurement');
+      this.router.transitionTo('authenticated.index');
     } catch (e) {
       this.flashMessages.danger('Error adding BP measurement');
       console.error('attempted data', updateData, e);
