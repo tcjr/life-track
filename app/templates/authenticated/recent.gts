@@ -8,6 +8,31 @@ import type FirebaseService from '#app/services/firebase.ts';
 import { service } from '@ember/service';
 import { collections } from '#app/models/collections.ts';
 import type { TOC } from '@ember/component/template-only';
+import DayTimeline from '#app/components/day-timeline.gts';
+import type { Meal } from '#app/models/measurements/meal.ts';
+
+/**
+ * Return a string in the form YYYY-MM-DD that represents the given date in the
+ * local timezone.
+ */
+function asLocalDate(date: Date) {
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  const [month, , day, , year] = dtf.formatToParts(date);
+  return `${year?.value}-${month?.value}-${day?.value}`;
+}
+
+function localTime(date: Date) {
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+  return dtf.format(date);
+}
 
 function eq<T>(a: T, b: T) {
   return a === b;
@@ -17,7 +42,8 @@ interface BpItemSignature {
   Args: { bp: BpMeasurement };
 }
 const BpItem = <template>
-  <div class="badge badge-info">
+  <div class="badge badge-outline">
+    {{localTime @bp.timestamp}}
     BP:
     {{@bp.systolic}}/{{@bp.diastolic}}
     HR:
@@ -29,21 +55,41 @@ interface GlucoseItemSignature {
   Args: { glucose: GlucoseMeasurement };
 }
 const GlucoseItem = <template>
-  <div class="badge badge-success">
+  <div class="badge badge-outline">
+    {{localTime @glucose.timestamp}}
     Glucose:
     {{@glucose.value}}
   </div>
 </template> satisfies TOC<GlucoseItemSignature>;
+
+interface MealItemSignature {
+  Args: { meal: Meal };
+}
+const MealItem = <template>
+  <div class="badge">
+    {{localTime @meal.timestamp}}
+    Meal
+    {{#if @meal.notes}}
+      ({{@meal.notes}})
+    {{/if}}
+  </div>
+</template> satisfies TOC<MealItemSignature>;
 
 export interface MeasurementsSignature {
   Args: { model: unknown };
   Element: HTMLDivElement;
 }
 
+type TypedTrackable =
+  | { type: 'bp'; item: BpMeasurement }
+  | { type: 'glucose'; item: GlucoseMeasurement }
+  | { type: 'meal'; item: Meal };
+
 export default class Measurements extends Component<MeasurementsSignature> {
   @service declare firebase: FirebaseService;
   @tracked allBps: BpMeasurement[] = [];
   @tracked allGlucoses: GlucoseMeasurement[] = [];
+  @tracked allMeals: Meal[] = [];
 
   constructor(owner: Owner, args: MeasurementsSignature['Args']) {
     super(owner, args);
@@ -55,7 +101,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
   }
 
   loadAllData = async () => {
-    const [bps, glucoses] = await Promise.all([
+    const [bps, glucoses, meals] = await Promise.all([
       collections['app-users'](this.uid).bps.findMany({
         name: 'all-bps',
         limit: 1000,
@@ -66,9 +112,15 @@ export default class Measurements extends Component<MeasurementsSignature> {
         limit: 1000,
         orderBy: [['timestamp', 'desc']],
       }),
+      collections['app-users'](this.uid).meals.findMany({
+        name: 'all-meals',
+        limit: 1000,
+        orderBy: [['timestamp', 'desc']],
+      }),
     ]);
     this.allBps = bps;
     this.allGlucoses = glucoses;
+    this.allMeals = meals;
   };
 
   /*
@@ -98,33 +150,23 @@ export default class Measurements extends Component<MeasurementsSignature> {
     ]
   */
   get measurementsByDay() {
-    const combined: (
-      | { type: 'bp'; item: BpMeasurement }
-      | { type: 'glucose'; item: GlucoseMeasurement }
-    )[] = [
+    const combined: TypedTrackable[] = [
       ...this.allBps.map((bp) => ({ type: 'bp' as const, item: bp })),
       ...this.allGlucoses.map((glucose) => ({
         type: 'glucose' as const,
         item: glucose,
       })),
+      ...this.allMeals.map((meal) => ({ type: 'meal' as const, item: meal })),
     ];
 
-    const byDay: Record<
-      string,
-      (
-        | { type: 'bp'; item: BpMeasurement }
-        | { type: 'glucose'; item: GlucoseMeasurement }
-      )[]
-    > = {};
+    const byDay: Record<string, TypedTrackable[]> = {};
 
     for (const measurement of combined) {
-      const date = measurement.item.timestamp
-        .toISOString()
-        .split('T')[0] as string;
-      if (!byDay[date]) {
-        byDay[date] = [];
+      const yyyymmdd = asLocalDate(measurement.item.timestamp);
+      if (!byDay[yyyymmdd]) {
+        byDay[yyyymmdd] = [];
       }
-      byDay[date].push(measurement);
+      byDay[yyyymmdd].push(measurement);
     }
 
     return Object.entries(byDay)
@@ -139,7 +181,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
 
   <template>
     {{pageTitle "Measurements"}}
-    {{!log "EVERYTHING" this.measurementsByDay}}
+    {{log "EVERYTHING" this.measurementsByDay}}
     <div ...attributes>
       <h1 class="text-3xl font-bold">Recent Items</h1>
       <div class="text-right">
@@ -152,19 +194,25 @@ export default class Measurements extends Component<MeasurementsSignature> {
           <li class="list-row">
             <div>{{day.date}}</div>
             <div>
-              {{#each day.items as |dm|}}
-                {{!
+              <div>
+                {{#each day.items as |dm|}}
+                  {{!
                   I think we might be able to clean up the type errors here by
                   using a helpers?
                 }}
-                {{#if (eq dm.type "bp")}}
-                  {{! @glint-expect-error We know it's a bp, but glint doesn't }}
-                  <BpItem @bp={{dm.item}} />
-                {{else if (eq dm.type "glucose")}}
-                  {{! @glint-expect-error We know it's a glucose, but glint doesn't }}
-                  <GlucoseItem @glucose={{dm.item}} />
-                {{/if}}
-              {{/each}}
+                  {{#if (eq dm.type "bp")}}
+                    {{! @glint-expect-error We know it's a bp, but glint doesn't }}
+                    <BpItem @bp={{dm.item}} />
+                  {{else if (eq dm.type "glucose")}}
+                    {{! @glint-expect-error We know it's a glucose, but glint doesn't }}
+                    <GlucoseItem @glucose={{dm.item}} />
+                  {{else if (eq dm.type "meal")}}
+                    <MealItem @meal={{dm.item}} />
+                  {{/if}}
+
+                {{/each}}
+              </div>
+              <DayTimeline @items={{day.items}} />
             </div>
           </li>
         {{/each}}

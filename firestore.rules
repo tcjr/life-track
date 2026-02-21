@@ -36,6 +36,12 @@ service cloud.firestore {
         allow read: if request.auth.uid == userId;
         allow write: if request.auth.uid == userId;
       }
+
+      match /meals/{measurementId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
+      }
+
     }
 
     // Admin users
