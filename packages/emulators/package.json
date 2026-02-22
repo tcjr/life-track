@@ -1,0 +1,12 @@
+{
+  "name": "emulators",
+  "version": "1.0.0",
+  "description": "Firebase emulators for local development of life-track",
+  "scripts": {
+    "start": "firebase emulators:start --only auth,firestore --import=./firebase-dev-data --export-on-exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.12.4"
+}

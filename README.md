@@ -1,55 +1,107 @@
-# life-track
+# Life Track
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+A personal life tracking application built with Ember.js, Firebase, and modern web technologies. Track various aspects of your life including health measurements and more.
+
+## Overview
+
+Life Track is a monorepo containing:
+
+- **web-app**: An Ember.js application for tracking life metrics
+- **emulators**: Firebase emulators for local development
+
+## Tech Stack
+
+- **Frontend**: Ember.js with Vite
+- **Language**: TypeScript
+- **Backend**: Firebase (Authentication, Firestore)
+- **Styling**: TailwindCSS, DaisyUI
+- **Testing**: Vitest
+- **Package Manager**: pnpm
 
 ## Prerequisites
 
-You will need the following things properly installed on your computer.
-
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/)
-- [pnpm](https://pnpm.io/)
-- [Google Chrome](https://google.com/chrome/)
+- Node.js 20+
+- pnpm
+- Google Chrome (for testing)
 
 ## Installation
 
-- `git clone <repository-url>` this repository
-- `cd life-track`
-- `pnpm install`
+```bash
+pnpm install
+```
 
-## Running / Development
+## Development
 
-- `pnpm start`
-- Visit your app at [http://localhost:4200](http://localhost:4200).
-- Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+### Start Development Server
 
-### Code Generators
+```bash
+pnpm start
+```
 
-Make use of the many generators for code, try `pnpm ember help generate` for more details
+This starts both the web-app and emulators. The web app runs at http://localhost:4200.
 
-### Running Tests
+### Run Tests
 
-- `pnpm test`
+```bash
+pnpm test
+```
+
+### Build for Production
+
+```bash
+pnpm build
+```
 
 ### Linting
 
-- `pnpm lint`
-- `pnpm lint:fix`
+```bash
+pnpm lint          # Run all linters
+pnpm lint:fix      # Fix linting issues
+```
 
-### Building
+For package-specific linting:
 
-- `pnpm vite build --mode development` (development)
-- `pnpm build` (production)
+```bash
+pnpm --filter=web-app run lint:css    # Lint CSS
+pnpm --filter=web-app run lint:hbs    # Lint Ember templates
+pnpm --filter=web-app run lint:js     # Lint JavaScript/TypeScript
+pnpm --filter=web-app run lint:types  # Type check TypeScript
+```
 
-### Deploying
+### Firebase Emulators
 
-Specify what it takes to deploy your app.
+The emulators package provides local Firebase services:
 
-## Further Reading / Useful Links
+```bash
+pnpm --filter=emulators start
+```
 
-- [ember.js](https://emberjs.com/)
+This starts Auth and Firestore emulators with pre-loaded dev data.
+
+### Deploy Firestore Rules
+
+```bash
+pnpm deploy-rules
+```
+
+## Project Structure
+
+```
+life-track/
+├── packages/
+│   ├── web-app/          # Ember.js application
+│   │   ├── app/          # Application code
+│   │   ├── tests/        # Test files
+│   │   └── ...
+│   └── emulators/       # Firebase emulator data
+├── firestore.rules      # Firestore security rules
+├── firestore.indexes.json
+└── firebase.json
+```
+
+## Further Reading
+
+- [Ember.js](https://emberjs.com/)
 - [Vite](https://vite.dev)
-- Development Browser Extensions
-  - [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  - [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+- [Firebase Documentation](https://firebase.google.com/docs)
+- [TailwindCSS](https://tailwindcss.com/)

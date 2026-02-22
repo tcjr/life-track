@@ -14,7 +14,7 @@ interface Config {
 }
 
 const ENV: Config = {
-  modulePrefix: 'life-track',
+  modulePrefix: 'web-app',
   environment: import.meta.env.DEV ? 'development' : 'production',
   rootURL: '/',
   locationType: 'history',
