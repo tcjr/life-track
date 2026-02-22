@@ -38,9 +38,7 @@
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc --noEmit",
     "start": "vite",
-    "test": "vitest run",
-    "start-emulators": "firebase emulators:start --only auth,firestore --import=./firebase-dev-data --export-on-exit",
-    "deploy-rules": "firebase deploy --only firestore:rules"
+    "test": "vitest run"
   },
   "dependencies": {
     "firebase": "^12.8.0"

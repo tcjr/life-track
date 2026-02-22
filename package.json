@@ -8,9 +8,10 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm --filter=life-track run build",
-    "lint": "pnpm --filter=life-track run lint",
+    "lint": "pnpm --filter '*' run lint",
     "test": "pnpm --filter=life-track run test",
-    "start": "pnpm --filter=life-track run start"
+    "start": "pnpm --filter '*' run start",
+    "deploy-rules": "firebase deploy --only firestore:rules"
   },
   "pnpm": {
     "overrides": {

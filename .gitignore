@@ -8,6 +8,3 @@ node_modules
 
 /firestore-debug.log
 /firebase-debug.log
-
-# Firebase emulators data
-/firebase-dev-data/

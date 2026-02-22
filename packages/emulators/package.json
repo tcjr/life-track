@@ -1,0 +1,12 @@
+{
+  "name": "emulators",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "firebase emulators:start --only auth,firestore --import=./firebase-dev-data --export-on-exit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.4"
+}
