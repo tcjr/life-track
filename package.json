@@ -7,9 +7,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "build": "pnpm --filter=life-track run build",
+    "build": "pnpm --filter=web-app run build",
     "lint": "pnpm --filter '*' run lint",
-    "test": "pnpm --filter=life-track run test",
+    "test": "pnpm --filter=web-app run test",
     "start": "pnpm --filter '*' run start",
     "deploy-rules": "firebase deploy --only firestore:rules"
   },

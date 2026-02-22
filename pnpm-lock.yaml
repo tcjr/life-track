@@ -11,7 +11,9 @@ importers:
 
   .: {}
 
-  packages/frontend:
+  packages/emulators: {}
+
+  packages/web-app:
     dependencies:
       firebase:
         specifier: ^12.8.0
