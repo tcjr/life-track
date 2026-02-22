@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'life-track',
+    modulePrefix: 'web-app',
     environment,
     rootURL: '/',
     locationType: 'history',
