@@ -1,5 +1,7 @@
 node_modules
 
+service-account/*.json
+
 .env
 *.local
 /.pnp*
@@ -8,3 +10,4 @@ node_modules
 
 /firestore-debug.log
 /firebase-debug.log
+.DS_Store
