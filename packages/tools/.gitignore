@@ -1,9 +1,3 @@
-# Compiled JavaScript files
-lib/**/*.js
-lib/**/*.mjs
-lib/**/*.js.map
-lib/**/*.mjs.map
-
 /.eslintcache
 
 # TypeScript v1 declaration files
