@@ -7,11 +7,12 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "build": "pnpm --filter=web-app run build",
+    "build": "pnpm --filter '*' run build",
     "lint": "pnpm --filter '*' run lint",
     "test": "pnpm --filter=web-app run test",
     "start": "pnpm --filter '*' run start",
-    "deploy-rules": "firebase deploy --only firestore:rules"
+    "deploy-rules": "firebase deploy --only firestore:rules",
+    "deploy-functions": "pnpm --filter=functions run deploy"
   },
   "pnpm": {
     "overrides": {
