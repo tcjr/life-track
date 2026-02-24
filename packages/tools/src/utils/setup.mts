@@ -5,6 +5,8 @@ import { collectionsBuilder } from 'zod-firebase-admin';
 import { AppUserSchema } from '../models/app-user.mts';
 import { NoticeSchema } from '../models/notice.mts';
 import { Timestamp } from 'firebase-admin/firestore';
+import gradient from 'gradient-string';
+const fiery = gradient(['yellow', 'red']);
 
 // Always load .env from monorepo root
 dotenv.config({
@@ -26,7 +28,10 @@ export default async function setupApp() {
     // GOOGLE_APPLICATION_CREDENTIALS
     credential: applicationDefault(),
   });
-  console.log('Firebase Admin initialized.');
+
+  console.log('🔥');
+  console.log(fiery('🔥 PRODUCTION Firebase Admin initialized.'));
+  console.log('🔥');
 
   const collections = collectionsBuilder(schema, {
     snapshotDataConverter: (snapshot) => {

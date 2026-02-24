@@ -2,10 +2,10 @@ import { text, select, confirm, isCancel } from '@clack/prompts';
 
 async function main() {
   // Get user's name
-  const name = await text({
+  const name = (await text({
     message: 'What is your name?',
     placeholder: 'John Doe',
-  }) as string;
+  })) as string;
 
   // Get user's favorite color
   const favoriteColor = await select({
