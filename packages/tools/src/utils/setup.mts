@@ -7,6 +7,7 @@ import { NoticeSchema } from '../models/notice.mts';
 import { Timestamp } from 'firebase-admin/firestore';
 import gradient from 'gradient-string';
 const fiery = gradient(['yellow', 'red']);
+const cool = gradient(['white', 'purple']);
 
 // Always load .env from monorepo root
 dotenv.config({
@@ -26,12 +27,21 @@ export default async function setupApp() {
   const app = initializeApp({
     // applicationDefault() causes it to look at the path in the environment var
     // GOOGLE_APPLICATION_CREDENTIALS
+    // It also looks for FIRESTORE_EMULATOR_HOST and respects that.
     credential: applicationDefault(),
   });
 
-  console.log('🔥');
-  console.log(fiery('🔥 PRODUCTION Firebase Admin initialized.'));
-  console.log('🔥');
+  const isProduction = Boolean(!process.env.FIRESTORE_EMULATOR_HOST);
+
+  if (isProduction) {
+    console.log('🔥');
+    console.log(fiery('🔥 PRODUCTION Firebase Admin initialized.'));
+    console.log('🔥');
+  } else {
+    console.log('⛄');
+    console.log(cool('⛄ EMULATOR Firebase Admin initialized.'));
+    console.log('⛄');
+  }
 
   const collections = collectionsBuilder(schema, {
     snapshotDataConverter: (snapshot) => {
@@ -46,5 +56,5 @@ export default async function setupApp() {
     },
   });
 
-  return { app, collections };
+  return { app, collections, isProduction };
 }
