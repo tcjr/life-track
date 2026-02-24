@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Firebase emulators for local development of life-track",
   "scripts": {
-    "start": "firebase emulators:start --only auth,firestore --import=./firebase-dev-data --export-on-exit"
+    "start": "firebase emulators:start --only auth,firestore,functions --import=./firebase-dev-data --export-on-exit"
   },
   "keywords": [],
   "author": "",
