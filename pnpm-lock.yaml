@@ -21,6 +21,12 @@ importers:
       firebase-functions:
         specifier: ^7.0.0
         version: 7.0.5(firebase-admin@13.6.1)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+      zod-firebase-admin:
+        specifier: ^2.1.2
+        version: 2.1.2(firebase-admin@13.6.1)(zod@4.3.6)
     devDependencies:
       firebase-functions-test:
         specifier: ^3.4.1
@@ -8598,6 +8604,13 @@ packages:
   zip-stream@6.0.1:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
+
+  zod-firebase-admin@2.1.2:
+    resolution: {integrity: sha512-araEa1wZ1Vn30Cw+n6XFFDeF0O6eHree2rlsNcxtTg+4hjLf3qJJOISnT4E7N4qYXvv/IWx2kaZWc+rjf6lvFA==}
+    engines: {node: '>= 22.0.0'}
+    peerDependencies:
+      firebase-admin: ^12.0.0 || ^13.0.0
+      zod: ^3.23.0 || ^4.0.0
 
   zod-firebase@2.1.2:
     resolution: {integrity: sha512-HKPCfKRx09IhieFg7U1krLQ1dfX6ZZVe3ZVfETSWaCZR2VqLLnu+uWKHXagY+15ffKgEDa5qJ6ikxW/Ul9u6kw==}
@@ -19097,6 +19110,12 @@ snapshots:
       archiver-utils: 5.0.2
       compress-commons: 6.0.2
       readable-stream: 4.7.0
+
+  zod-firebase-admin@2.1.2(firebase-admin@13.6.1)(zod@4.3.6):
+    dependencies:
+      firebase-admin: 13.6.1
+      type-fest: 5.4.4
+      zod: 4.3.6
 
   zod-firebase@2.1.2(@firebase/firestore@4.10.0(@firebase/app@0.14.7))(zod@4.3.6):
     dependencies:
