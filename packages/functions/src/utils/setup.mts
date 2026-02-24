@@ -2,6 +2,7 @@ import { collectionsBuilder } from 'zod-firebase-admin';
 import { NoticeSchema } from '../models/notice.mjs';
 import { initializeApp } from 'firebase-admin/app';
 import { Timestamp } from 'firebase-admin/firestore';
+import * as logger from 'firebase-functions/logger';
 
 const schema = {
   notices: {
@@ -22,6 +23,15 @@ export default async function setupApp() {
           value instanceof Timestamp ? value.toDate() : value,
         ]),
       );
+    },
+
+    // When we have a validation error
+    zodErrorHandler: (error, snapshot) => {
+      logger.error(
+        `Validation (zod) failed for document "${snapshot.id}":`,
+        error,
+      );
+      return new Error(`Invalid document: ${snapshot.id}`);
     },
   });
 

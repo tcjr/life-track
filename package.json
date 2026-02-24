@@ -11,7 +11,8 @@
     "lint": "pnpm --filter '*' run lint",
     "test": "pnpm --filter=web-app run test",
     "start": "pnpm --filter '*' run start",
-    "deploy-rules": "firebase deploy --only firestore:rules"
+    "deploy-rules": "firebase deploy --only firestore:rules",
+    "deploy-functions": "pnpm --filter=functions run deploy"
   },
   "pnpm": {
     "overrides": {
