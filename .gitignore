@@ -5,6 +5,7 @@ node_modules
 /.pnp*
 /.eslintcache
 
-
 /firestore-debug.log
 /firebase-debug.log
+service-account/*
+.DS_Store
