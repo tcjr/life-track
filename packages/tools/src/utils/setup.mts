@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { join } from 'node:path';
-import { initializeApp, applicationDefault, cert } from 'firebase-admin/app';
+import { initializeApp, applicationDefault } from 'firebase-admin/app';
 import { collectionsBuilder } from 'zod-firebase-admin';
 import { AppUserSchema } from '../models/app-user.mts';
 import { NoticeSchema } from '../models/notice.mts';
