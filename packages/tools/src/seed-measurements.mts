@@ -74,13 +74,25 @@ async function main() {
       timestamp,
     });
 
+    const secondTimestamp = new Date(timestamp.getTime() + randomInRange(1, 2) * 60 * 1000);
+    const systolic2 = randomInRange(110, 140);
+    const diastolic2 = randomInRange(70, 90);
+    const heartRate2 = randomInRange(60, 80);
+
+    await userCollection.bps.add({
+      systolic: systolic2,
+      diastolic: diastolic2,
+      heartRate: heartRate2,
+      timestamp: secondTimestamp,
+    });
+
     console.log(
-      `Day ${i + 1}/${numDays}: ${timestamp.toISOString()} - Glucose: ${glucoseValue}, BP: ${systolic}/${diastolic} (HR: ${heartRate})`,
+      `Day ${i + 1}/${numDays}: ${timestamp.toISOString()} - Glucose: ${glucoseValue}, BP: ${systolic}/${diastolic} (HR: ${heartRate}), BP2: ${systolic2}/${diastolic2} (HR: ${heartRate2})`,
     );
   }
 
   console.log(
-    `Successfully created ${numDays} glucose and ${numDays} BP measurements.`,
+    `Successfully created ${numDays} glucose and ${numDays * 2} BP measurements.`,
   );
 }
 
