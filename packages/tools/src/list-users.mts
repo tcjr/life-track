@@ -1,4 +1,4 @@
-import setup from '../src/utils/setup.mts';
+import setup from './utils/setup.mts';
 
 async function main() {
   const { collections } = await setup();
