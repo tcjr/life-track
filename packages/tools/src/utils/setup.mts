@@ -4,6 +4,8 @@ import { initializeApp, applicationDefault } from 'firebase-admin/app';
 import { collectionsBuilder } from 'zod-firebase-admin';
 import { AppUserSchema } from '../models/app-user.mts';
 import { NoticeSchema } from '../models/notice.mts';
+import { GlucoseSchema } from '../models/glucose.mts';
+import { BpSchema } from '../models/bp.mts';
 import { Timestamp } from 'firebase-admin/firestore';
 import gradient from 'gradient-string';
 const fiery = gradient(['yellow', 'red']);
@@ -17,6 +19,8 @@ dotenv.config({
 const schema = {
   'app-users': {
     zod: AppUserSchema,
+    glucoses: { zod: GlucoseSchema },
+    bps: { zod: BpSchema },
   },
   notices: {
     zod: NoticeSchema,
