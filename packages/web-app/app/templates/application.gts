@@ -5,23 +5,7 @@ import type FirebaseService from '#services/firebase';
 import type RouterService from '@ember/routing/router-service';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
-import { type FlashMessagesService } from 'ember-cli-flash';
-
-const flashAlertClass = (flashType: string) => {
-  switch (flashType) {
-    case 'success':
-      return 'alert-success';
-    case 'error':
-    case 'danger':
-      return 'alert-error';
-    case 'warning':
-      return 'alert-warning';
-    case 'info':
-      return 'alert-info';
-    default:
-      return 'alert-info';
-  }
-};
+import FlashMessages from '#app/components/flash-messages.gts';
 
 interface ApplicationComponentSignature {
   Args: {
@@ -32,7 +16,6 @@ interface ApplicationComponentSignature {
 export default class Application extends Component<ApplicationComponentSignature> {
   @service declare firebase: FirebaseService;
   @service declare router: RouterService;
-  @service declare flashMessages: FlashMessagesService;
 
   @action
   async logout() {
@@ -57,14 +40,8 @@ export default class Application extends Component<ApplicationComponentSignature
 
   <template>
     {{pageTitle "LifeTrack"}}
-    {{! Toast messages appear at the bottom. The CSS takes care of the positioning. }}
-    <div class="toast">
-      {{#each this.flashMessages.queue as |flash|}}
-        <div class="alert {{flashAlertClass flash.type}}">
-          <span>{{flash.message}}</span>
-        </div>
-      {{/each}}
-    </div>
+
+    <FlashMessages />
 
     <div class="container mx-auto px-4">
 
@@ -75,9 +52,9 @@ export default class Application extends Component<ApplicationComponentSignature
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1">
             {{#if this.firebase.signedInUser}}
-              <li>
+              {{!-- <li>
                 <span>{{this.firebase.signedInUser.email}}</span>
-              </li>
+              </li> --}}
               <li>
                 <a href="/settings">Settings</a>
               </li>
