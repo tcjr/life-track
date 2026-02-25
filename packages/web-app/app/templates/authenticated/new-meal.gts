@@ -2,19 +2,18 @@ import { pageTitle } from 'ember-page-title';
 import Component from '@glimmer/component';
 import { on } from '@ember/modifier';
 import { dataFromEvent } from 'ember-primitives/components/form';
-import type { GlucoseMeasurementInput } from '#app/models/measurements/glucose.ts';
+import type { MealInput } from '#app/models/measurements/meal.ts';
 import { collections } from '#app/models/collections.ts';
 import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
-import InputNumber from '#app/components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
 
-interface NewGlucoseSignature {
+interface NewMealSignature {
   Element: HTMLDivElement;
 }
 
-export default class NewGlucose extends Component<NewGlucoseSignature> {
+export default class NewMeal extends Component<NewMealSignature> {
   @service declare firebase: FirebaseService;
   @service declare flashMessages: FlashMessagesService;
   @service declare router: RouterService;
@@ -22,38 +21,36 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
   handleSubmit = async (e: Event) => {
     e.preventDefault();
     const formData = dataFromEvent(e);
-    const updateData: GlucoseMeasurementInput = {
-      value: Number(formData.value),
+    const updateData: MealInput = {
+      notes: (formData.notes || '') as string,
       timestamp: new Date(),
     };
 
     try {
-      await collections['app-users'](this.firebase.uid).glucoses.add(
-        updateData
-      );
-      this.flashMessages.success('Glucose added');
+      await collections['app-users'](this.firebase.uid).meals.add(updateData);
+      this.flashMessages.success('Meal added');
       this.router.transitionTo('authenticated.new-measurement');
     } catch (e) {
-      this.flashMessages.danger('Error adding glucose measurement');
+      this.flashMessages.danger('Error adding meal');
       console.error('attempted data', updateData, e);
     }
   };
 
-  get prefillValues() {
-    return {
-      value: '150',
-    };
-  }
-
   <template>
-    {{pageTitle "New Glucose"}}
+    {{pageTitle "New Meal"}}
     <div ...attributes>
 
       <form {{on "submit" this.handleSubmit}}>
-        <div class="text-2xl font-bold text-center">Glucose</div>
+        <div class="text-2xl font-bold text-center">Meal</div>
         <div class="flex flex-col">
-          <label for="value" class="text-center italic text-sm">mg/dL</label>
-          <InputNumber @name="value" @value={{this.prefillValues.value}} />
+          <label for="notes" class="text-center italic text-sm">optional notes</label>
+          <input
+            name="notes"
+            id="notes"
+            value=""
+            placeholder="light breakfast, etc"
+            class="input w-full"
+          />
         </div>
         <button
           type="submit"

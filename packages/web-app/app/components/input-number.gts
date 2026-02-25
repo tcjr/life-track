@@ -25,13 +25,13 @@ export default class InputNumber extends Component<InputNumberSignature> {
 
   <template>
     <div
-      class="flex gap-2 items-center justify-between"
+      class="flex gap-2 items-center justify-between text-5xl"
       ...attributes
       data-component="InputNumber"
     >
       <button
         type="button"
-        class="btn btn-circle btn-secondary btn-lg text-4xl"
+        class="btn btn-circle btn-secondary btn-lg"
         {{on "click" this.decrement}}
       >-</button>
       <input
@@ -39,13 +39,13 @@ export default class InputNumber extends Component<InputNumberSignature> {
         name={{@name}}
         id={{@name}}
         value={{this.currentValue}}
-        class="w-full bg-primary text-primary-content text-5xl font-bold text-center rounded-full"
+        class="w-full bg-primary text-primary-content font-bold text-center rounded-full"
         inputmode="numeric"
         {{! NOTE: we might want to disable this }}
       />
       <button
         type="button"
-        class="btn btn-circle btn-secondary btn-lg text-4xl"
+        class="btn btn-circle btn-secondary btn-lg"
         {{on "click" this.increment}}
       >+</button>
     </div>
