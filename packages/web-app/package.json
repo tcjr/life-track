@@ -80,6 +80,7 @@
     "ember-cli": "~6.11.0",
     "ember-cli-babel": "^8.3.1",
     "ember-cli-flash": "^7.0.0",
+    "ember-concurrency": "^5.2.0",
     "ember-modifier": "^4.3.0",
     "ember-page-title": "^9.0.3",
     "ember-primitives": "^0.53.1",
