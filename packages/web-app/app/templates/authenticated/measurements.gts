@@ -7,7 +7,6 @@ import type Owner from '@ember/owner';
 import type FirebaseService from '#app/services/firebase.ts';
 import { service } from '@ember/service';
 import { collections } from '#app/models/collections.ts';
-import { LinkTo } from '@ember/routing';
 
 const dtf = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
@@ -64,7 +63,9 @@ export default class Measurements extends Component<MeasurementsSignature> {
     {{pageTitle "Measurements"}}
     <div ...attributes>
       <h1>Measurements</h1>
-      <LinkTo @route="authenticated.new-bp" class="link">New BP...</LinkTo>
+      <a href="/new-measurement" class="link">New Measurement...</a>
+      <hr />
+      <a href="/new-bp" class="link">New BP...</a>
       <table class="table">
         <thead>
           <tr>
@@ -90,7 +91,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
         </tbody>
       </table>
 
-      <LinkTo @route="authenticated.new-glucose" class="link">New Glucose...</LinkTo>
+      <a href="/new-glucose" class="link">New Glucose...</a>
 
       <table class="table">
         <thead>

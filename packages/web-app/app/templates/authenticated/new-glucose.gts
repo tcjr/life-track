@@ -6,18 +6,18 @@ import type { GlucoseMeasurementInput } from '#app/models/measurements/glucose.t
 import { collections } from '#app/models/collections.ts';
 import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
-import { LinkTo } from '@ember/routing';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#app/components/input-number.gts';
+import type RouterService from '@ember/routing/router-service';
 
 interface NewGlucoseSignature {
-  // Args: {};
   Element: HTMLDivElement;
 }
 
 export default class NewGlucose extends Component<NewGlucoseSignature> {
   @service declare firebase: FirebaseService;
   @service declare flashMessages: FlashMessagesService;
+  @service declare router: RouterService;
 
   handleSubmit = async (e: Event) => {
     e.preventDefault();
@@ -32,6 +32,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         updateData
       );
       this.flashMessages.success('Glucose added');
+      this.router.transitionTo('authenticated.new-measurement');
     } catch (e) {
       this.flashMessages.danger('Error adding glucose measurement');
       console.error('attempted data', updateData, e);
@@ -47,14 +48,6 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
   <template>
     {{pageTitle "New Glucose"}}
     <div ...attributes>
-      <div class="breadcrumbs text-sm">
-        <ul>
-          <li><LinkTo
-              @route="authenticated.measurements"
-            >Measurements</LinkTo></li>
-          <li>Add Glucose</li>
-        </ul>
-      </div>
 
       <h1>New Glucose</h1>
       <form {{on "submit" this.handleSubmit}}>

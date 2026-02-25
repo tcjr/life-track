@@ -6,18 +6,18 @@ import type { BpMeasurementInput } from '#app/models/measurements/bp.ts';
 import { collections } from '#app/models/collections.ts';
 import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
-import { LinkTo } from '@ember/routing';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
+import type RouterService from '@ember/routing/router-service';
 
 interface NewBpSignature {
-  // Args: {};
   Element: HTMLDivElement;
 }
 
 export default class NewBp extends Component<NewBpSignature> {
   @service declare firebase: FirebaseService;
   @service declare flashMessages: FlashMessagesService;
+  @service declare router: RouterService;
 
   handleSubmit = async (e: Event) => {
     e.preventDefault();
@@ -32,6 +32,7 @@ export default class NewBp extends Component<NewBpSignature> {
     try {
       await collections['app-users'](this.firebase.uid).bps.add(updateData);
       this.flashMessages.success('BP added');
+      this.router.transitionTo('authenticated.new-measurement');
     } catch (e) {
       this.flashMessages.danger('Error adding BP measurement');
       console.error('attempted data', updateData, e);
@@ -49,14 +50,6 @@ export default class NewBp extends Component<NewBpSignature> {
   <template>
     {{pageTitle "New BP"}}
     <div ...attributes>
-      <div class="breadcrumbs text-sm mb-4">
-        <ul>
-          <li><LinkTo
-              @route="authenticated.measurements"
-            >Measurements</LinkTo></li>
-          <li>New Blood Pressure Measurement</li>
-        </ul>
-      </div>
 
       <form {{on "submit" this.handleSubmit}}>
         <div class="text-2xl font-bold text-center">Blood Pressure</div>
