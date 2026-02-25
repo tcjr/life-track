@@ -1,4 +1,3 @@
-import { LinkTo } from '@ember/routing';
 import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
@@ -6,23 +5,7 @@ import type FirebaseService from '#services/firebase';
 import type RouterService from '@ember/routing/router-service';
 import { action } from '@ember/object';
 import { on } from '@ember/modifier';
-import { type FlashMessagesService } from 'ember-cli-flash';
-
-const flashAlertClass = (flashType: string) => {
-  switch (flashType) {
-    case 'success':
-      return 'alert-success';
-    case 'error':
-    case 'danger':
-      return 'alert-error';
-    case 'warning':
-      return 'alert-warning';
-    case 'info':
-      return 'alert-info';
-    default:
-      return 'alert-info';
-  }
-};
+import FlashMessages from '#app/components/flash-messages.gts';
 
 interface ApplicationComponentSignature {
   Args: {
@@ -33,7 +16,6 @@ interface ApplicationComponentSignature {
 export default class Application extends Component<ApplicationComponentSignature> {
   @service declare firebase: FirebaseService;
   @service declare router: RouterService;
-  @service declare flashMessages: FlashMessagesService;
 
   @action
   async logout() {
@@ -58,55 +40,50 @@ export default class Application extends Component<ApplicationComponentSignature
 
   <template>
     {{pageTitle "LifeTrack"}}
-    {{! Toast messages appear at the bottom. The CSS takes care of the positioning. }}
-    <div class="toast">
-      {{#each this.flashMessages.queue as |flash|}}
-        <div class="alert {{flashAlertClass flash.type}}">
-          <span>{{flash.message}}</span>
+
+    <FlashMessages />
+
+    <div class="container mx-auto px-4">
+
+      <div class="navbar bg-base-100 shadow-sm">
+        <div class="flex-1">
+          <a href="/" class="btn btn-ghost text-xl">home</a>
         </div>
-      {{/each}}
-    </div>
-
-    <h2 class="bg-primary text-primary-content">Welcome to Ember</h2>
-
-    <div class="navbar bg-base-100 shadow-sm">
-      <div class="flex-1">
-        <LinkTo @route="application" class="btn btn-ghost text-xl">home</LinkTo>
+        <div class="flex-none">
+          <ul class="menu menu-horizontal px-1">
+            {{#if this.firebase.signedInUser}}
+              {{!-- <li>
+                <span>{{this.firebase.signedInUser.email}}</span>
+              </li> --}}
+              <li>
+                <a href="/settings">Settings</a>
+              </li>
+              <li>
+                <a href="/measurements">Measurements</a>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm"
+                  {{on "click" this.logout}}
+                >
+                  Logout
+                </button>
+              </li>
+            {{else}}
+              <li>
+                <a href="/login">Login</a>
+              </li>
+            {{/if}}
+          </ul>
+        </div>
       </div>
-      <div class="flex-none">
-        <ul class="menu menu-horizontal px-1">
-          {{#if this.firebase.signedInUser}}
-            <li>
-              <span>{{this.firebase.signedInUser.email}}</span>
-            </li>
-            <li>
-              <LinkTo @route="authenticated.settings">Settings</LinkTo>
-            </li>
-            <li>
-              <LinkTo @route="authenticated.measurements">Measurements</LinkTo>
-            </li>
-            <li>
-              <button
-                type="button"
-                class="btn btn-ghost btn-sm"
-                {{on "click" this.logout}}
-              >
-                Logout
-              </button>
-            </li>
-          {{else}}
-            <li>
-              <LinkTo @route="login">Login</LinkTo>
-            </li>
-          {{/if}}
-        </ul>
+
+      {{outlet}}
+
+      <div class="mt-96">
+
       </div>
-    </div>
-
-    {{outlet}}
-
-    <div class="mt-96">
-
     </div>
   </template>
 }

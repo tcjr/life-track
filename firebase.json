@@ -29,7 +29,23 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": ["pnpm --filter 'functions' run build"]
+      "predeploy": [
+        "pnpm --filter 'functions' run build"
+      ]
     }
-  ]
+  ],
+  "hosting": {
+    "public": "packages/web-app/dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
