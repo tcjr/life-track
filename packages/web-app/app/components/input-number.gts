@@ -30,6 +30,7 @@ export default class InputNumber extends Component<InputNumberSignature> {
   });
 
   <template>
+    {{! template-lint-disable no-pointer-down-event-binding }}
     <div
       class="flex gap-2 items-center justify-between text-5xl"
       ...attributes
