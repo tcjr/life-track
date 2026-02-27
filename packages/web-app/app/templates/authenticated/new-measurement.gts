@@ -10,7 +10,7 @@ export interface NewMeasurementSignature {
 
 export default class NewMeasurement extends Component<NewMeasurementSignature> {
   <template>
-    {{pageTitle "New Measurement"}}
+    {{pageTitle "Track Something"}}
     <div ...attributes>
       <h3 class="text-3xl font-bold text-center mb-5">What do you want to track?</h3>
       <ul class="flex flex-col gap-4">

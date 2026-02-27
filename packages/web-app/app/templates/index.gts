@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { pageTitle } from 'ember-page-title';
+// import { pageTitle } from 'ember-page-title';
 
 export interface IndexSignature {
   Element: HTMLDivElement;
@@ -7,7 +7,7 @@ export interface IndexSignature {
 
 export default class Index extends Component<IndexSignature> {
   <template>
-    {{pageTitle "Index"}}
+    {{!pageTitle "Index"}}
     <div ...attributes>
       <h2>Index</h2>
     </div>
