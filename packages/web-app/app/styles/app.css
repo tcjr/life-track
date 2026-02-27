@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @plugin "daisyui" {
   themes:
+    nord,
     aqua --default,
     forest --prefersdark;
 }

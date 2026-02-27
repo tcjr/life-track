@@ -43,8 +43,7 @@ export default class Application extends Component<ApplicationComponentSignature
 
     <FlashMessages />
 
-    <div class="container mx-auto px-4">
-
+    <header>
       <div class="navbar bg-base-100 shadow-sm">
         <div class="flex-1">
           <a href="/" class="btn btn-ghost text-xl">home</a>
@@ -78,12 +77,18 @@ export default class Application extends Component<ApplicationComponentSignature
           </ul>
         </div>
       </div>
+    </header>
 
+    <main class="container mx-auto px-4 min-h-screen">
       {{outlet}}
+    </main>
 
-      <div class="mt-96">
-
-      </div>
-    </div>
+    <footer
+      class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content/50 text-xs p-4 pb-24"
+    >
+      <aside>
+        <p>Copyright © 2026 - tcjr</p>
+      </aside>
+    </footer>
   </template>
 }
