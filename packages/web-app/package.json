@@ -99,6 +99,7 @@
     "reactiveweb": "^1.9.1",
     "stylelint": "^17.2.0",
     "stylelint-config-standard": "^40.0.0",
+    "svg2ember": "^1.0.0",
     "tailwindcss": "^4.1.18",
     "testem": "^3.17.0",
     "testing-library-ember": "^1.0.0",
