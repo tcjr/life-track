@@ -37,7 +37,7 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc --noEmit",
-    "start": "vite dev -- --clearScreen false",
+    "start": "vite dev --host -- --clearScreen false",
     "test": "vitest run"
   },
   "dependencies": {
