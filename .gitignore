@@ -5,6 +5,9 @@ node_modules
 /.pnp*
 /.eslintcache
 
+# Firebase emulators data
+/firebase-dev-data/
+
 /firestore-debug.log
 /firebase-debug.log
 service-account/

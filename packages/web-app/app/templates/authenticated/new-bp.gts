@@ -9,6 +9,7 @@ import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
+import { parseTimeToDate, initTimePicker } from '#app/utils/timepicker.ts';
 
 interface NewBpSignature {
   Element: HTMLDivElement;
@@ -22,11 +23,17 @@ export default class NewBp extends Component<NewBpSignature> {
   handleSubmit = async (e: Event) => {
     e.preventDefault();
     const formData = dataFromEvent(e);
+
+    const timestamp =
+      formData.time === ''
+        ? new Date()
+        : parseTimeToDate(String(formData.time));
+
     const updateData: BpMeasurementInput = {
       systolic: Number(formData.systolic),
       diastolic: Number(formData.diastolic),
       heartRate: Number(formData.heartRate),
-      timestamp: new Date(),
+      timestamp,
     };
 
     try {
@@ -44,6 +51,7 @@ export default class NewBp extends Component<NewBpSignature> {
       systolic: '120',
       diastolic: '80',
       heartRate: '70',
+      time: '',
     };
   }
 
@@ -78,6 +86,22 @@ export default class NewBp extends Component<NewBpSignature> {
             @value={{this.prefillValues.heartRate}}
           />
         </div>
+
+        <div class="text-2xl font-bold text-center mt-4">Time</div>
+        <div class="w-full flex flex-row justify-center">
+          <label for="time" class="sr-only">when</label>
+          <input
+            class="bg-primary text-primary-content font-bold text-center rounded-full text-5xl"
+            id="time"
+            name="time"
+            type="text"
+            placeholder="Now"
+            value={{this.prefillValues.time}}
+            autocomplete="off"
+            {{initTimePicker}}
+          />
+        </div>
+
         <button
           type="submit"
           class="btn btn-secondary btn-xl w-full mt-6"

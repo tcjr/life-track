@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import type RouterService from '@ember/routing/router-service';
+import { parseTimeToDate, initTimePicker } from '#app/utils/timepicker.ts';
 
 interface NewMealSignature {
   Element: HTMLDivElement;
@@ -21,9 +22,15 @@ export default class NewMeal extends Component<NewMealSignature> {
   handleSubmit = async (e: Event) => {
     e.preventDefault();
     const formData = dataFromEvent(e);
+
+    const timestamp =
+      formData.time === ''
+        ? new Date()
+        : parseTimeToDate(String(formData.time));
+
     const updateData: MealInput = {
       notes: (formData.notes || '') as string,
-      timestamp: new Date(),
+      timestamp,
     };
 
     try {
@@ -52,6 +59,21 @@ export default class NewMeal extends Component<NewMealSignature> {
             class="input w-full"
           />
         </div>
+
+        <div class="text-2xl font-bold text-center mt-4">Time</div>
+        <div class="w-full flex flex-row justify-center">
+          <label for="time" class="sr-only">when</label>
+          <input
+            class="bg-primary text-primary-content font-bold text-center rounded-full text-5xl"
+            id="time"
+            name="time"
+            type="text"
+            placeholder="Now"
+            autocomplete="off"
+            {{initTimePicker}}
+          />
+        </div>
+
         <button
           type="submit"
           class="btn btn-secondary btn-xl w-full mt-6"
