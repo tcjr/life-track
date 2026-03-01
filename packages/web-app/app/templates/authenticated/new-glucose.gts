@@ -9,6 +9,7 @@ import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#app/components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
+import { parseTimeToDate, initTimePicker } from '#app/utils/timepicker.ts';
 
 interface NewGlucoseSignature {
   Element: HTMLDivElement;
@@ -22,9 +23,15 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
   handleSubmit = async (e: Event) => {
     e.preventDefault();
     const formData = dataFromEvent(e);
+
+    const timestamp =
+      formData.time === ''
+        ? new Date()
+        : parseTimeToDate(String(formData.time));
+
     const updateData: GlucoseMeasurementInput = {
       value: Number(formData.value),
-      timestamp: new Date(),
+      timestamp,
     };
 
     try {
@@ -42,6 +49,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
   get prefillValues() {
     return {
       value: '150',
+      time: '',
     };
   }
 
@@ -55,6 +63,22 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
           <label for="value" class="text-center italic text-sm">mg/dL</label>
           <InputNumber @name="value" @value={{this.prefillValues.value}} />
         </div>
+
+        <div class="text-2xl font-bold text-center mt-4">Time</div>
+        <div class="w-full flex flex-row justify-center">
+          <label for="time" class="sr-only">when</label>
+          <input
+            class="bg-primary text-primary-content font-bold text-center rounded-full text-5xl"
+            id="time"
+            name="time"
+            type="text"
+            placeholder="Now"
+            value={{this.prefillValues.time}}
+            autocomplete="off"
+            {{initTimePicker}}
+          />
+        </div>
+
         <button
           type="submit"
           class="btn btn-secondary btn-xl w-full mt-6"

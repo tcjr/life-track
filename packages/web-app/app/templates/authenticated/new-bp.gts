@@ -9,53 +9,7 @@ import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
-// import 'timepicker-ui/main.css';
-import { TimepickerUI } from 'timepicker-ui';
-import { modifier } from 'ember-modifier';
-
-function parseTimeToDate(timeString: string): Date {
-  const match = timeString.match(/^(\d{2}):(\d{2})\s(AM|PM)$/);
-
-  if (!match) {
-    throw new Error(
-      `Invalid time format: "${timeString}". Expected "hh:mm AM/PM".`
-    );
-  }
-
-  let hours = parseInt(match[1], 10);
-  const minutes = parseInt(match[2], 10);
-  const period = match[3];
-
-  if (hours < 1 || hours > 12) {
-    throw new Error(`Invalid hours: ${hours}. Must be between 01 and 12.`);
-  }
-  if (minutes < 0 || minutes > 59) {
-    throw new Error(`Invalid minutes: ${minutes}. Must be between 00 and 59.`);
-  }
-
-  // Convert to 24-hour format
-  if (period === 'AM') {
-    if (hours === 12) hours = 0; // 12:xx AM -> 00:xx (midnight)
-  } else {
-    if (hours !== 12) hours += 12; // 01:xx PM -> 13:xx, but 12:xx PM stays as 12
-  }
-
-  const date = new Date();
-  date.setHours(hours, minutes, 0, 0);
-
-  return date;
-}
-
-const initTimePicker = modifier((element: HTMLInputElement) => {
-  const picker = new TimepickerUI(element, {
-    //labels: { time: 'Now', mobileTime: 'Now' },
-  });
-  picker.create();
-
-  return () => {
-    picker?.destroy();
-  };
-});
+import { parseTimeToDate, initTimePicker } from '#app/utils/timepicker.ts';
 
 interface NewBpSignature {
   Element: HTMLDivElement;
@@ -69,12 +23,11 @@ export default class NewBp extends Component<NewBpSignature> {
   handleSubmit = async (e: Event) => {
     e.preventDefault();
     const formData = dataFromEvent(e);
-    console.log('form data', formData);
 
     const timestamp =
-      formData.timepicker === ''
+      formData.time === ''
         ? new Date()
-        : parseTimeToDate(String(formData.timepicker));
+        : parseTimeToDate(String(formData.time));
 
     const updateData: BpMeasurementInput = {
       systolic: Number(formData.systolic),
@@ -98,7 +51,7 @@ export default class NewBp extends Component<NewBpSignature> {
       systolic: '120',
       diastolic: '80',
       heartRate: '70',
-      timepicker: '',
+      time: '',
     };
   }
 
@@ -136,14 +89,15 @@ export default class NewBp extends Component<NewBpSignature> {
 
         <div class="text-2xl font-bold text-center mt-4">Time</div>
         <div class="w-full flex flex-row justify-center">
-          <label for="timepicker" class="sr-only">when</label>
+          <label for="time" class="sr-only">when</label>
           <input
             class="bg-primary text-primary-content font-bold text-center rounded-full text-5xl"
-            id="timepicker"
-            name="timepicker"
+            id="time"
+            name="time"
             type="text"
             placeholder="Now"
-            value={{this.prefillValues.timepicker}}
+            value={{this.prefillValues.time}}
+            autocomplete="off"
             {{initTimePicker}}
           />
         </div>
