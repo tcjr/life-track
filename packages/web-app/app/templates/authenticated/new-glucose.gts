@@ -57,7 +57,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         </div>
         <button
           type="submit"
-          class="btn btn-secondary btn-xl w-full mt-6"
+          class="btn btn-secondary btn-xl w-full mt-10"
         >Save</button>
       </form>
     </div>
