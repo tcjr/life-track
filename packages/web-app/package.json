@@ -37,11 +37,12 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "lint:types": "ember-tsc --noEmit",
-    "start": "vite dev -- --clearScreen false",
+    "start": "vite dev --host -- --clearScreen false",
     "test": "vitest run"
   },
   "dependencies": {
-    "firebase": "^12.8.0"
+    "firebase": "^12.8.0",
+    "timepicker-ui": "^4.1.6"
   },
   "devDependencies": {
     "@babel/core": "^7.28.6",

@@ -1,7 +1,13 @@
 @import 'tailwindcss';
+@import './timepicker.css';
+
 @plugin "daisyui" {
   themes:
-    nord,
-    aqua --default,
-    forest --prefersdark;
+    light --default,
+    dark --prefersdark,
+    cmyk,
+    garden,
+    coffee,
+    forest,
+    nord;
 }

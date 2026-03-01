@@ -52,7 +52,7 @@ export default class AuthenticatedRoute extends Route {
         console.log(
           '[route:authenticated] No app-users doc found, creating it now'
         );
-        await setDoc(docRef, { isSetup: false });
+        await setDoc(docRef, { isSetup: false, theme: 'light' });
         console.log(
           '[route:authenticated] app-user document created, redirecting to onboarding'
         );

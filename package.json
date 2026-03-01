@@ -10,7 +10,9 @@
     "build": "pnpm --filter '*' run build",
     "lint": "pnpm --filter '*' run lint",
     "test": "pnpm --filter=web-app run test",
-    "start": "pnpm --filter '*' run start",
+    "start": "echo \"Run start:emulators or start:web-app\"",
+    "start:emulators": "firebase emulators:start --only auth,firestore,functions --import=./firebase-dev-data --export-on-exit",
+    "start:web-app": "pnpm --filter=web-app run start",
     "deploy-rules": "firebase deploy --only firestore:rules",
     "deploy-functions": "pnpm --filter=functions run deploy"
   },
