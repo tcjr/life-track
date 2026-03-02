@@ -1,6 +1,10 @@
-import { text, confirm } from '@clack/prompts';
+import { text, confirm, log, progress } from '@clack/prompts';
 import setup from './utils/setup.mts';
 import { chooseUser } from './utils/choose-user.mts';
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function randomInRange(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -12,16 +16,46 @@ function addDays(date: Date, days: number) {
   return new Date(newTime);
 }
 
-function createTimestampForDay(dayOffset: number): Date {
+function createTimestampForDay(
+  dayOffset: number,
+  nearHour = 8,
+  nearMinute = 30,
+): Date {
   const today = new Date();
   const targetDate = addDays(today, -dayOffset);
 
-  targetDate.setHours(8, 30, 0, 0);
+  targetDate.setHours(nearHour, nearMinute, 0, 0);
 
   const jitter = randomInRange(-30, 30);
   targetDate.setMinutes(targetDate.getMinutes() + jitter);
 
   return targetDate;
+}
+
+async function addBpPair(userCollection: any, time: Date) {
+  const systolic = randomInRange(110, 140);
+  const diastolic = randomInRange(70, 90);
+  const heartRate = randomInRange(60, 80);
+
+  await userCollection.bps.add({
+    systolic,
+    diastolic,
+    heartRate,
+    timestamp: time,
+  });
+
+  // 2nd one is a minute or two later
+  const time2 = new Date(time.getTime() + randomInRange(1, 2) * 60 * 1000);
+  const systolic2 = randomInRange(110, 140);
+  const diastolic2 = randomInRange(70, 90);
+  const heartRate2 = randomInRange(60, 80);
+
+  await userCollection.bps.add({
+    systolic: systolic2,
+    diastolic: diastolic2,
+    heartRate: heartRate2,
+    timestamp: time2,
+  });
 }
 
 async function main() {
@@ -50,49 +84,31 @@ async function main() {
     return;
   }
 
-  console.log(`Creating measurements for ${numDays} days...`);
+  log.info(`Creating measurements for ${numDays} days...`);
 
   const userCollection = collections['app-users'](userId);
 
+  const plog = progress({ max: numDays });
+  plog.start('Creating measurements...');
   for (let i = 0; i < numDays; i++) {
-    const timestamp = createTimestampForDay(i);
+    const morningTimestamp = createTimestampForDay(i, 8, 30);
+    const eveningTimestamp = createTimestampForDay(i, 22, 15);
 
     const glucoseValue = randomInRange(80, 140);
     await userCollection.glucoses.add({
       value: glucoseValue,
-      timestamp,
+      timestamp: morningTimestamp,
     });
 
-    const systolic = randomInRange(110, 140);
-    const diastolic = randomInRange(70, 90);
-    const heartRate = randomInRange(60, 80);
+    await addBpPair(userCollection, morningTimestamp);
+    await addBpPair(userCollection, eveningTimestamp);
 
-    await userCollection.bps.add({
-      systolic,
-      diastolic,
-      heartRate,
-      timestamp,
-    });
-
-    const secondTimestamp = new Date(timestamp.getTime() + randomInRange(1, 2) * 60 * 1000);
-    const systolic2 = randomInRange(110, 140);
-    const diastolic2 = randomInRange(70, 90);
-    const heartRate2 = randomInRange(60, 80);
-
-    await userCollection.bps.add({
-      systolic: systolic2,
-      diastolic: diastolic2,
-      heartRate: heartRate2,
-      timestamp: secondTimestamp,
-    });
-
-    console.log(
-      `Day ${i + 1}/${numDays}: ${timestamp.toISOString()} - Glucose: ${glucoseValue}, BP: ${systolic}/${diastolic} (HR: ${heartRate}), BP2: ${systolic2}/${diastolic2} (HR: ${heartRate2})`,
-    );
+    await sleep(150);
+    plog.advance(i + 1, `Day ${i + 1}/${numDays} done`);
   }
 
-  console.log(
-    `Successfully created ${numDays} glucose and ${numDays * 2} BP measurements.`,
+  plog.stop(
+    `Successfully created glucose / BP measurements for ${numDays} days.`,
   );
 }
 
