@@ -8,7 +8,8 @@ import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import type RouterService from '@ember/routing/router-service';
-import { parseTimeToDate, initTimePicker } from '#app/utils/timepicker.ts';
+import { parseTimeToDate } from '#app/utils/timepicker.ts';
+import InputTime from '#app/components/input-time.gts';
 
 interface NewMealSignature {
   Element: HTMLDivElement;
@@ -61,17 +62,9 @@ export default class NewMeal extends Component<NewMealSignature> {
         </div>
 
         <div class="text-2xl font-bold text-center mt-4">Time</div>
-        <div class="w-full flex flex-row justify-center">
+        <div class="">
           <label for="time" class="sr-only">when</label>
-          <input
-            class="bg-primary text-primary-content font-bold text-center rounded-full text-5xl"
-            id="time"
-            name="time"
-            type="text"
-            placeholder="Now"
-            autocomplete="off"
-            {{initTimePicker}}
-          />
+          <InputTime @name="time" @value="" />
         </div>
 
         <button
