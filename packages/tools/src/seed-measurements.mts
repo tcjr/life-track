@@ -1,8 +1,6 @@
 import { text, confirm } from '@clack/prompts';
 import setup from './utils/setup.mts';
-
-//const USER_ID = 'dev-user';
-const USER_ID = '83m720LJbS6zpq9NORydMqi8e8eg';
+import { chooseUser } from './utils/choose-user.mts';
 
 function randomInRange(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -29,6 +27,8 @@ function createTimestampForDay(dayOffset: number): Date {
 async function main() {
   const { collections } = await setup();
 
+  const userId = await chooseUser(collections);
+
   const daysInput = (await text({
     message: 'How many days of data do you want to create?',
     placeholder: '10',
@@ -42,7 +42,7 @@ async function main() {
   }
 
   const shouldProceed = await confirm({
-    message: `Create glucose and BP measurements for the previous ${numDays} days?`,
+    message: `Create glucose and BP measurements for the previous ${numDays} days for user ${userId}?`,
   });
 
   if (!shouldProceed) {
@@ -52,7 +52,7 @@ async function main() {
 
   console.log(`Creating measurements for ${numDays} days...`);
 
-  const userCollection = collections['app-users'](USER_ID);
+  const userCollection = collections['app-users'](userId);
 
   for (let i = 0; i < numDays; i++) {
     const timestamp = createTimestampForDay(i);
