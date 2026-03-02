@@ -7,7 +7,6 @@ This document provides an overview of the "life-track" monorepo, designed to giv
 This is a JavaScript/TypeScript monorepo managed with `pnpm` workspaces. It currently contains two main packages:
 
 1.  **`web-app`**: An Ember.js application built with Vite and TypeScript. Its purpose is to track various aspects of the user's life, including health measurements, based on the `app/models` and `app/templates` directories. It integrates with Firebase for backend services (authentication, Firestore).
-2.  **`emulators`**: This package appears to house Firebase emulator data and configuration, used for local development and testing of Firebase services.
 
 **Key Technologies:**
 
@@ -47,7 +46,7 @@ pnpm --filter=web-app run build
 To start the development server for the `web-app` with hot-reloading:
 
 ```bash
-pnpm start
+pnpm start:web-app
 # or, specifically for the web-app:
 pnpm --filter=web-app run start
 ```
