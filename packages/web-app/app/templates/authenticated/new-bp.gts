@@ -9,7 +9,8 @@ import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
 import InputNumber from '#components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
-import { parseTimeToDate, initTimePicker } from '#app/utils/timepicker.ts';
+import { parseTimeToDate } from '#app/utils/timepicker.ts';
+import InputTime from '#app/components/input-time.gts';
 
 interface NewBpSignature {
   Element: HTMLDivElement;
@@ -88,23 +89,14 @@ export default class NewBp extends Component<NewBpSignature> {
         </div>
 
         <div class="text-2xl font-bold text-center mt-4">Time</div>
-        <div class="w-full flex flex-row justify-center">
+        <div class="">
           <label for="time" class="sr-only">when</label>
-          <input
-            class="bg-primary text-primary-content font-bold text-center rounded-full text-5xl"
-            id="time"
-            name="time"
-            type="text"
-            placeholder="Now"
-            value={{this.prefillValues.time}}
-            autocomplete="off"
-            {{initTimePicker}}
-          />
+          <InputTime @name="time" @value={{this.prefillValues.time}} />
         </div>
 
         <button
           type="submit"
-          class="btn btn-secondary btn-xl w-full mt-6"
+          class="btn btn-secondary btn-xl w-full mt-10"
         >Save</button>
       </form>
     </div>
