@@ -26,9 +26,9 @@ expect.extend({
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const mouseClick = async (elem: Element, pressLength = 5) => {
-  fireEvent.mouseDown(elem);
+  fireEvent.pointerDown(elem);
   await delay(pressLength);
-  fireEvent.mouseUp(elem);
+  fireEvent.pointerUp(elem);
 };
 
 const setup = async (initialValue = 10) => {
@@ -59,14 +59,13 @@ describe('Component | InputNumber', () => {
     expect(input.value).toBe('10');
     await mouseClick(plus);
     expect(input.value).toBe('11');
-    await Promise.all([mouseClick(plus), mouseClick(plus)]);
+    await mouseClick(plus);
+    await mouseClick(plus);
     expect(input.value).toBe('13');
-    await Promise.all([
-      mouseClick(minus),
-      mouseClick(minus),
-      mouseClick(minus),
-      mouseClick(minus),
-    ]);
+    await mouseClick(minus);
+    await mouseClick(minus);
+    await mouseClick(minus);
+    await mouseClick(minus);
     expect(input.value).toBe('9');
   });
 
