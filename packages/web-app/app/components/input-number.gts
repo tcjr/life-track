@@ -41,6 +41,7 @@ export default class InputNumber extends Component<InputNumberSignature> {
         class="btn btn-circle btn-secondary btn-lg"
         {{on "pointerdown" (fn this.incrementBy.perform -1)}}
         {{on "pointerup" (cancelAll this.incrementBy)}}
+        {{on "pointerleave" (cancelAll this.incrementBy)}}
         {{on "pointercancel" (cancelAll this.incrementBy)}}
       >-</button>
       <input
@@ -57,6 +58,7 @@ export default class InputNumber extends Component<InputNumberSignature> {
         class="btn btn-circle btn-secondary btn-lg"
         {{on "pointerdown" (fn this.incrementBy.perform 1)}}
         {{on "pointerup" (cancelAll this.incrementBy)}}
+        {{on "pointerleave" (cancelAll this.incrementBy)}}
         {{on "pointercancel" (cancelAll this.incrementBy)}}
       >+</button>
     </div>
