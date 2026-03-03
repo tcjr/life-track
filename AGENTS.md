@@ -4,21 +4,23 @@ This document provides an overview of the "life-track" monorepo, designed to giv
 
 ## Project Overview
 
-This is a JavaScript/TypeScript monorepo managed with `pnpm` workspaces. It currently contains two main packages:
+This is a JavaScript/TypeScript monorepo managed with `pnpm` workspaces. It contains the following main packages:
 
-1.  **`web-app`**: An Ember.js application built with Vite and TypeScript. Its purpose is to track various aspects of the user's life, including health measurements, based on the `app/models` and `app/templates` directories. It integrates with Firebase for backend services (authentication, Firestore).
-2.  **`emulators`**: This package appears to house Firebase emulator data and configuration, used for local development and testing of Firebase services.
+1.  **`web-app`**: An Ember.js application built with Vite and TypeScript. Its purpose is to track various aspects of the user's life, including health measurements. It integrates with Firebase for backend services (authentication, Firestore).
+2.  **`functions`**: Firebase Cloud Functions providing server-side logic and API endpoints. Built with TypeScript and deployed to Firebase.
+3.  **`tools`**: A collection of CLI tools for administrative tasks, data seeding, and management (e.g., adding notices, listing users, seeding measurements).
 
 **Key Technologies:**
 
 - **Monorepo Tooling**: pnpm workspaces
 - **Frontend Framework**: Ember.js
-- **Build Tool**: Vite
+- **Backend/Cloud Services**: Firebase (Authentication, Firestore, Cloud Functions)
 - **Language**: TypeScript
-- **Backend/Cloud Services**: Firebase (Authentication, Firestore)
-- **Styling**: TailwindCSS, DaisyUI
+- **CLI Tools**: Node.js scripts using `@clack/prompts` and `firebase-admin`
+- **Build Tool**: Vite (for web-app), tsc (for functions)
+- **Styling**: TailwindCSS, DaisyUI (in web-app)
 - **Linting/Formatting**: ESLint, Prettier, Stylelint, Ember Template Lint
-- **Testing**: Vitest
+- **Testing**: Vitest (in web-app)
 
 ## Building and Running
 
@@ -32,24 +34,45 @@ To install dependencies for all packages:
 pnpm install
 ```
 
-### Building the `web-app`
+### Local Development Environment
 
-To build the Ember.js `web-app` for production:
+To start the Firebase emulators (Auth, Firestore, Functions) with imported data:
 
 ```bash
-pnpm build
-# or, specifically for the web-app:
-pnpm --filter=web-app run build
+pnpm start:emulators
 ```
-
-### Starting the `web-app` Development Server
 
 To start the development server for the `web-app` with hot-reloading:
 
 ```bash
-pnpm start
+pnpm start:web-app
 # or, specifically for the web-app:
 pnpm --filter=web-app run start
+```
+
+### Building Packages
+
+To build all packages:
+
+```bash
+pnpm build
+```
+
+To build specifically for `web-app` or `functions`:
+
+```bash
+pnpm --filter=web-app run build
+pnpm --filter=functions run build
+```
+
+### Running CLI Tools
+
+CLI tools are located in `packages/tools/src`. They can be run using `node` directly.
+
+```bash
+# Example: Run the 'list-users' tool
+cd packages/tools
+node src/list-users.mts
 ```
 
 ### Running Tests
@@ -64,11 +87,10 @@ pnpm --filter=web-app run test
 
 ### Linting and Formatting
 
-To run linters and formatters across all packages:
+To run linters across all packages:
 
 ```bash
 pnpm lint
-pnpm format
 ```
 
 For specific linting tasks within the `web-app`:
@@ -80,13 +102,7 @@ pnpm --filter=web-app run lint:js     # Lint JavaScript/TypeScript
 pnpm --filter=web-app run lint:types  # Type check TypeScript files
 ```
 
-To fix linting and formatting issues:
-
-```bash
-pnpm --filter=web-app run lint:fix
-```
-
-### Deploying Firestore Rules
+### Deploying to Firebase
 
 To deploy Firestore security rules:
 
@@ -94,10 +110,16 @@ To deploy Firestore security rules:
 pnpm deploy-rules
 ```
 
+To deploy Cloud Functions:
+
+```bash
+pnpm deploy-functions
+```
+
 ## Development Conventions
 
 - **Code Style**: Enforced using ESLint and Prettier.
 - **Template Style**: Enforced using Ember Template Lint.
 - **CSS Style**: Enforced using Stylelint.
-- **Type Safety**: TypeScript is used extensively, with type checking performed via `ember-tsc`.
-- **Testing**: Unit and integration tests are written using Vitest and Ember's testing utilities.
+- **Type Safety**: TypeScript is used extensively across all packages.
+- **Testing**: Unit and integration tests are primarily in `web-app` using Vitest.

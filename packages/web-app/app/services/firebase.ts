@@ -56,11 +56,14 @@ export default class FirebaseService extends Service {
   }
 
   // This method bootstraps the use of emulators based on environment variables.
-  // It's currently synchrnous, but might be made asynchronous if we want to
+  // It's currently synchronous, but might be made asynchronous if we want to
   // do something like load a remote startup file.
   setup() {
     if (import.meta.env.VITE_USE_AUTH_EMULATOR === 'true') {
-      connectAuthEmulator(this.auth, import.meta.env.VITE_AUTH_EMULATOR_URL);
+      connectAuthEmulator(
+        this.auth,
+        import.meta.env.VITE_AUTH_EMULATOR_URL as string
+      );
       console.log(
         `[service:firebase]🚫 Using Auth emulator at ${import.meta.env.VITE_AUTH_EMULATOR_URL}`
       );
@@ -71,7 +74,7 @@ export default class FirebaseService extends Service {
     if (import.meta.env.VITE_USE_FIRESTORE_EMULATOR === 'true') {
       connectFirestoreEmulator(
         this.db,
-        import.meta.env.VITE_FIRESTORE_EMULATOR_HOST,
+        import.meta.env.VITE_FIRESTORE_EMULATOR_HOST as string,
         8080
       );
       console.log(
