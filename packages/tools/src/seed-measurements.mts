@@ -1,5 +1,6 @@
+import { type Collections } from 'zod-firebase-admin';
 import { text, confirm, log, progress } from '@clack/prompts';
-import setup from './utils/setup.mts';
+import setup, { schema } from './utils/setup.mts';
 import { chooseUser } from './utils/choose-user.mts';
 
 function sleep(ms: number) {
@@ -32,7 +33,10 @@ function createTimestampForDay(
   return targetDate;
 }
 
-async function addBpPair(userCollection: any, time: Date) {
+async function addBpPair(
+  userCollection: Collections<(typeof schema)['app-users']>,
+  time: Date,
+) {
   const systolic = randomInRange(110, 140);
   const diastolic = randomInRange(70, 90);
   const heartRate = randomInRange(60, 80);
@@ -61,7 +65,7 @@ async function addBpPair(userCollection: any, time: Date) {
 async function main() {
   const { collections } = await setup();
 
-  const userId = await chooseUser(collections);
+  const userId = await chooseUser();
 
   const daysInput = (await text({
     message: 'How many days of data do you want to create?',
@@ -104,7 +108,7 @@ async function main() {
     await addBpPair(userCollection, eveningTimestamp);
 
     await sleep(150);
-    plog.advance(i + 1, `Day ${i + 1}/${numDays} done`);
+    plog.advance(1, `Day ${i + 1}/${numDays} done`);
   }
 
   plog.stop(

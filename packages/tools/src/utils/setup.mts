@@ -16,7 +16,7 @@ dotenv.config({
   path: join(import.meta.dirname, '..', '..', '..', '..', '.env'),
 });
 
-const schema = {
+export const schema = {
   'app-users': {
     zod: AppUserSchema,
     glucoses: { zod: GlucoseSchema },

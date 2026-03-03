@@ -1,6 +1,9 @@
+import { type Collections } from 'zod-firebase-admin';
 import { select, isCancel, cancel } from '@clack/prompts';
+import { type AppUser } from '../models/app-user.mts';
+import { schema } from './setup.mts';
 
-export async function chooseUser(collections: any) {
+export async function chooseUser(collections: Collections<typeof schema>) {
   const allUsers = await collections['app-users'].findMany({
     name: 'all users',
   });
@@ -9,7 +12,7 @@ export async function chooseUser(collections: any) {
     throw new Error('No users found in the database.');
   }
 
-  const options = allUsers.map((user: any) => ({
+  const options = allUsers.map((user: AppUser) => ({
     value: user._id,
     label: user._id,
     hint: user.isSetup ? 'Setup complete' : 'Not setup',
