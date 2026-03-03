@@ -60,15 +60,23 @@ export default class FirebaseService extends Service {
   // do something like load a remote startup file.
   setup() {
     if (import.meta.env.VITE_USE_AUTH_EMULATOR === 'true') {
-      connectAuthEmulator(this.auth, 'http://localhost:9099');
-      console.log('[service:firebase]🚫 Using Auth emulator, port 9099');
+      connectAuthEmulator(this.auth, import.meta.env.VITE_AUTH_EMULATOR_URL);
+      console.log(
+        `[service:firebase]🚫 Using Auth emulator at ${import.meta.env.VITE_AUTH_EMULATOR_URL}`
+      );
     } else {
       console.log('[service:firebase]🔥 Using Auth production (no emulation)');
     }
 
     if (import.meta.env.VITE_USE_FIRESTORE_EMULATOR === 'true') {
-      connectFirestoreEmulator(this.db, 'localhost', 8080);
-      console.log('[service:firebase]🚫 Using Firestore emulator, port 8080');
+      connectFirestoreEmulator(
+        this.db,
+        import.meta.env.VITE_FIRESTORE_EMULATOR_HOST,
+        8080
+      );
+      console.log(
+        `[service:firebase]🚫 Using Firestore emulator, host ${import.meta.env.VITE_FIRESTORE_EMULATOR_HOST}, port 8080`
+      );
     } else {
       console.log(
         '[service:firebase]🔥 Using Firestore production (no emulation)'

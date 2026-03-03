@@ -19,7 +19,7 @@ export default class InputNumber extends Component<InputNumberSignature> {
 
   // This task lets us hold down the +/- buttons to continue to increment/decrement the value.
   // It will decrease the delay the longer it's held down, causing the rate of change to speed up.
-  incrementBy = task(async (inc) => {
+  incrementBy = task({ drop: true }, async (inc: number) => {
     let delay = 400;
     while (true) {
       this.currentValue += inc;
@@ -39,11 +39,10 @@ export default class InputNumber extends Component<InputNumberSignature> {
       <button
         type="button"
         class="btn btn-circle btn-secondary btn-lg"
-        {{on "touchstart" (fn this.incrementBy.perform -1)}}
-        {{on "mousedown" (fn this.incrementBy.perform -1)}}
-        {{on "touchend" (cancelAll this.incrementBy)}}
-        {{on "mouseleave" (cancelAll this.incrementBy)}}
-        {{on "mouseup" (cancelAll this.incrementBy)}}
+        {{on "pointerdown" (fn this.incrementBy.perform -1)}}
+        {{on "pointerup" (cancelAll this.incrementBy)}}
+        {{on "pointerleave" (cancelAll this.incrementBy)}}
+        {{on "pointercancel" (cancelAll this.incrementBy)}}
       >-</button>
       <input
         type="text"
@@ -57,11 +56,10 @@ export default class InputNumber extends Component<InputNumberSignature> {
       <button
         type="button"
         class="btn btn-circle btn-secondary btn-lg"
-        {{on "touchstart" (fn this.incrementBy.perform 1)}}
-        {{on "mousedown" (fn this.incrementBy.perform 1)}}
-        {{on "touchend" (cancelAll this.incrementBy)}}
-        {{on "mouseleave" (cancelAll this.incrementBy)}}
-        {{on "mouseup" (cancelAll this.incrementBy)}}
+        {{on "pointerdown" (fn this.incrementBy.perform 1)}}
+        {{on "pointerup" (cancelAll this.incrementBy)}}
+        {{on "pointerleave" (cancelAll this.incrementBy)}}
+        {{on "pointercancel" (cancelAll this.incrementBy)}}
       >+</button>
     </div>
   </template>

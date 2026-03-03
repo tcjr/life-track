@@ -7,6 +7,7 @@
   },
   "emulators": {
     "firestore": {
+      "host": "localhost",
       "port": 8080
     },
     "ui": {
@@ -14,7 +15,11 @@
     },
     "singleProjectMode": true,
     "auth": {
+      "host": "localhost",
       "port": 9099
+    },
+    "functions": {
+      "host": "localhost"
     }
   },
   "functions": [
@@ -29,18 +34,12 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": [
-        "pnpm --filter 'functions' run build"
-      ]
+      "predeploy": ["pnpm --filter 'functions' run build"]
     }
   ],
   "hosting": {
     "public": "packages/web-app/dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
