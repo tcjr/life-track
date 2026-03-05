@@ -16,7 +16,9 @@ Router.map(function () {
   this.route('authenticated', { path: '' }, function () {
     this.route('settings');
     this.route('notices');
-    this.route('measurements');
+    this.route('measurements', function () {
+      this.route('day', { path: 'day/:yyyy_mm_dd' });
+    });
     this.route('new-measurement');
     this.route('new-bp');
     this.route('new-glucose');
