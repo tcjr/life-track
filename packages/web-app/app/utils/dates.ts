@@ -7,8 +7,17 @@ const dtf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
+const ttf = new Intl.DateTimeFormat('en-US', {
+  hour: 'numeric',
+  minute: 'numeric',
+});
+
 const asLocal = (date: Date) => {
   return dtf.format(date);
+};
+
+const asLocalTime = (date: Date) => {
+  return ttf.format(date);
 };
 
 const asYYYYMMDD = (timestamp: Date) => {
@@ -19,4 +28,4 @@ const asYYYYMMDD = (timestamp: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export { asLocal, asYYYYMMDD };
+export { asLocal, asLocalTime, asYYYYMMDD };

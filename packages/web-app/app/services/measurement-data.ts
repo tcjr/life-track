@@ -4,7 +4,7 @@ import { asYYYYMMDD } from '#app/utils/dates.ts';
 import { trackedObject } from '@ember/reactive/collections';
 import Service from '@ember/service';
 
-type MeasurementValue =
+export type MeasurementValue =
   | { type: 'bp'; measurement: BpMeasurement }
   | { type: 'glucose'; measurement: GlucoseMeasurement };
 

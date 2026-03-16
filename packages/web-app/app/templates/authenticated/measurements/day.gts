@@ -2,7 +2,10 @@ import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import type MeasurementDataService from '#app/services/measurement-data.ts';
 import { service } from '@ember/service';
-import { asLocal } from '#app/utils/dates.ts';
+import { asLocalTime } from '#app/utils/dates.ts';
+import BpHr from '#app/components/measurements/bp-hr.gts';
+import type { MeasurementValue } from '#app/services/measurement-data.ts';
+import Glucose from '#app/components/measurements/glucose.gts';
 
 export interface MeasurementsDaySignature {
   Args: {
@@ -26,6 +29,14 @@ export default class MeasurementsDay extends Component<MeasurementsDaySignature>
     });
   }
 
+  getMeasurementView = (measurement: MeasurementValue) => {
+    if (measurement.type === 'bp') {
+      return BpHr;
+    } else if (measurement.type === 'glucose') {
+      return Glucose;
+    }
+  };
+
   <template>
     {{pageTitle "DAY"}}
     <div ...attributes>
@@ -35,13 +46,17 @@ export default class MeasurementsDay extends Component<MeasurementsDaySignature>
       {{this.measurementsForDay.length}}
       <ol>
         {{#each this.measurementsForDay as |measurement|}}
-          <li>
-            {{asLocal measurement.measurement.timestamp}}
-            [{{measurement.type}}]
-            {{measurement.measurement._id}}
+          <li
+            data-measurement-type={{measurement.type}}
+            data-measurement-id={{measurement.measurement._id}}
+          >
+            {{!asLocal measurement.measurement.timestamp}}
+            {{asLocalTime measurement.measurement.timestamp}}
+            {{#let (this.getMeasurementView measurement) as |MV|}}
+              <MV @value={{measurement.measurement}} />
+            {{/let}}
           </li>
         {{/each}}
-
       </ol>
 
     </div>
