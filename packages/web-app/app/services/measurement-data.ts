@@ -60,11 +60,11 @@ export default class MeasurementDataService extends Service {
       dayMap.get(date)?.push(obj);
     }
 
-    const sorted: DayMap = [...dayMap.keys()]
+    const sorted = [...dayMap.keys()]
       .sort((a, b) => a.localeCompare(b))
       .reduce((r, key) => r.set(key, dayMap.get(key)), new Map());
 
-    return sorted;
+    return sorted as DayMap;
   }
 }
 

@@ -6,6 +6,7 @@ import { asLocalTime } from '#app/utils/dates.ts';
 import BpHr from '#app/components/measurements/bp-hr.gts';
 import type { MeasurementValue } from '#app/services/measurement-data.ts';
 import Glucose from '#app/components/measurements/glucose.gts';
+import Anything from '#app/components/measurements/anything.gts';
 
 export interface MeasurementsDaySignature {
   Args: {
@@ -35,6 +36,7 @@ export default class MeasurementsDay extends Component<MeasurementsDaySignature>
     } else if (measurement.type === 'glucose') {
       return Glucose;
     }
+    return Anything;
   };
 
   <template>
@@ -53,6 +55,8 @@ export default class MeasurementsDay extends Component<MeasurementsDaySignature>
             {{!asLocal measurement.measurement.timestamp}}
             {{asLocalTime measurement.measurement.timestamp}}
             {{#let (this.getMeasurementView measurement) as |MV|}}
+              {{! I don't know how to get the types to work here }}
+              {{! @glint-ignore }}
               <MV @value={{measurement.measurement}} />
             {{/let}}
           </li>

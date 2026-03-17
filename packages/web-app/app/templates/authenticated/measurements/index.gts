@@ -1,5 +1,3 @@
-import type { BpMeasurement } from '#app/models/measurements/bp.ts';
-import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import Component from '@glimmer/component';
 // import { pageTitle } from 'ember-page-title';
 import type MeasurementDataService from '#app/services/measurement-data.ts';
@@ -28,7 +26,7 @@ export default class MeasurementsIndex extends Component<IndexSignature> {
       </div>
 
       <ol>
-        {{#each-in this.measurementData.allByDay as |day measurements|}}
+        {{#each-in this.measurementData.allByDay as |day|}}
           <li><a href="/measurements/day/{{day}}" class="link">{{day}}</a></li>
         {{/each-in}}
       </ol>

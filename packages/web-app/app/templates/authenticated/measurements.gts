@@ -1,8 +1,5 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { pageTitle } from 'ember-page-title';
-import type { BpMeasurement } from '#app/models/measurements/bp';
-import type { GlucoseMeasurement } from '#app/models/measurements/glucose';
 import type Owner from '@ember/owner';
 import type FirebaseService from '#app/services/firebase.ts';
 import { service } from '@ember/service';
@@ -33,7 +30,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
   loadBps = async () => {
     const bps = await collections['app-users'](this.uid).bps.findMany({
       name: 'all-bps',
-      limit: 100,
+      limit: 2000,
     });
     this.measurementData.allMeasurements.bps = bps;
   };
@@ -42,7 +39,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
     const glucoses = await collections['app-users'](this.uid).glucoses.findMany(
       {
         name: 'all-glucoses',
-        limit: 100,
+        limit: 2000,
       }
     );
     this.measurementData.allMeasurements.glucoses = glucoses;
@@ -50,8 +47,8 @@ export default class Measurements extends Component<MeasurementsSignature> {
 
   <template>
     {{pageTitle "Measurements"}}
-    (in parent component)
-    <hr />
+    {{!log "glucoses" this.measurementData.allMeasurements.glucoses}}
+    {{!log "bps" this.measurementData.allMeasurements.bps}}
 
     {{outlet}}
   </template>
