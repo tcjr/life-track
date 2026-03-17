@@ -113,19 +113,23 @@ const GLUCOSE_COLORS = {
 
 // BP quality scale
 const getBpQuality = (bp: BpMeasurement) => {
-  if (bp.systolic > 180 || bp.diastolic > 120) {
+  const { systolic, diastolic } = bp;
+  if (systolic > 180 || diastolic > 120) {
     return 'hypertension-crisis';
-  } else if (bp.systolic > 140 || bp.diastolic > 90) {
-    return 'hypertension-2';
-  } else if (bp.systolic > 130 || bp.diastolic > 80) {
-    return 'hypertension-1';
-  } else if (bp.systolic > 120 || bp.diastolic < 80) {
-    return 'elevated';
-  } else if (bp.systolic < 90 || bp.diastolic < 60) {
-    return 'low';
-  } else {
-    return 'normal';
   }
+  if (systolic >= 140 || diastolic >= 90) {
+    return 'hypertension-2';
+  }
+  if (systolic >= 130 || diastolic >= 80) {
+    return 'hypertension-1';
+  }
+  if (systolic >= 120 && diastolic < 80) {
+    return 'elevated';
+  }
+  if (systolic < 90 || diastolic < 60) {
+    return 'low';
+  }
+  return 'normal';
 };
 
 // Glucose quality scale
@@ -134,7 +138,7 @@ const getGlucoseQuality = (glucose: GlucoseMeasurement) => {
     return 'high';
   } else if (glucose.value > 140) {
     return 'elevated';
-  } else if (glucose.value > 80) {
+  } else if (glucose.value >= 80) {
     return 'normal';
   } else {
     return 'low';
