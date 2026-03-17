@@ -75,8 +75,8 @@ const BP_COLORS = {
     fg: 'var(--color-error-content)',
   },
   'hypertension-1': {
-    bg: 'var(--color-error)',
-    fg: 'var(--color-error-content)',
+    bg: 'var(--color-warning)',
+    fg: 'var(--color-warning-content)',
   },
   elevated: {
     bg: 'var(--color-warning)',
