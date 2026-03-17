@@ -25,6 +25,10 @@ export default class MeasurementsIndex extends Component<IndexSignature> {
         glucoses.
       </div>
 
+      <div>
+        <a href="/measurements/cal" class="link">Monthly list view</a>
+      </div>
+
       <ol>
         {{#each-in this.measurementData.allByDay as |day|}}
           <li><a href="/measurements/day/{{day}}" class="link">{{day}}</a></li>
