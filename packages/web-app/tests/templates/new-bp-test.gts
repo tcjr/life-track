@@ -5,7 +5,7 @@ import App from '#app/app.ts';
 import NewBp from '#app/templates/authenticated/new-bp.gts';
 
 describe('Template | authenticated/new-bp', () => {
-  renderingTest.scoped({ app: ({}, use) => use(App) });
+  renderingTest.override('app', { scope: 'test' }, () => App);
 
   renderingTest('it has correct intitial values', async () => {
     await render(<template><NewBp /></template>);

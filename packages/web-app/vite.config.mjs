@@ -27,5 +27,6 @@ export default defineConfig({
         { browser: 'chrome' }, // or 'firefox' 'edge' 'safari'
       ],
     },
+    setupFiles: ['tests/setup.ts'],
   },
 });
