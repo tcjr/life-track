@@ -189,7 +189,6 @@ export default class MonthList extends Component<MonthListSignature> {
 
     const formData = new FormData(evt.currentTarget as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    console.log('data', data);
     this.includeBps = data.withBps === 'on';
     this.includeGlucoses = data.withGlucoses === 'on';
   };
@@ -205,7 +204,7 @@ export default class MonthList extends Component<MonthListSignature> {
             <label class="label">
               <input
                 type="checkbox"
-                checked="checked"
+                checked={{this.includeBps}}
                 class="checkbox"
                 name="withBps"
               />
@@ -219,7 +218,7 @@ export default class MonthList extends Component<MonthListSignature> {
             <label class="label">
               <input
                 type="checkbox"
-                checked="checked"
+                checked={{this.includeGlucoses}}
                 class="checkbox"
                 name="withGlucoses"
               />

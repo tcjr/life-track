@@ -47,9 +47,6 @@ export default class Measurements extends Component<MeasurementsSignature> {
 
   <template>
     {{pageTitle "Measurements"}}
-    {{!log "glucoses" this.measurementData.allMeasurements.glucoses}}
-    {{!log "bps" this.measurementData.allMeasurements.bps}}
-
     {{outlet}}
   </template>
 }
