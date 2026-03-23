@@ -1,25 +1,10 @@
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { pageTitle } from 'ember-page-title';
-import type { BpMeasurement } from '#app/models/measurements/bp';
-import type { GlucoseMeasurement } from '#app/models/measurements/glucose';
 import type Owner from '@ember/owner';
 import type FirebaseService from '#app/services/firebase.ts';
 import { service } from '@ember/service';
 import { collections } from '#app/models/collections.ts';
-
-const dtf = new Intl.DateTimeFormat('en-US', {
-  weekday: 'short',
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-});
-
-const asLocal = (date: Date) => {
-  return dtf.format(date);
-};
+import type MeasurementDataService from '#app/services/measurement-data.ts';
 
 export interface MeasurementsSignature {
   Args: { model: unknown };
@@ -28,8 +13,7 @@ export interface MeasurementsSignature {
 
 export default class Measurements extends Component<MeasurementsSignature> {
   @service declare firebase: FirebaseService;
-  @tracked allBps: BpMeasurement[] = [];
-  @tracked allGlucoses: GlucoseMeasurement[] = [];
+  @service declare measurementData: MeasurementDataService;
 
   constructor(owner: Owner, args: MeasurementsSignature['Args']) {
     super(owner, args);
@@ -41,78 +25,28 @@ export default class Measurements extends Component<MeasurementsSignature> {
     return this.firebase.uid;
   }
 
+  // These loaders will populate the data service
+
   loadBps = async () => {
     const bps = await collections['app-users'](this.uid).bps.findMany({
       name: 'all-bps',
-      limit: 100,
+      limit: 2000,
     });
-    this.allBps = bps;
+    this.measurementData.allMeasurements.bps = bps;
   };
 
   loadGlucoses = async () => {
     const glucoses = await collections['app-users'](this.uid).glucoses.findMany(
       {
         name: 'all-glucoses',
-        limit: 100,
+        limit: 2000,
       }
     );
-    this.allGlucoses = glucoses;
+    this.measurementData.allMeasurements.glucoses = glucoses;
   };
 
   <template>
     {{pageTitle "Measurements"}}
-    <div ...attributes>
-      <h1>Measurements</h1>
-      <a href="/new-measurement" class="link">New Measurement...</a>
-      <hr />
-      <a href="/new-bp" class="link">New BP...</a>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>BP</th>
-            <th>HR</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.allBps as |bp|}}
-            <tr>
-              <td>
-                {{bp.systolic}}/{{bp.diastolic}}
-              </td>
-              <td>
-                {{bp.heartRate}}
-              </td>
-              <td>
-                {{asLocal bp.timestamp}}
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-
-      <a href="/new-glucose" class="link">New Glucose...</a>
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Glucose</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.allGlucoses as |glucose|}}
-            <tr>
-              <td>
-                {{glucose.value}}
-              </td>
-              <td>
-                {{asLocal glucose.timestamp}}
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
+    {{outlet}}
   </template>
 }

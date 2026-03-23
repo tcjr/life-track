@@ -101,7 +101,7 @@ async function main() {
     const glucoseValue = randomInRange(80, 140);
     await userCollection.glucoses.add({
       value: glucoseValue,
-      timestamp: morningTimestamp,
+      timestamp: createTimestampForDay(i, 9, 30),
     });
 
     await addBpPair(userCollection, morningTimestamp);
