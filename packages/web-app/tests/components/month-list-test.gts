@@ -3,22 +3,27 @@ import { renderingTest } from 'ember-vitest';
 import { render, click } from '@ember/test-helpers';
 import { screen } from '@testing-library/dom';
 import MonthList from '#app/components/month-list.gts';
+import type { BpMeasurement } from '#app/models/measurements/bp.ts';
+import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 
-const mockMeasurements = {
+const mockMeasurements: {
+  bps: BpMeasurement[];
+  glucoses: GlucoseMeasurement[];
+} = {
   bps: [
     {
       _id: 'bp1',
       systolic: 120,
       diastolic: 80,
       heartRate: 70,
-      timestamp: new Date('2026-03-01T10:00:00Z').toISOString(),
+      timestamp: new Date('2026-03-01T10:00:00Z'),
     },
   ],
   glucoses: [
     {
       _id: 'g1',
       value: 100,
-      timestamp: new Date('2026-03-01T11:00:00Z').toISOString(),
+      timestamp: new Date('2026-03-01T11:00:00Z'),
     },
   ],
 };
