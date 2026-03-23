@@ -15,7 +15,7 @@ class JustUid extends Component {
 
 describe('Component | firebase service access', () => {
   // This causes the application to be loaded and instanciated, but that's it.
-  renderingTest.scoped({ app: ({}, use) => use(App) });
+  renderingTest.override('app', { scope: 'test' }, () => App);
 
   renderingTest(
     'it renders with mocked signedInUser',
