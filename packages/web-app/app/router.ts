@@ -18,7 +18,6 @@ Router.map(function () {
     this.route('notices');
     this.route('measurements', function () {
       this.route('day', { path: 'day/:yyyy_mm_dd' });
-      this.route('cal');
     });
     this.route('new-measurement');
     this.route('new-bp');
