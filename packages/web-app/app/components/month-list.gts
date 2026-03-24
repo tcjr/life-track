@@ -190,7 +190,7 @@ export default class MonthList extends Component<MonthListSignature> {
 
       registerDestructor(this, () => {
         if (this.#calendar) {
-          destroyCalendar(this.#calendar);
+          void destroyCalendar(this.#calendar);
         }
       });
     } else {
