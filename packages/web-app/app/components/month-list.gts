@@ -1,6 +1,11 @@
 import Component from '@glimmer/component';
 import { modifier } from 'ember-modifier';
-import { createCalendar, destroyCalendar, List } from '@event-calendar/core';
+import {
+  type Calendar,
+  createCalendar,
+  destroyCalendar,
+  List,
+} from '@event-calendar/core';
 import HeartUrl from '#app/icons/heart.svg';
 import BloodPressureUrl from '#app/icons/blood-pressure.svg';
 import BloodDropUrl from '#app/icons/blood-drop.svg';
@@ -11,6 +16,7 @@ import { cached, tracked } from '@glimmer/tracking';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import { on } from '@ember/modifier';
+import { registerDestructor } from '@ember/destroyable';
 
 interface MonthListSignature {
   Element: HTMLDivElement;
@@ -172,16 +178,24 @@ export default class MonthList extends Component<MonthListSignature> {
     return this.args.measurements.glucoses.map(getEventForGlucose);
   }
 
-  attachCalendar = modifier((elem: HTMLDivElement) => {
-    let ec = createCalendar(elem, [List], {
-      view: 'listMonth', //'dayGridMonth',
-      events: this.calendarEvents,
-      editable: false,
-    });
+  #calendar: Calendar | undefined;
 
-    return async () => {
-      await destroyCalendar(ec);
-    };
+  attachCalendar = modifier((elem: HTMLDivElement) => {
+    if (!this.#calendar) {
+      this.#calendar = createCalendar(elem, [List], {
+        view: 'listMonth', //'dayGridMonth',
+        events: this.calendarEvents,
+        editable: false,
+      });
+
+      registerDestructor(this, () => {
+        if (this.#calendar) {
+          destroyCalendar(this.#calendar);
+        }
+      });
+    } else {
+      this.#calendar.setOption('events', this.calendarEvents);
+    }
   });
 
   updatedOptions = (evt: Event) => {
