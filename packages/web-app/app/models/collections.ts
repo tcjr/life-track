@@ -2,6 +2,7 @@ import { collectionsBuilder } from 'zod-firebase';
 
 import { NoticeSchema } from './notice';
 import { AppUserSchema } from './app-user';
+import { ReportSchema } from './report';
 import { Timestamp } from 'firebase/firestore';
 import { BpMeasurementSchema } from './measurements/bp';
 import { GlucoseMeasurementSchema } from './measurements/glucose';
@@ -22,6 +23,9 @@ const schema = {
   },
   notices: {
     zod: NoticeSchema,
+  },
+  reports: {
+    zod: ReportSchema,
   },
 } as const;
 

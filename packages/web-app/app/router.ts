@@ -23,5 +23,9 @@ Router.map(function () {
     this.route('new-bp');
     this.route('new-glucose');
     this.route('new-meal');
+    this.route('reports');
   });
+
+  // Public reports
+  this.route('reports', { path: '/reports/:report_id' });
 });
