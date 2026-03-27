@@ -1,5 +1,6 @@
 import { collectionsBuilder } from 'zod-firebase-admin';
 import { NoticeSchema } from '../models/notice.mjs';
+import { AppUserSchema } from '../models/app-user.mjs';
 import { ReportSchema } from '../models/report.mjs';
 import { BpSchema } from '../models/bp.mjs';
 import { GlucoseSchema } from '../models/glucose.mjs';
@@ -10,6 +11,7 @@ import * as logger from 'firebase-functions/logger';
 
 const schema = {
   'app-users': {
+    zod: AppUserSchema,
     bps: {
       zod: BpSchema,
     },

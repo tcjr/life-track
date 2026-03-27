@@ -12,7 +12,10 @@ interface CreateReportData {
 export const createReport = onCall<CreateReportData>(async (request) => {
   // Check auth
   if (!request.auth) {
-    throw new HttpsError('unauthenticated', 'User must be logged in to create a report.');
+    throw new HttpsError(
+      'unauthenticated',
+      'User must be logged in to create a report.',
+    );
   }
 
   const { collections } = await setup();
@@ -25,11 +28,13 @@ export const createReport = onCall<CreateReportData>(async (request) => {
   const reportData: any = {};
 
   for (const type of measurements) {
-    logger.info(`Fetching ${type} for user ${uid} between ${startDate} and ${endDate}`);
-    
+    logger.info(
+      `Fetching ${type} for user ${uid} between ${startDate} and ${endDate}`,
+    );
+
     // Use the typed collections from setup()
-    const userCollections = collections['app-users'].doc(uid);
-    let items = [];
+    const userCollections = collections['app-users'](uid);
+    let items: any[] = [];
 
     if (type === 'bps') {
       items = await userCollections.bps.findMany({
@@ -63,7 +68,7 @@ export const createReport = onCall<CreateReportData>(async (request) => {
     reportData[type] = items;
   }
 
-  const reportId = await collections.reports.create({
+  const reportId = await collections.reports.add({
     title,
     userId: uid,
     startDate: start,
