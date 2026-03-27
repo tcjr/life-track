@@ -32,3 +32,4 @@ export const helloWorld = onRequest((request, response) => {
 });
 
 export { listAllNotices } from './list-notices.mjs';
+export { createReport } from './create-report.mjs';
