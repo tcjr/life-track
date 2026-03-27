@@ -24,6 +24,7 @@ export default class Reports extends Component {
     limit: 20,
     orderBy: [['createdAt', 'desc']],
     where: [['userId', '==', this.firebase.uid]],
+    verbose: true,
   }));
 
   updateForm = (event: Event) => {
@@ -186,6 +187,7 @@ export default class Reports extends Component {
       <section>
         <h2 class="text-2xl font-bold mb-4 px-2">Your Reports</h2>
         <ul class="list bg-base-100 rounded-box shadow-md">
+          {{log "this.reports" this.reports}}
           {{#each this.reports as |report|}}
             <li class="list-row items-center">
               <div class="flex-1">

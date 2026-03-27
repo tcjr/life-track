@@ -10,11 +10,9 @@ export const ReportSchema = z.object({
   startDate: z.date(),
   endDate: z.date(),
   createdAt: z.date(),
-  data: z.object({
-    bps: z.array(BpMeasurementSchema).optional(),
-    glucoses: z.array(GlucoseMeasurementSchema).optional(),
-    meals: z.array(MealSchema).optional(),
-  }),
+  bps: z.array(BpMeasurementSchema),
+  glucoses: z.array(GlucoseMeasurementSchema),
+  meals: z.array(MealSchema),
 });
 
 export type Report = DocumentOutput<typeof ReportSchema>;

@@ -34,6 +34,11 @@ export const collections = collectionsBuilder(schema, {
   snapshotDataConverter: (snapshot) => {
     const data = snapshot.data();
     // Convert Firestore Timestamps to JavaScript Dates
+    console.log(
+      'converting timestamps to dates, snapshot = %o, data = %o',
+      snapshot,
+      data
+    );
     return Object.fromEntries(
       Object.entries(data).map(([key, value]) => [
         key,

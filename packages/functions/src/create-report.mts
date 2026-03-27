@@ -65,17 +65,23 @@ export const createReport = onCall<CreateReportData>(async (request) => {
       });
     }
 
+    console.log(`Found ${items.length} '${type}' items, adding to report`);
     reportData[type] = items;
   }
 
-  const reportId = await collections.reports.add({
+  console.log('Creating report...');
+  const reportRef = await collections.reports.add({
     title,
     userId: uid,
     startDate: start,
     endDate: end,
     createdAt: new Date(),
-    data: reportData,
+    bps: [],
+    glucoses: [],
+    meals: [],
+    ...reportData,
   });
+  console.log(`Report created with ID: ${reportRef.id}`);
 
-  return { id: reportId };
+  return { id: reportRef.id };
 });
