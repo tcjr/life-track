@@ -3,10 +3,10 @@ import { collectionsBuilder } from 'zod-firebase';
 import { NoticeSchema } from './notice';
 import { AppUserSchema } from './app-user';
 import { ReportSchema } from './report';
-import { Timestamp } from 'firebase/firestore';
 import { BpMeasurementSchema } from './measurements/bp';
 import { GlucoseMeasurementSchema } from './measurements/glucose';
 import { MealSchema } from './measurements/meal';
+import { convertTimestampsToDates } from '#app/utils/firestore.ts';
 
 const schema = {
   'app-users': {
@@ -34,16 +34,7 @@ export const collections = collectionsBuilder(schema, {
   snapshotDataConverter: (snapshot) => {
     const data = snapshot.data();
     // Convert Firestore Timestamps to JavaScript Dates
-    console.log(
-      'converting timestamps to dates, snapshot = %o, data = %o',
-      snapshot,
-      data
-    );
-    return Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [
-        key,
-        value instanceof Timestamp ? value.toDate() : value,
-      ])
-    );
+    convertTimestampsToDates(data);
+    return data;
   },
 });

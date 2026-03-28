@@ -12,6 +12,9 @@ Router.map(function () {
   this.route('login');
   this.route('setup-profile');
 
+  // Public reports
+  this.route('reports', { path: '/reports/:report_id' });
+
   // The authenticated route is a parent route that requires authentication.
   this.route('authenticated', { path: '' }, function () {
     this.route('settings');
@@ -25,7 +28,4 @@ Router.map(function () {
     this.route('new-meal');
     this.route('reports');
   });
-
-  // Public reports
-  this.route('reports', { path: '/reports/:report_id' });
 });

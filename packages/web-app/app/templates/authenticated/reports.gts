@@ -7,6 +7,7 @@ import { use } from 'ember-resources';
 import { FirestoreQuery } from '#resources/firestore-query';
 import { httpsCallable } from 'firebase/functions';
 import type FirebaseService from '#app/services/firebase';
+import { asLocal } from '#app/utils/dates.ts';
 
 export default class Reports extends Component {
   @service declare firebase: FirebaseService;
@@ -193,9 +194,9 @@ export default class Reports extends Component {
               <div class="flex-1">
                 <div class="font-bold">{{report.title}}</div>
                 <div class="text-xs opacity-60">
-                  {{report.startDate.toLocaleDateString}}
+                  {{asLocal report.startDate}}
                   -
-                  {{report.endDate.toLocaleDateString}}
+                  {{asLocal report.endDate}}
                 </div>
               </div>
               <div class="flex-none">
