@@ -3,6 +3,19 @@ import { pageTitle } from 'ember-page-title';
 import { FirestoreDocument } from '#resources/firestore-document';
 import { use } from 'ember-resources';
 import { asLocal } from '#app/utils/dates.ts';
+import {
+  BP_STATUS_CLASSES,
+  getBpQuality,
+  getGlucoseQuality,
+  GLUCOSE_STATUS_CLASSES,
+} from '#app/utils/measurements.ts';
+import type { BpMeasurement } from '#app/models/measurements/bp.ts';
+import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+
+const bpStatus = (bp: Pick<BpMeasurement, 'systolic' | 'diastolic'>) =>
+  BP_STATUS_CLASSES[getBpQuality(bp)];
+const glucoseStatus = (glucose: Pick<GlucoseMeasurement, 'value'>) =>
+  GLUCOSE_STATUS_CLASSES[getGlucoseQuality(glucose)];
 
 interface ReportsSignature {
   Args: {
@@ -52,7 +65,10 @@ export default class PublicReport extends Component<ReportsSignature> {
               <tbody>
                 {{#each this.report.bps as |bp|}}
                   <tr>
-                    <td><div aria-label="status" class="status"></div></td>
+                    <td><div
+                        aria-label="status"
+                        class="status {{bpStatus bp}}"
+                      ></div></td>
                     <td>{{asLocal bp.timestamp}}</td>
                     <td>{{bp.systolic}}</td>
                     <td>{{bp.diastolic}}</td>
@@ -70,6 +86,7 @@ export default class PublicReport extends Component<ReportsSignature> {
             <table class="table table-zebra w-full">
               <thead>
                 <tr>
+                  <th> </th>
                   <th>Date/Time</th>
                   <th>Value</th>
                 </tr>
@@ -77,6 +94,10 @@ export default class PublicReport extends Component<ReportsSignature> {
               <tbody>
                 {{#each this.report.glucoses as |glucose|}}
                   <tr>
+                    <td><div
+                        aria-label="status"
+                        class="status {{glucoseStatus glucose}}"
+                      ></div></td>
                     <td>{{asLocal glucose.timestamp}}</td>
                     <td>{{glucose.value}}</td>
                   </tr>
