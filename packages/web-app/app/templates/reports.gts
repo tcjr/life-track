@@ -18,7 +18,7 @@ export default class PublicReport extends Component<ReportsSignature> {
   });
 
   <template>
-    {{log "@model" @model}}
+    {{!log "@model" @model}}
     {{#if this.report}}
       {{pageTitle this.report.title}}
       <div

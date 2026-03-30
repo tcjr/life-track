@@ -7,7 +7,11 @@ import { use } from 'ember-resources';
 import { FirestoreQuery } from '#resources/firestore-query';
 import { httpsCallable } from 'firebase/functions';
 import type FirebaseService from '#app/services/firebase';
-import { asLocal } from '#app/utils/dates.ts';
+import {
+  asLocal,
+  toStartOfLocalDay,
+  toEndOfLocalDay,
+} from '#app/utils/dates.ts';
 
 export default class Reports extends Component {
   @service declare firebase: FirebaseService;
@@ -57,14 +61,20 @@ export default class Reports extends Component {
       >(this.firebase.functions, 'createReport');
 
       const measurements = [];
-      if (this.showBps) measurements.push('bps');
-      if (this.showGlucoses) measurements.push('glucoses');
-      if (this.showMeals) measurements.push('meals');
+      if (this.showBps) {
+        measurements.push('bps');
+      }
+      if (this.showGlucoses) {
+        measurements.push('glucoses');
+      }
+      if (this.showMeals) {
+        measurements.push('meals');
+      }
 
       const result = await createReportFn({
         title: this.title,
-        startDate: new Date(this.startDate).toISOString(),
-        endDate: new Date(this.endDate).toISOString(),
+        startDate: toStartOfLocalDay(this.startDate).toISOString(),
+        endDate: toEndOfLocalDay(this.endDate).toISOString(),
         measurements,
       });
 
@@ -188,7 +198,7 @@ export default class Reports extends Component {
       <section>
         <h2 class="text-2xl font-bold mb-4 px-2">Your Reports</h2>
         <ul class="list bg-base-100 rounded-box shadow-md">
-          {{log "this.reports" this.reports}}
+          {{!log "this.reports" this.reports}}
           {{#each this.reports as |report|}}
             <li class="list-row items-center">
               <div class="flex-1">
