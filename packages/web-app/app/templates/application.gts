@@ -61,6 +61,9 @@ export default class Application extends Component<ApplicationComponentSignature
                 <a href="/measurements">Measurements</a>
               </li>
               <li>
+                <a href="/reports">Reports</a>
+              </li>
+              <li>
                 <button
                   type="button"
                   class="btn btn-ghost btn-sm"

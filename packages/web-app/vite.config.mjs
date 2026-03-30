@@ -17,7 +17,7 @@ export default defineConfig({
   ],
 
   test: {
-    include: ['tests/**/*-test.{gjs,gts}'],
+    include: ['tests/**/*-test.{gjs,gts}', 'tests/**/*-test.{js,ts}'],
     maxConcurrency: 1,
     browser: {
       provider: webdriverio(),

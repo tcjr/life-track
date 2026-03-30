@@ -8,7 +8,7 @@ This is a JavaScript/TypeScript monorepo managed with `pnpm` workspaces. It cont
 
 1.  **`web-app`**: An Ember.js application built with Vite and TypeScript. Its purpose is to track various aspects of the user's life, including health measurements. It integrates with Firebase for backend services (authentication, Firestore).
 2.  **`functions`**: Firebase Cloud Functions providing server-side logic and API endpoints. Built with TypeScript and deployed to Firebase.
-3.  **`tools`**: A collection of CLI tools for administrative tasks, data seeding, and management (e.g., adding notices, listing users, seeding measurements).
+3.  **`tools`**: A collection of CLI tools for administrative tasks, data seeding, and management (e.g. listing users, seeding measurements).
 
 **Key Technologies:**
 
@@ -74,6 +74,8 @@ CLI tools are located in `packages/tools/src`. They can be run using `node` dire
 cd packages/tools
 node src/list-users.mts
 ```
+
+The tools will use the production or emulated Firestore depending on the presence of the `FIRESTORE_EMULATOR_HOST` environment variable.
 
 ### Running Tests
 

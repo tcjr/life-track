@@ -28,4 +28,22 @@ const asYYYYMMDD = (timestamp: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export { asLocal, asLocalTime, asYYYYMMDD };
+const toStartOfLocalDay = (dateStr: string) => {
+  const [year, month, day] = dateStr.split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  return new Date(year, month - 1, day, 0, 0, 0, 0);
+};
+
+const toEndOfLocalDay = (dateStr: string) => {
+  const [year, month, day] = dateStr.split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  return new Date(year, month - 1, day, 23, 59, 59, 999);
+};
+
+export { asLocal, asLocalTime, asYYYYMMDD, toStartOfLocalDay, toEndOfLocalDay };

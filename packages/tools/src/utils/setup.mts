@@ -6,6 +6,8 @@ import { AppUserSchema } from '../models/app-user.mts';
 import { NoticeSchema } from '../models/notice.mts';
 import { GlucoseSchema } from '../models/glucose.mts';
 import { BpSchema } from '../models/bp.mts';
+import { MealSchema } from '../models/meal.mts';
+import { ReportSchema } from '../models/report.mts';
 import { Timestamp } from 'firebase-admin/firestore';
 import gradient from 'gradient-string';
 const fiery = gradient(['yellow', 'red']);
@@ -21,9 +23,13 @@ export const schema = {
     zod: AppUserSchema,
     glucoses: { zod: GlucoseSchema },
     bps: { zod: BpSchema },
+    meals: { zod: MealSchema },
   },
   notices: {
     zod: NoticeSchema,
+  },
+  reports: {
+    zod: ReportSchema,
   },
 } as const;
 

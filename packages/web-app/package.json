@@ -41,6 +41,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "firebase": "^12.8.0",
     "timepicker-ui": "^4.1.6"
   },
