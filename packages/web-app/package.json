@@ -41,7 +41,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "firebase": "^12.8.0",
+    "firebase": "^12.11.0",
     "timepicker-ui": "^4.1.6"
   },
   "devDependencies": {
