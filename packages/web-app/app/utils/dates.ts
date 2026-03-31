@@ -41,11 +41,17 @@ const asYYYYMMDD = (timestamp: Date) => {
 
 const toStartOfLocalDay = (dateStr: string) => {
   const [year, month, day] = dateStr.split('-').map(Number);
+  if (year === undefined || month === undefined || day === undefined) {
+    throw new Error(`Invalid date string: ${dateStr}`);
+  }
   return new Date(year, month - 1, day, 0, 0, 0, 0);
 };
 
 const toEndOfLocalDay = (dateStr: string) => {
   const [year, month, day] = dateStr.split('-').map(Number);
+  if (year === undefined || month === undefined || day === undefined) {
+    throw new Error(`Invalid date string: ${dateStr}`);
+  }
   return new Date(year, month - 1, day, 23, 59, 59, 999);
 };
 
