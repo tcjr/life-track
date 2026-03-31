@@ -45,7 +45,7 @@ export default class BpStats extends Component<BpStatsSignature> {
         </div>
         <div class="stat-title">Systolic</div>
         <div class="stat-value">{{this.avgSystolic}}</div>
-        <div class="stat-desc">{{this.args.bps.length}} measurements</div>
+        <div class="stat-desc">{{@bps.length}} measurements</div>
       </div>
 
       <div class="stat place-items-center">
@@ -54,7 +54,7 @@ export default class BpStats extends Component<BpStatsSignature> {
         </div>
         <div class="stat-title">Diastolic</div>
         <div class="stat-value">{{this.avgDiastolic}}</div>
-        <div class="stat-desc">{{this.args.bps.length}} measurements</div>
+        <div class="stat-desc">{{@bps.length}} measurements</div>
       </div>
 
       <div class="stat place-items-center">
@@ -63,7 +63,7 @@ export default class BpStats extends Component<BpStatsSignature> {
         </div>
         <div class="stat-title">Heart Rate</div>
         <div class="stat-value">{{this.avgHeartRate}}</div>
-        <div class="stat-desc">{{this.args.bps.length}} measurements</div>
+        <div class="stat-desc">{{@bps.length}} measurements</div>
       </div>
     </div>
   </template>

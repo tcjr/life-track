@@ -31,7 +31,7 @@ export default class GlucoseStats extends Component<GlucoseStatsSignature> {
         </div>
         <div class="stat-title">Systolic</div>
         <div class="stat-value">{{this.avgValue}}</div>
-        <div class="stat-desc">{{this.args.glucoses.length}} measurements</div>
+        <div class="stat-desc">{{@glucoses.length}} measurements</div>
       </div>
 
     </div>
