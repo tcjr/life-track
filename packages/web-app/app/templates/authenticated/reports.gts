@@ -11,17 +11,20 @@ import {
   asLocal,
   toStartOfLocalDay,
   toEndOfLocalDay,
+  asLocalDate,
 } from '#app/utils/dates.ts';
+import type { FlashMessagesService } from 'ember-cli-flash';
+import ChartLine from '#app/icons/chart-line.svg?component';
 
 export default class Reports extends Component {
   @service declare firebase: FirebaseService;
+  @service declare flashMessages: FlashMessagesService;
 
   @tracked title = '';
   @tracked startDate = '';
   @tracked endDate = '';
   @tracked showBps = true;
   @tracked showGlucoses = true;
-  @tracked showMeals = true;
   @tracked isCreating = false;
 
   @use reports = FirestoreQuery('reports', () => ({
@@ -41,7 +44,6 @@ export default class Reports extends Component {
     this.endDate = (formData.get('endDate') as string) ?? '';
     this.showBps = formData.has('showBps');
     this.showGlucoses = formData.has('showGlucoses');
-    this.showMeals = formData.has('showMeals');
   };
 
   createReport = async (event: Event) => {
@@ -67,9 +69,6 @@ export default class Reports extends Component {
       if (this.showGlucoses) {
         measurements.push('glucoses');
       }
-      if (this.showMeals) {
-        measurements.push('meals');
-      }
 
       const result = await createReportFn({
         title: this.title,
@@ -79,16 +78,16 @@ export default class Reports extends Component {
       });
 
       console.log('Report created:', result.data.id);
+      this.flashMessages.success(`Report "${this.title}" created`);
 
       // Reset form state
-      this.title = '';
-      this.startDate = '';
-      this.endDate = '';
-      this.showBps = true;
-      this.showGlucoses = true;
-      this.showMeals = true;
+      // this.title = '';
+      // this.startDate = '';
+      // this.endDate = '';
+      // this.showBps = true;
+      // this.showGlucoses = true;
 
-      (event.target as HTMLFormElement).reset();
+      // (event.target as HTMLFormElement).reset();
     } catch (error) {
       console.error('Failed to create report:', error);
       alert('Failed to create report. See console for details.');
@@ -162,7 +161,7 @@ export default class Reports extends Component {
                   class="checkbox"
                   checked={{this.showBps}}
                 />
-                <span class="label-text">Blood Pressure</span>
+                <span class="label-text">BP/HR</span>
               </label>
               <label class="label cursor-pointer space-x-2">
                 <input
@@ -172,15 +171,6 @@ export default class Reports extends Component {
                   checked={{this.showGlucoses}}
                 />
                 <span class="label-text">Glucose</span>
-              </label>
-              <label class="label cursor-pointer space-x-2">
-                <input
-                  type="checkbox"
-                  name="showMeals"
-                  class="checkbox"
-                  checked={{this.showMeals}}
-                />
-                <span class="label-text">Meals</span>
               </label>
             </div>
           </div>
@@ -200,23 +190,26 @@ export default class Reports extends Component {
         <ul class="list bg-base-100 rounded-box shadow-md">
           {{!log "this.reports" this.reports}}
           {{#each this.reports as |report|}}
-            <li class="list-row items-center">
-              <div class="flex-1">
+            <li class="list-row">
+              <div>
+                <ChartLine class="h-8" />
+              </div>
+              <div class="">
                 <div class="font-bold">{{report.title}}</div>
                 <div class="text-xs opacity-60">
-                  {{asLocal report.startDate}}
+                  {{asLocalDate report.startDate}}
                   -
-                  {{asLocal report.endDate}}
+                  {{asLocalDate report.endDate}}
                 </div>
               </div>
-              <div class="flex-none">
+              <div class="">
                 <a
                   href="/reports/{{report._id}}"
-                  class="btn btn-ghost btn-sm"
+                  class="link"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View Public Link
+                  Public Link
                 </a>
               </div>
             </li>

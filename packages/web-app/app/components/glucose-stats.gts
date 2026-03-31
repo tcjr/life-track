@@ -24,12 +24,12 @@ export default class GlucoseStats extends Component<GlucoseStatsSignature> {
   }
 
   <template>
-    <div class="stats mb-4" ...attributes>
+    <div class="stats stats-vertical lg:stats-horizontal mb-4" ...attributes>
       <div class="stat place-items-center">
         <div class="stat-figure">
           <BloodDrop class="text-primary" />
         </div>
-        <div class="stat-title">Systolic</div>
+        <div class="stat-title">Avg. mg/dL</div>
         <div class="stat-value">{{this.avgValue}}</div>
         <div class="stat-desc">{{@glucoses.length}} measurements</div>
       </div>

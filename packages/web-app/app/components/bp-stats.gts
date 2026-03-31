@@ -38,7 +38,7 @@ export default class BpStats extends Component<BpStatsSignature> {
   }
 
   <template>
-    <div class="stats mb-4" ...attributes>
+    <div class="stats stats-vertical lg:stats-horizontal mb-4" ...attributes>
       <div class="stat place-items-center">
         <div class="stat-figure">
           <BloodPressure class="text-primary" />
