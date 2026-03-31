@@ -46,7 +46,9 @@ export default class Application extends Component<ApplicationComponentSignature
     <header>
       <div class="navbar bg-base-100 shadow-sm">
         <div class="flex-1">
-          <a href="/" class="btn btn-ghost text-xl">home</a>
+          {{#if this.firebase.signedInUser}}
+            <a href="/" class="btn btn-ghost text-xl">home</a>
+          {{/if}}
         </div>
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1">

@@ -12,7 +12,9 @@ import {
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import GlucoseChart from '#components/glucose-chart.gts';
+import GlucoseStats from '#app/components/glucose-stats.gts';
 import BpChart from '#components/bp-chart.gts';
+import BpStats from '#app/components/bp-stats.gts';
 
 const bpStatus = (bp: Pick<BpMeasurement, 'systolic' | 'diastolic'>) =>
   BP_STATUS_CLASSES[getBpQuality(bp)];
@@ -54,6 +56,7 @@ export default class PublicReport extends Component<ReportsSignature> {
         {{#if this.report.bps.length}}
           <section>
             <h2 class="text-xl font-semibold mb-2">Blood Pressure / Heart Rate</h2>
+            <BpStats @bps={{this.report.bps}} />
             <BpChart @bps={{this.report.bps}} />
             <table class="table table-zebra table-xs w-full">
               <thead>
@@ -86,6 +89,7 @@ export default class PublicReport extends Component<ReportsSignature> {
         {{#if this.report.glucoses.length}}
           <section>
             <h2 class="text-xl font-semibold mb-2">Glucose</h2>
+            <GlucoseStats @glucoses={{this.report.glucoses}} />
             <GlucoseChart @glucoses={{this.report.glucoses}} />
             <table class="table table-zebra table-xs w-full">
               <thead>
