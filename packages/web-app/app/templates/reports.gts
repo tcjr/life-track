@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import { FirestoreDocument } from '#resources/firestore-document';
 import { use } from 'ember-resources';
-import { asLocal } from '#app/utils/dates.ts';
+import { asLocal, asLocalDate } from '#app/utils/dates.ts';
 import {
   BP_STATUS_CLASSES,
   getBpQuality,
@@ -11,6 +11,7 @@ import {
 } from '#app/utils/measurements.ts';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import GlucoseChart from '#components/glucose-chart.gts';
 
 const bpStatus = (bp: Pick<BpMeasurement, 'systolic' | 'diastolic'>) =>
   BP_STATUS_CLASSES[getBpQuality(bp)];
@@ -41,9 +42,9 @@ export default class PublicReport extends Component<ReportsSignature> {
           <h1 class="text-3xl font-bold">{{this.report.title}}</h1>
           <p class="text-base-content">
             Report Period:
-            {{asLocal this.report.startDate}}
+            {{asLocalDate this.report.startDate}}
             -
-            {{asLocal this.report.endDate}}
+            {{asLocalDate this.report.endDate}}
           </p>
           {{!-- <p class="text-sm text-base-content/70">Created on:
             {{asLocal this.report.createdAt}}</p> --}}
@@ -52,7 +53,7 @@ export default class PublicReport extends Component<ReportsSignature> {
         {{#if this.report.bps.length}}
           <section>
             <h2 class="text-xl font-semibold mb-2">Blood Pressure / Heart Rate</h2>
-            <table class="table table-zebra w-full">
+            <table class="table table-zebra table-xs w-full">
               <thead>
                 <tr>
                   <th> </th>
@@ -83,7 +84,8 @@ export default class PublicReport extends Component<ReportsSignature> {
         {{#if this.report.glucoses.length}}
           <section>
             <h2 class="text-xl font-semibold mb-2">Glucose</h2>
-            <table class="table table-zebra w-full">
+            <GlucoseChart @glucoses={{this.report.glucoses}} />
+            <table class="table table-zebra table-xs w-full">
               <thead>
                 <tr>
                   <th> </th>

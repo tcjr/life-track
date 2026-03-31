@@ -7,6 +7,13 @@ const dtf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
+const df = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short',
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+});
+
 const ttf = new Intl.DateTimeFormat('en-US', {
   hour: 'numeric',
   minute: 'numeric',
@@ -18,6 +25,10 @@ const asLocal = (date: Date) => {
 
 const asLocalTime = (date: Date) => {
   return ttf.format(date);
+};
+
+const asLocalDate = (date: Date) => {
+  return df.format(date);
 };
 
 const asYYYYMMDD = (timestamp: Date) => {
@@ -38,4 +49,11 @@ const toEndOfLocalDay = (dateStr: string) => {
   return new Date(year, month - 1, day, 23, 59, 59, 999);
 };
 
-export { asLocal, asLocalTime, asYYYYMMDD, toStartOfLocalDay, toEndOfLocalDay };
+export {
+  asLocal,
+  asLocalTime,
+  asLocalDate,
+  asYYYYMMDD,
+  toStartOfLocalDay,
+  toEndOfLocalDay,
+};
