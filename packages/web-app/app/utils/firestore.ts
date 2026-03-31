@@ -16,6 +16,7 @@ export const convertTimestampsToDates = (data: DocumentData) => {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     data[key] = convertTimestampsToDates(value);
   });
 
