@@ -8,7 +8,6 @@ import { FirestoreQuery } from '#resources/firestore-query';
 import { httpsCallable } from 'firebase/functions';
 import type FirebaseService from '#app/services/firebase';
 import {
-  asLocal,
   toStartOfLocalDay,
   toEndOfLocalDay,
   asLocalDate,

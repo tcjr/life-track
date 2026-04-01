@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import { FirestoreDocument } from '#resources/firestore-document';
 import { use } from 'ember-resources';
-import { asLocalDate } from '#app/utils/dates.ts';
+import { asLocal, asLocalDate } from '#app/utils/dates.ts';
 import {
   BP_STATUS_CLASSES,
   getBpQuality,
