@@ -78,6 +78,7 @@
     "@vitest/browser-webdriverio": "^4.1.0",
     "@vitest/eslint-plugin": "^1.6.12",
     "babel-plugin-ember-template-compilation": "^4.0.0",
+    "chart.js": "^4.5.1",
     "concurrently": "^9.2.1",
     "daisyui": "^5.5.19",
     "decorator-transforms": "^2.3.1",

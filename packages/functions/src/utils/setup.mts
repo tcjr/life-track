@@ -1,12 +1,32 @@
 import { collectionsBuilder } from 'zod-firebase-admin';
 import { NoticeSchema } from '../models/notice.mjs';
+import { AppUserSchema } from '../models/app-user.mjs';
+import { ReportSchema } from '../models/report.mjs';
+import { BpSchema } from '../models/bp.mjs';
+import { GlucoseSchema } from '../models/glucose.mjs';
+import { MealSchema } from '../models/meal.mjs';
 import { initializeApp } from 'firebase-admin/app';
 import { Timestamp } from 'firebase-admin/firestore';
 import * as logger from 'firebase-functions/logger';
 
 const schema = {
-  notices: {
+  'app-users': {
+    zod: AppUserSchema,
+    bps: {
+      zod: BpSchema,
+    },
+    glucoses: {
+      zod: GlucoseSchema,
+    },
+    meals: {
+      zod: MealSchema,
+    },
+  },
+  'notices': {
     zod: NoticeSchema,
+  },
+  'reports': {
+    zod: ReportSchema,
   },
 } as const;
 

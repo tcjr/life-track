@@ -15,6 +15,12 @@ import BloodDrop from '#app/icons/blood-drop.svg?component';
 import { cached, tracked } from '@glimmer/tracking';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import {
+  BP_COLORS,
+  getBpQuality,
+  getGlucoseQuality,
+  GLUCOSE_COLORS,
+} from '#app/utils/measurements.ts';
 import { on } from '@ember/modifier';
 import { registerDestructor } from '@ember/destroyable';
 
@@ -69,86 +75,6 @@ const getEventForGlucose = (glucose: GlucoseMeasurement) => {
     backgroundColor: colors.bg,
     textColor: colors.fg,
   };
-};
-
-const BP_COLORS = {
-  'hypertension-crisis': {
-    bg: 'var(--color-error)',
-    fg: 'var(--color-error-content)',
-  },
-  'hypertension-2': {
-    bg: 'var(--color-error)',
-    fg: 'var(--color-error-content)',
-  },
-  'hypertension-1': {
-    bg: 'var(--color-warning)',
-    fg: 'var(--color-warning-content)',
-  },
-  elevated: {
-    bg: 'var(--color-warning)',
-    fg: 'var(--color-warning-content)',
-  },
-  low: {
-    bg: 'var(--color-info)',
-    fg: 'var(--color-info-content)',
-  },
-  normal: {
-    bg: 'var(--color-success)',
-    fg: 'var(--color-success-content)',
-  },
-};
-
-const GLUCOSE_COLORS = {
-  high: {
-    bg: 'var(--color-error)',
-    fg: 'var(--color-error-content)',
-  },
-  elevated: {
-    bg: 'var(--color-warning)',
-    fg: 'var(--color-warning-content)',
-  },
-  low: {
-    bg: 'var(--color-info)',
-    fg: 'var(--color-info-content)',
-  },
-  normal: {
-    bg: 'var(--color-success)',
-    fg: 'var(--color-success-content)',
-  },
-};
-
-// BP quality scale
-const getBpQuality = (bp: BpMeasurement) => {
-  const { systolic, diastolic } = bp;
-  if (systolic > 180 || diastolic > 120) {
-    return 'hypertension-crisis';
-  }
-  if (systolic >= 140 || diastolic >= 90) {
-    return 'hypertension-2';
-  }
-  if (systolic >= 130 || diastolic >= 80) {
-    return 'hypertension-1';
-  }
-  if (systolic >= 120 && diastolic < 80) {
-    return 'elevated';
-  }
-  if (systolic < 90 || diastolic < 60) {
-    return 'low';
-  }
-  return 'normal';
-};
-
-// Glucose quality scale
-const getGlucoseQuality = (glucose: GlucoseMeasurement) => {
-  if (glucose.value > 180) {
-    return 'high';
-  } else if (glucose.value > 140) {
-    return 'elevated';
-  } else if (glucose.value >= 80) {
-    return 'normal';
-  } else {
-    return 'low';
-  }
 };
 
 export default class MonthList extends Component<MonthListSignature> {

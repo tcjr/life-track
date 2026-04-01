@@ -65,7 +65,7 @@ async function addBpPair(
 async function main() {
   const { collections } = await setup();
 
-  const userId = await chooseUser();
+  const userId = await chooseUser(collections);
 
   const daysInput = (await text({
     message: 'How many days of data do you want to create?',

@@ -19,6 +19,11 @@ import {
   type Firestore,
   connectFirestoreEmulator,
 } from 'firebase/firestore';
+import {
+  getFunctions,
+  type Functions,
+  connectFunctionsEmulator,
+} from 'firebase/functions';
 
 import { firebaseConfig } from '../config/firebase';
 import type Owner from '@ember/owner';
@@ -28,6 +33,7 @@ export default class FirebaseService extends Service {
   app: FirebaseApp;
   auth: Auth;
   db: Firestore;
+  functions: Functions;
 
   /**
    * This is the Firebase auth User.
@@ -48,6 +54,9 @@ export default class FirebaseService extends Service {
 
     // Initialize Cloud Firestore and get a reference to the service
     this.db = getFirestore(this.app);
+
+    // Initialize Cloud Functions and get a reference to the service
+    this.functions = getFunctions(this.app);
   }
 
   // Convenience getter for the current user's uid
@@ -83,6 +92,21 @@ export default class FirebaseService extends Service {
     } else {
       console.log(
         '[service:firebase]🔥 Using Firestore production (no emulation)'
+      );
+    }
+
+    if (import.meta.env.VITE_USE_FUNCTIONS_EMULATOR === 'true') {
+      connectFunctionsEmulator(
+        this.functions,
+        import.meta.env.VITE_FUNCTIONS_EMULATOR_HOST as string,
+        5001
+      );
+      console.log(
+        `[service:firebase]🚫 Using Functions emulator, host ${import.meta.env.VITE_FUNCTIONS_EMULATOR_HOST}, port 5001`
+      );
+    } else {
+      console.log(
+        '[service:firebase]🔥 Using Functions production (no emulation)'
       );
     }
 
