@@ -58,7 +58,7 @@ export default class PublicReport extends Component<ReportsSignature> {
             <h2 class="text-xl font-semibold mb-2">Blood Pressure / Heart Rate</h2>
             <BpStats @bps={{this.report.bps}} />
             <BpChart @bps={{this.report.bps}} />
-            <table class="table table-zebra table-xs w-full">
+            <table class="table table-pin-rows table-zebra table-xs w-full">
               <thead>
                 <tr>
                   <th> </th>
@@ -91,7 +91,7 @@ export default class PublicReport extends Component<ReportsSignature> {
             <h2 class="text-xl font-semibold mb-2">Glucose</h2>
             <GlucoseStats @glucoses={{this.report.glucoses}} />
             <GlucoseChart @glucoses={{this.report.glucoses}} />
-            <table class="table table-zebra table-xs w-full">
+            <table class="table table-pin-rows table-zebra table-xs w-full">
               <thead>
                 <tr>
                   <th> </th>
@@ -118,7 +118,7 @@ export default class PublicReport extends Component<ReportsSignature> {
         {{#if this.report.meals.length}}
           <section>
             <h2 class="text-xl font-semibold mb-2">Meals</h2>
-            <table class="table table-zebra w-full">
+            <table class="table table-pin-rows table-zebra w-full">
               <thead>
                 <tr>
                   <th>Date/Time</th>
