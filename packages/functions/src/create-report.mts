@@ -6,7 +6,7 @@ interface CreateReportData {
   title: string;
   startDate: string; // ISO string
   endDate: string; // ISO string
-  measurements: ('bps' | 'glucoses' | 'meals')[];
+  measurements: ('bps' | 'glucoses')[];
 }
 
 export const createReport = onCall<CreateReportData>(
@@ -56,15 +56,6 @@ export const createReport = onCall<CreateReportData>(
           ],
           orderBy: [['timestamp', 'asc']],
         });
-      } else if (type === 'meals') {
-        items = await userCollections.meals.findMany({
-          name: `report-meals-${uid}`,
-          where: [
-            ['timestamp', '>=', start],
-            ['timestamp', '<=', end],
-          ],
-          orderBy: [['timestamp', 'asc']],
-        });
       }
 
       console.log(`Found ${items.length} '${type}' items, adding to report`);
@@ -80,7 +71,6 @@ export const createReport = onCall<CreateReportData>(
       createdAt: new Date(),
       bps: [],
       glucoses: [],
-      meals: [],
       ...reportData,
     });
     console.log(`Report created with ID: ${reportRef.id}`);
