@@ -35,6 +35,13 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
       timestamp,
     };
 
+    if (formData.context) {
+      updateData.context = String(formData.context) as
+        | 'fasting'
+        | 'post-meal'
+        | 'other';
+    }
+
     try {
       await collections['app-users'](this.firebase.uid).glucoses.add(
         updateData
@@ -69,6 +76,31 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         <div class="">
           <label for="time" class="sr-only">when</label>
           <InputTime @name="time" @value={{this.prefillValues.time}} />
+        </div>
+
+        <div class="text-2xl font-bold text-center mt-4">Context</div>
+        <div class="join w-full justify-center mt-2">
+          <input
+            class="join-item btn"
+            type="radio"
+            name="context"
+            value="fasting"
+            aria-label="Fasting"
+          />
+          <input
+            class="join-item btn"
+            type="radio"
+            name="context"
+            value="post-meal"
+            aria-label="Post-Meal"
+          />
+          <input
+            class="join-item btn"
+            type="radio"
+            name="context"
+            value="other"
+            aria-label="Other"
+          />
         </div>
 
         <button
