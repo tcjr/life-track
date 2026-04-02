@@ -114,28 +114,6 @@ export default class PublicReport extends Component<ReportsSignature> {
             </table>
           </section>
         {{/if}}
-
-        {{#if this.report.meals.length}}
-          <section>
-            <h2 class="text-xl font-semibold mb-2">Meals</h2>
-            <table class="table table-pin-rows table-zebra w-full">
-              <thead>
-                <tr>
-                  <th>Date/Time</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each this.report.meals as |meal|}}
-                  <tr>
-                    <td>{{asLocal meal.timestamp}}</td>
-                    <td>{{meal.notes}}</td>
-                  </tr>
-                {{/each}}
-              </tbody>
-            </table>
-          </section>
-        {{/if}}
       </div>
     {{else}}
       <div class="p-8 text-center">

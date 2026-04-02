@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { type DocumentInput, type DocumentOutput } from 'zod-firebase';
 import { BpMeasurementSchema } from './measurements/bp';
 import { GlucoseMeasurementSchema } from './measurements/glucose';
-import { MealSchema } from './measurements/meal';
 
 export const ReportSchema = z.object({
   title: z.string(),
@@ -12,7 +11,6 @@ export const ReportSchema = z.object({
   createdAt: z.date(),
   bps: z.array(BpMeasurementSchema),
   glucoses: z.array(GlucoseMeasurementSchema),
-  meals: z.array(MealSchema),
 });
 
 export type Report = DocumentOutput<typeof ReportSchema>;

@@ -5,7 +5,6 @@ import { AppUserSchema } from './app-user';
 import { ReportSchema } from './report';
 import { BpMeasurementSchema } from './measurements/bp';
 import { GlucoseMeasurementSchema } from './measurements/glucose';
-import { MealSchema } from './measurements/meal';
 import { convertTimestampsToDates } from '#app/utils/firestore.ts';
 
 const schema = {
@@ -16,9 +15,6 @@ const schema = {
     },
     glucoses: {
       zod: GlucoseMeasurementSchema,
-    },
-    meals: {
-      zod: MealSchema,
     },
   },
   notices: {

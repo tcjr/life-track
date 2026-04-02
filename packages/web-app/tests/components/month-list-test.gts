@@ -6,6 +6,7 @@ import MonthList from '#app/components/month-list.gts';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 
+const now = new Date();
 const mockMeasurements: {
   bps: BpMeasurement[];
   glucoses: GlucoseMeasurement[];
@@ -16,14 +17,14 @@ const mockMeasurements: {
       systolic: 120,
       diastolic: 80,
       heartRate: 70,
-      timestamp: new Date('2026-03-01T10:00:00Z'),
+      timestamp: new Date(now.getFullYear(), now.getMonth(), 15, 10, 0, 0),
     },
   ],
   glucoses: [
     {
       _id: 'g1',
       value: 100,
-      timestamp: new Date('2026-03-01T11:00:00Z'),
+      timestamp: new Date(now.getFullYear(), now.getMonth(), 15, 11, 0, 0),
     },
   ],
 };

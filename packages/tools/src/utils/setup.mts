@@ -6,10 +6,9 @@ import { AppUserSchema } from '../models/app-user.mts';
 import { NoticeSchema } from '../models/notice.mts';
 import { GlucoseSchema } from '../models/glucose.mts';
 import { BpSchema } from '../models/bp.mts';
-import { MealSchema } from '../models/meal.mts';
 import { ReportSchema } from '../models/report.mts';
-import { Timestamp } from 'firebase-admin/firestore';
 import gradient from 'gradient-string';
+import { convertTimestampsToDates } from './timestamp-converter.mts';
 const fiery = gradient(['yellow', 'red']);
 const cool = gradient(['white', 'purple']);
 
@@ -23,7 +22,6 @@ export const schema = {
     zod: AppUserSchema,
     glucoses: { zod: GlucoseSchema },
     bps: { zod: BpSchema },
-    meals: { zod: MealSchema },
   },
   notices: {
     zod: NoticeSchema,
@@ -57,12 +55,8 @@ export default async function setupApp() {
     snapshotDataConverter: (snapshot) => {
       const data = snapshot.data();
       // Convert Firestore Timestamps to JavaScript Dates
-      return Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [
-          key,
-          value instanceof Timestamp ? value.toDate() : value,
-        ]),
-      );
+      convertTimestampsToDates(data);
+      return data;
     },
   });
 

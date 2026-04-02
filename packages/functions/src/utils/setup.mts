@@ -4,10 +4,9 @@ import { AppUserSchema } from '../models/app-user.mjs';
 import { ReportSchema } from '../models/report.mjs';
 import { BpSchema } from '../models/bp.mjs';
 import { GlucoseSchema } from '../models/glucose.mjs';
-import { MealSchema } from '../models/meal.mjs';
 import { initializeApp } from 'firebase-admin/app';
-import { Timestamp } from 'firebase-admin/firestore';
 import * as logger from 'firebase-functions/logger';
+import { convertTimestampsToDates } from './timestamp-converter.mjs';
 
 const schema = {
   'app-users': {
@@ -17,9 +16,6 @@ const schema = {
     },
     glucoses: {
       zod: GlucoseSchema,
-    },
-    meals: {
-      zod: MealSchema,
     },
   },
   'notices': {
@@ -37,12 +33,8 @@ export default async function setupApp() {
     snapshotDataConverter: (snapshot) => {
       const data = snapshot.data();
       // Convert Firestore Timestamps to JavaScript Dates
-      return Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [
-          key,
-          value instanceof Timestamp ? value.toDate() : value,
-        ]),
-      );
+      convertTimestampsToDates(data);
+      return data;
     },
 
     // When we have a validation error
