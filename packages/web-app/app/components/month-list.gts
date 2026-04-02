@@ -18,6 +18,7 @@ import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import {
   BP_COLORS,
   getBpQuality,
+  getGlucoseContextName,
   getGlucoseQuality,
   GLUCOSE_COLORS,
 } from '#app/utils/measurements.ts';
@@ -70,7 +71,7 @@ const getEventForGlucose = (glucose: GlucoseMeasurement) => {
     start: glucose.timestamp,
     end: glucose.timestamp,
     title: {
-      html: `<img src="${BloodDropUrl}" class="inline-block align-text-bottom h-5"> Glucose ${glucose.value}`,
+      html: `<img src="${BloodDropUrl}" class="inline-block align-text-bottom h-5"> Glucose ${glucose.value} (${getGlucoseContextName(glucose.context)})`,
     },
     backgroundColor: colors.bg,
     textColor: colors.fg,

@@ -4,6 +4,7 @@ import { type DocumentInput, type DocumentOutput } from 'zod-firebase-admin';
 export const GlucoseSchema = z.object({
   value: z.number(),
   timestamp: z.date(),
+  context: z.enum(['fasting', 'post-meal', 'other']).optional(),
 });
 
 export type Glucose = DocumentOutput<typeof GlucoseSchema>;
