@@ -74,10 +74,6 @@ export default class Application extends Component<ApplicationComponentSignature
                   Logout
                 </button>
               </li>
-            {{else}}
-              <li>
-                <a href="/login">Login</a>
-              </li>
             {{/if}}
           </ul>
         </div>
