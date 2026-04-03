@@ -82,6 +82,9 @@ importers:
 
   packages/web-app:
     dependencies:
+      ember-truth-helpers:
+        specifier: ^5.0.0
+        version: 5.0.0
       firebase:
         specifier: ^12.11.0
         version: 12.11.0
@@ -4531,6 +4534,9 @@ packages:
   ember-tracked-storage-polyfill@1.0.0:
     resolution: {integrity: sha512-eL7lZat68E6P/D7b9UoTB5bB5Oh/0aju0Z7PCMi3aTwhaydRaxloE7TGrTRYU+NdJuyNVZXeGyxFxn2frvd3TA==}
     engines: {node: 12.* || >= 14}
+
+  ember-truth-helpers@5.0.0:
+    resolution: {integrity: sha512-PnQd6D6hvlNC3k6gBu0SC2cvfXX6wH6W0nToomIIoxqyrD5cllk0zBh/j/1H0KsczVCWeuF9PWj5xJgL4jQAGg==}
 
   ember-vitest@0.3.3:
     resolution: {integrity: sha512-Fac31ULUrqSyvB0qw1F/+Vny5XBB+c8aT7Um9D3xt4AKbBNeu7fCgQmPMp7CofLGM165WPYQ6YZvlP/bYW8LWA==}
@@ -14018,6 +14024,12 @@ snapshots:
     dependencies:
       ember-cli-babel: 7.26.11
       ember-cli-htmlbars: 5.7.2
+    transitivePeerDependencies:
+      - supports-color
+
+  ember-truth-helpers@5.0.0:
+    dependencies:
+      '@embroider/addon-shim': 1.10.2
     transitivePeerDependencies:
       - supports-color
 
