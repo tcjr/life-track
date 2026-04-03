@@ -15,13 +15,12 @@ import BloodDrop from '#app/icons/blood-drop.svg?component';
 import { cached, tracked } from '@glimmer/tracking';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import { BP_COLORS, getBpQuality } from '#app/utils/bp.ts';
 import {
-  BP_COLORS,
-  getBpQuality,
   getGlucoseContextName,
   getGlucoseQuality,
   GLUCOSE_COLORS,
-} from '#app/utils/measurements.ts';
+} from '#app/utils/glucose.ts';
 import { on } from '@ember/modifier';
 import { registerDestructor } from '@ember/destroyable';
 

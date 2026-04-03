@@ -1,0 +1,13 @@
+packages/functions                       |  WARN  Unsupported engine: wanted: {"node":"24"} (current: {"node":"v22.22.1","pnpm":"10.30.3"})
+
+> web-app@0.0.0 start /app/packages/web-app
+> vite dev --host -- --clearScreen false
+
+
+  VITE v8.0.3  ready in 2543 ms
+
+  ➜  Local:   http://localhost:4200/
+  ➜  Network: http://192.168.0.2:4200/
+/*! 🌼 daisyUI 5.5.19 */
+1:04:17 PM [vite] (client) ✨ new dependencies optimized: ember-source/@ember/component/template-only.js
+1:04:17 PM [vite] (client) ✨ optimized dependencies changed. reloading
