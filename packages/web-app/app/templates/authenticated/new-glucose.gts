@@ -32,16 +32,13 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         ? new Date()
         : parseTimeToDate(String(formData.time));
 
+    const context = formData.context as GlucoseMeasurementInput['context'];
+
     const updateData: GlucoseMeasurementInput = {
       value: Number(formData.value),
       timestamp,
+      context,
     };
-
-    if (formData.context) {
-      updateData.context = String(
-        formData.context
-      ) as GlucoseMeasurementInput['context'];
-    }
 
     try {
       await collections['app-users'](this.firebase.uid).glucoses.add(
@@ -83,7 +80,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         <div class="text-2xl font-bold text-center mt-4">Context</div>
         <div class="join w-full justify-center mt-2">
           <input
-            class="join-item btn"
+            class="join-item btn btn-xl"
             type="radio"
             name="context"
             value="fasting"
@@ -91,7 +88,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
             checked={{eq this.prefillValues.context "fasting"}}
           />
           <input
-            class="join-item btn"
+            class="join-item btn btn-xl"
             type="radio"
             name="context"
             value="post-meal"
@@ -99,7 +96,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
             checked={{eq this.prefillValues.context "post-meal"}}
           />
           <input
-            class="join-item btn"
+            class="join-item btn btn-xl"
             type="radio"
             name="context"
             value="other"
