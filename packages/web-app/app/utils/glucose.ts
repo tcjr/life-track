@@ -10,7 +10,7 @@ export const getGlucoseQuality = (
       return 'high';
     } else if (glucose.value > 180) {
       return 'elevated';
-    } else if (glucose.value >= 80) {
+    } else if (glucose.value >= 70) {
       return 'normal';
     } else {
       return 'low';
@@ -18,9 +18,9 @@ export const getGlucoseQuality = (
   } else {
     if (glucose.value > 180) {
       return 'high';
-    } else if (glucose.value > 140) {
+    } else if (glucose.value > 130) {
       return 'elevated';
-    } else if (glucose.value >= 80) {
+    } else if (glucose.value >= 70) {
       return 'normal';
     } else {
       return 'low';
