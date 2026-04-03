@@ -41,6 +41,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "ember-truth-helpers": "^5.0.0",
     "firebase": "^12.11.0",
     "timepicker-ui": "^4.3.0"
   },
