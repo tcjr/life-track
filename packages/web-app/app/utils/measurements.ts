@@ -108,3 +108,16 @@ export const GLUCOSE_STATUS_CLASSES: Record<GlucoseQuality, string> = {
   normal: 'status-success',
   low: 'status-info',
 };
+
+const GLUCOSE_CONTEXT = {
+  fasting: { name: 'Fasting' },
+  'post-meal': { name: 'Post-Meal' },
+  other: { name: 'Other' },
+};
+
+export const getGlucoseContextName = (context?: string) => {
+  if (!context) {
+    return 'Unknown';
+  }
+  return GLUCOSE_CONTEXT[context as keyof typeof GLUCOSE_CONTEXT].name;
+};

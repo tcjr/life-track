@@ -3,8 +3,8 @@ import { type DocumentInput, type DocumentOutput } from 'zod-firebase';
 
 export const GlucoseMeasurementSchema = z.object({
   value: z.number(),
-  //unit: z.enum(['mg/dL', 'mmol/L']),
   timestamp: z.date(),
+  context: z.enum(['fasting', 'post-meal', 'other']).optional(),
 });
 
 export type GlucoseMeasurement = DocumentOutput<

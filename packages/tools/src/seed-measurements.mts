@@ -98,10 +98,20 @@ async function main() {
     const morningTimestamp = createTimestampForDay(i, 8, 30);
     const eveningTimestamp = createTimestampForDay(i, 22, 15);
 
-    const glucoseValue = randomInRange(80, 140);
+    const glucoseValueFasting = randomInRange(80, 140);
     await userCollection.glucoses.add({
-      value: glucoseValue,
-      timestamp: createTimestampForDay(i, 9, 30),
+      value: glucoseValueFasting,
+      context: 'fasting',
+      timestamp: createTimestampForDay(i, 8, 30),
+    });
+    const glucoseValuePostMeal = randomInRange(
+      glucoseValueFasting,
+      glucoseValueFasting + 85,
+    );
+    await userCollection.glucoses.add({
+      value: glucoseValuePostMeal,
+      context: 'post-meal',
+      timestamp: createTimestampForDay(i, 10, 15),
     });
 
     await addBpPair(userCollection, morningTimestamp);

@@ -11,6 +11,8 @@ import InputNumber from '#app/components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
 import { parseTimeToDate } from '#app/utils/timepicker.ts';
 import InputTime from '#app/components/input-time.gts';
+import { getGlucoseContextName } from '#app/utils/measurements.ts';
+import { eq } from 'ember-truth-helpers';
 
 interface NewGlucoseSignature {
   Element: HTMLDivElement;
@@ -30,9 +32,12 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         ? new Date()
         : parseTimeToDate(String(formData.time));
 
+    const context = formData.context as GlucoseMeasurementInput['context'];
+
     const updateData: GlucoseMeasurementInput = {
       value: Number(formData.value),
       timestamp,
+      context,
     };
 
     try {
@@ -51,6 +56,7 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
     return {
       value: '150',
       time: '',
+      context: 'fasting',
     };
   }
 
@@ -69,6 +75,34 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
         <div class="">
           <label for="time" class="sr-only">when</label>
           <InputTime @name="time" @value={{this.prefillValues.time}} />
+        </div>
+
+        <div class="text-2xl font-bold text-center mt-4">Context</div>
+        <div class="join w-full justify-center mt-2">
+          <input
+            class="join-item btn btn-xl"
+            type="radio"
+            name="context"
+            value="fasting"
+            aria-label={{getGlucoseContextName "fasting"}}
+            checked={{eq this.prefillValues.context "fasting"}}
+          />
+          <input
+            class="join-item btn btn-xl"
+            type="radio"
+            name="context"
+            value="post-meal"
+            aria-label={{getGlucoseContextName "post-meal"}}
+            checked={{eq this.prefillValues.context "post-meal"}}
+          />
+          <input
+            class="join-item btn btn-xl"
+            type="radio"
+            name="context"
+            value="other"
+            aria-label={{getGlucoseContextName "other"}}
+            checked={{eq this.prefillValues.context "other"}}
+          />
         </div>
 
         <button

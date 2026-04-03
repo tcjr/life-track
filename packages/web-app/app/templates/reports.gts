@@ -6,6 +6,7 @@ import { asLocal, asLocalDate } from '#app/utils/dates.ts';
 import {
   BP_STATUS_CLASSES,
   getBpQuality,
+  getGlucoseContextName,
   getGlucoseQuality,
   GLUCOSE_STATUS_CLASSES,
 } from '#app/utils/measurements.ts';
@@ -97,6 +98,7 @@ export default class PublicReport extends Component<ReportsSignature> {
                   <th> </th>
                   <th>Date/Time</th>
                   <th>Value</th>
+                  <th>Context</th>
                 </tr>
               </thead>
               <tbody>
@@ -108,6 +110,7 @@ export default class PublicReport extends Component<ReportsSignature> {
                       ></div></td>
                     <td>{{asLocal glucose.timestamp}}</td>
                     <td>{{glucose.value}}</td>
+                    <td>{{getGlucoseContextName glucose.context}}</td>
                   </tr>
                 {{/each}}
               </tbody>
