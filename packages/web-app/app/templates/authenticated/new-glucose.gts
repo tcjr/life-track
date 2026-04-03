@@ -11,6 +11,7 @@ import InputNumber from '#app/components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
 import { parseTimeToDate } from '#app/utils/timepicker.ts';
 import InputTime from '#app/components/input-time.gts';
+import { getGlucoseContextName } from '#app/utils/measurements.ts';
 
 interface NewGlucoseSignature {
   Element: HTMLDivElement;
@@ -84,21 +85,21 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
             type="radio"
             name="context"
             value="fasting"
-            aria-label="Fasting"
+            aria-label={{getGlucoseContextName "fasting"}}
           />
           <input
             class="join-item btn"
             type="radio"
             name="context"
             value="post-meal"
-            aria-label="Post-Meal"
+            aria-label={{getGlucoseContextName "post-meal"}}
           />
           <input
             class="join-item btn"
             type="radio"
             name="context"
             value="other"
-            aria-label="Other"
+            aria-label={{getGlucoseContextName "other"}}
           />
         </div>
 
