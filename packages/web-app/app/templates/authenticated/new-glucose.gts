@@ -36,10 +36,9 @@ export default class NewGlucose extends Component<NewGlucoseSignature> {
     };
 
     if (formData.context) {
-      updateData.context = String(formData.context) as
-        | 'fasting'
-        | 'post-meal'
-        | 'other';
+      updateData.context = String(
+        formData.context
+      ) as GlucoseMeasurementInput['context'];
     }
 
     try {
