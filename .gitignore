@@ -13,3 +13,4 @@ node_modules
 service-account/
 .DS_Store
 .firebase/*.cache
+webapp.log
