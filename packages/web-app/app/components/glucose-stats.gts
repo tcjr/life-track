@@ -1,7 +1,7 @@
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import Component from '@glimmer/component';
 import BloodDrop from '#app/icons/blood-drop.svg?component';
-import { getGlucoseContextName } from '#app/utils/measurements.ts';
+import { getGlucoseContextName } from '#app/utils/glucose.ts';
 
 type PartialGlucoseMeasurement = Pick<
   GlucoseMeasurement,

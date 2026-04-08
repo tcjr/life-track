@@ -11,7 +11,7 @@ import InputNumber from '#app/components/input-number.gts';
 import type RouterService from '@ember/routing/router-service';
 import { parseTimeToDate } from '#app/utils/timepicker.ts';
 import InputTime from '#app/components/input-time.gts';
-import { getGlucoseContextName } from '#app/utils/measurements.ts';
+import { getGlucoseContextName } from '#app/utils/glucose.ts';
 import { eq } from 'ember-truth-helpers';
 
 interface NewGlucoseSignature {

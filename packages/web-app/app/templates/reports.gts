@@ -3,13 +3,12 @@ import { pageTitle } from 'ember-page-title';
 import { FirestoreDocument } from '#resources/firestore-document';
 import { use } from 'ember-resources';
 import { asLocal, asLocalDate } from '#app/utils/dates.ts';
+import { BP_STATUS_CLASSES, getBpQuality } from '#app/utils/bp.ts';
 import {
-  BP_STATUS_CLASSES,
-  getBpQuality,
   getGlucoseContextName,
   getGlucoseQuality,
   GLUCOSE_STATUS_CLASSES,
-} from '#app/utils/measurements.ts';
+} from '#app/utils/glucose.ts';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import GlucoseChart from '#components/glucose-chart.gts';
@@ -19,8 +18,9 @@ import BpStats from '#app/components/bp-stats.gts';
 
 const bpStatus = (bp: Pick<BpMeasurement, 'systolic' | 'diastolic'>) =>
   BP_STATUS_CLASSES[getBpQuality(bp)];
-const glucoseStatus = (glucose: Pick<GlucoseMeasurement, 'value'>) =>
-  GLUCOSE_STATUS_CLASSES[getGlucoseQuality(glucose)];
+const glucoseStatus = (
+  glucose: Pick<GlucoseMeasurement, 'value' | 'context'>
+) => GLUCOSE_STATUS_CLASSES[getGlucoseQuality(glucose)];
 
 interface ReportsSignature {
   Args: {
