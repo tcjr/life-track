@@ -1,30 +1,27 @@
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import { scaleThreshold } from 'd3-scale';
 
-export type GlucoseQuality = 'high' | 'elevated' | 'normal' | 'low';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const GLUCOSE_QUALITIES = ['low', 'normal', 'elevated', 'high'] as const;
+export type GlucoseQuality = (typeof GLUCOSE_QUALITIES)[number];
+
+const postMealQualityScale = scaleThreshold<number, GlucoseQuality>(
+  [70, 180, 220],
+  ['low', 'normal', 'elevated', 'high']
+);
+
+const fastQualityScale = scaleThreshold<number, GlucoseQuality>(
+  [70, 130, 180],
+  ['low', 'normal', 'elevated', 'high']
+);
 
 export const getGlucoseQuality = (
   glucose: Pick<GlucoseMeasurement, 'value' | 'context'>
 ): GlucoseQuality => {
   if (glucose.context === 'post-meal') {
-    if (glucose.value > 220) {
-      return 'high';
-    } else if (glucose.value > 180) {
-      return 'elevated';
-    } else if (glucose.value >= 70) {
-      return 'normal';
-    } else {
-      return 'low';
-    }
+    return postMealQualityScale(glucose.value);
   } else {
-    if (glucose.value > 180) {
-      return 'high';
-    } else if (glucose.value > 130) {
-      return 'elevated';
-    } else if (glucose.value >= 70) {
-      return 'normal';
-    } else {
-      return 'low';
-    }
+    return fastQualityScale(glucose.value);
   }
 };
 
