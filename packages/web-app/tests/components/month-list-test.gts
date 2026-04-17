@@ -5,11 +5,13 @@ import { screen } from '@testing-library/dom';
 import MonthList from '#app/components/month-list.gts';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 
 const now = new Date();
 const mockMeasurements: {
   bps: BpMeasurement[];
   glucoses: GlucoseMeasurement[];
+  weights: WeightMeasurement[];
 } = {
   bps: [
     {
@@ -27,6 +29,7 @@ const mockMeasurements: {
       timestamp: new Date(now.getFullYear(), now.getMonth(), 15, 11, 0, 0),
     },
   ],
+  weights: [],
 };
 
 describe('Component | MonthList', () => {
