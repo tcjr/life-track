@@ -9,18 +9,25 @@ import {
   getGlucoseQuality,
   GLUCOSE_STATUS_CLASSES,
 } from '#app/utils/glucose.ts';
+import { getWeightQuality, WEIGHT_STATUS_CLASSES } from '#app/utils/weight.ts';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import GlucoseChart from '#components/glucose-chart.gts';
 import GlucoseStats from '#app/components/glucose-stats.gts';
 import BpChart from '#components/bp-chart.gts';
 import BpStats from '#app/components/bp-stats.gts';
+import WeightChart from '#app/components/weight-chart.gts';
+import WeightStats from '#app/components/weight-stats.gts';
 
 const bpStatus = (bp: Pick<BpMeasurement, 'systolic' | 'diastolic'>) =>
   BP_STATUS_CLASSES[getBpQuality(bp)];
 const glucoseStatus = (
   glucose: Pick<GlucoseMeasurement, 'value' | 'context'>
 ) => GLUCOSE_STATUS_CLASSES[getGlucoseQuality(glucose)];
+const weightStatus = (
+  weight: Partial<Pick<WeightMeasurement, 'value'>>
+) => WEIGHT_STATUS_CLASSES[getWeightQuality(weight as Pick<WeightMeasurement, 'value'>)];
 
 interface ReportsSignature {
   Args: {
@@ -111,6 +118,35 @@ export default class PublicReport extends Component<ReportsSignature> {
                     <td>{{asLocal glucose.timestamp}}</td>
                     <td>{{glucose.value}}</td>
                     <td>{{getGlucoseContextName glucose.context}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </section>
+        {{/if}}
+
+        {{#if this.report.weights.length}}
+          <section>
+            <h2 class="text-xl font-semibold mb-2">Weight</h2>
+            <WeightStats @weights={{this.report.weights}} />
+            <WeightChart @weights={{this.report.weights}} />
+            <table class="table table-pin-rows table-zebra table-xs w-full">
+              <thead>
+                <tr>
+                  <th> </th>
+                  <th>Date/Time</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each this.report.weights as |weight|}}
+                  <tr>
+                    <td><div
+                        aria-label="status"
+                        class="status {{weightStatus weight}}"
+                      ></div></td>
+                    <td>{{asLocal weight.timestamp}}</td>
+                    <td>{{weight.value}} lbs</td>
                   </tr>
                 {{/each}}
               </tbody>

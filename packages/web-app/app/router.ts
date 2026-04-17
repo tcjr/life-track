@@ -25,6 +25,7 @@ Router.map(function () {
     this.route('new-measurement');
     this.route('new-bp');
     this.route('new-glucose');
+    this.route('new-weight');
     this.route('reports');
   });
 });

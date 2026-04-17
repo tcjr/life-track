@@ -24,6 +24,7 @@ export default class Reports extends Component {
   @tracked endDate = '';
   @tracked showBps = true;
   @tracked showGlucoses = true;
+  @tracked showWeights = true;
   @tracked isCreating = false;
 
   @use reports = FirestoreQuery('reports', () => ({
@@ -43,6 +44,7 @@ export default class Reports extends Component {
     this.endDate = (formData.get('endDate') as string) ?? '';
     this.showBps = formData.has('showBps');
     this.showGlucoses = formData.has('showGlucoses');
+    this.showWeights = formData.has('showWeights');
   };
 
   createReport = async (event: Event) => {
@@ -67,6 +69,9 @@ export default class Reports extends Component {
       }
       if (this.showGlucoses) {
         measurements.push('glucoses');
+      }
+      if (this.showWeights) {
+        measurements.push('weights');
       }
 
       const result = await createReportFn({
@@ -170,6 +175,15 @@ export default class Reports extends Component {
                   checked={{this.showGlucoses}}
                 />
                 <span class="label-text">Glucose</span>
+              </label>
+              <label class="label cursor-pointer space-x-2">
+                <input
+                  type="checkbox"
+                  name="showWeights"
+                  class="checkbox"
+                  checked={{this.showWeights}}
+                />
+                <span class="label-text">Weight</span>
               </label>
             </div>
           </div>

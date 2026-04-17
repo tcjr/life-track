@@ -9,13 +9,17 @@ import {
 import HeartUrl from '#app/icons/heart.svg';
 import BloodPressureUrl from '#app/icons/blood-pressure.svg';
 import BloodDropUrl from '#app/icons/blood-drop.svg';
+import WeightUrl from '#app/icons/weight.svg';
 import Heart from '#app/icons/heart.svg?component';
 import BloodPressure from '#app/icons/blood-pressure.svg?component';
 import BloodDrop from '#app/icons/blood-drop.svg?component';
+import WeightIcon from '#app/icons/weight.svg?component';
 import { cached, tracked } from '@glimmer/tracking';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import { BP_COLORS, getBpQuality } from '#app/utils/bp.ts';
+import { WEIGHT_COLORS, getWeightQuality } from '#app/utils/weight.ts';
 import {
   getGlucoseContextName,
   getGlucoseQuality,
@@ -30,6 +34,7 @@ interface MonthListSignature {
     measurements: {
       bps: BpMeasurement[];
       glucoses: GlucoseMeasurement[];
+      weights: WeightMeasurement[];
     };
   };
 }
@@ -77,9 +82,25 @@ const getEventForGlucose = (glucose: GlucoseMeasurement) => {
   };
 };
 
+const getEventForWeight = (weight: WeightMeasurement) => {
+  const quality = getWeightQuality(weight);
+  const colors = WEIGHT_COLORS[quality];
+  return {
+    id: weight._id,
+    start: weight.timestamp,
+    end: weight.timestamp,
+    title: {
+      html: `<img src="${WeightUrl}" class="inline-block align-text-bottom h-5"> Weight ${weight.value} lbs`,
+    },
+    backgroundColor: colors.bg,
+    textColor: colors.fg,
+  };
+};
+
 export default class MonthList extends Component<MonthListSignature> {
   @tracked includeBps = true;
   @tracked includeGlucoses = true;
+  @tracked includeWeights = true;
 
   @cached
   get calendarEvents() {
@@ -89,6 +110,9 @@ export default class MonthList extends Component<MonthListSignature> {
     }
     if (this.includeGlucoses) {
       events.push(...this.glucosesEvents);
+    }
+    if (this.includeWeights) {
+      events.push(...this.weightsEvents);
     }
 
     return events;
@@ -102,6 +126,11 @@ export default class MonthList extends Component<MonthListSignature> {
   @cached
   get glucosesEvents() {
     return this.args.measurements.glucoses.map(getEventForGlucose);
+  }
+
+  @cached
+  get weightsEvents() {
+    return this.args.measurements.weights.map(getEventForWeight);
   }
 
   #calendar: Calendar | undefined;
@@ -131,6 +160,7 @@ export default class MonthList extends Component<MonthListSignature> {
     const data = Object.fromEntries(formData.entries());
     this.includeBps = data.withBps === 'on';
     this.includeGlucoses = data.withGlucoses === 'on';
+    this.includeWeights = data.withWeights === 'on';
   };
 
   <template>
@@ -165,6 +195,18 @@ export default class MonthList extends Component<MonthListSignature> {
               <span>
                 <BloodDrop class="inline-block h-5" />
                 Glucose
+              </span>
+            </label>
+            <label class="label">
+              <input
+                type="checkbox"
+                checked={{this.includeWeights}}
+                class="checkbox"
+                name="withWeights"
+              />
+              <span>
+                <WeightIcon class="inline-block h-5" />
+                Weight
               </span>
             </label>
           </fieldset>
