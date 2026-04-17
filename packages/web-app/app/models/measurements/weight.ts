@@ -7,4 +7,6 @@ export const WeightMeasurementSchema = z.object({
 });
 
 export type WeightMeasurement = DocumentOutput<typeof WeightMeasurementSchema>;
-export type WeightMeasurementInput = DocumentInput<typeof WeightMeasurementSchema>;
+export type WeightMeasurementInput = DocumentInput<
+  typeof WeightMeasurementSchema
+>;

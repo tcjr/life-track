@@ -2,10 +2,7 @@ import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import Component from '@glimmer/component';
 import WeightIcon from '#app/icons/weight.svg?component';
 
-type PartialWeightMeasurement = Pick<
-  WeightMeasurement,
-  'value' | 'timestamp'
->;
+type PartialWeightMeasurement = Pick<WeightMeasurement, 'value' | 'timestamp'>;
 
 interface WeightStatsSignature {
   Element: HTMLDivElement;
@@ -15,13 +12,11 @@ interface WeightStatsSignature {
 }
 
 export default class WeightStats extends Component<WeightStatsSignature> {
-
   get avgValue() {
     if (!this.args.weights || this.args.weights.length === 0) return '0.0';
     const weights = this.args.weights;
     return (
-      weights.reduce((acc, weight) => acc + (weight.value), 0) /
-      weights.length
+      weights.reduce((acc, weight) => acc + weight.value, 0) / weights.length
     ).toFixed(1);
   }
 

@@ -25,9 +25,10 @@ const bpStatus = (bp: Pick<BpMeasurement, 'systolic' | 'diastolic'>) =>
 const glucoseStatus = (
   glucose: Pick<GlucoseMeasurement, 'value' | 'context'>
 ) => GLUCOSE_STATUS_CLASSES[getGlucoseQuality(glucose)];
-const weightStatus = (
-  weight: Partial<Pick<WeightMeasurement, 'value'>>
-) => WEIGHT_STATUS_CLASSES[getWeightQuality(weight as Pick<WeightMeasurement, 'value'>)];
+const weightStatus = (weight: Partial<Pick<WeightMeasurement, 'value'>>) =>
+  WEIGHT_STATUS_CLASSES[
+    getWeightQuality(weight as Pick<WeightMeasurement, 'value'>)
+  ];
 
 interface ReportsSignature {
   Args: {

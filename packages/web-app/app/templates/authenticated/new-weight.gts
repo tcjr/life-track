@@ -36,9 +36,7 @@ export default class NewWeight extends Component<NewWeightSignature> {
     };
 
     try {
-      await collections['app-users'](this.firebase.uid).weights.add(
-        updateData
-      );
+      await collections['app-users'](this.firebase.uid).weights.add(updateData);
       this.flashMessages.success('Weight added');
       this.router.transitionTo('authenticated.new-measurement');
     } catch (e) {

@@ -7,10 +7,7 @@ import { asLocal, asYYYYMMDD } from '#app/utils/dates.ts';
 
 Chart.register(...registerables);
 
-type PartialWeightMeasurement = Pick<
-  WeightMeasurement,
-  'value' | 'timestamp'
->;
+type PartialWeightMeasurement = Pick<WeightMeasurement, 'value' | 'timestamp'>;
 
 interface WeightChartSignature {
   Args: {

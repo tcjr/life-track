@@ -34,7 +34,11 @@ export default class MeasurementDataService extends Service {
   // }
   //
   get allByDay() {
-    const all = [...this.allMeasurements.bps, ...this.allMeasurements.glucoses, ...this.allMeasurements.weights];
+    const all = [
+      ...this.allMeasurements.bps,
+      ...this.allMeasurements.glucoses,
+      ...this.allMeasurements.weights,
+    ];
 
     const dayMap: DayMap = new Map();
 
@@ -54,7 +58,10 @@ export default class MeasurementDataService extends Service {
       if ('systolic' in measurement) {
         obj = { type: 'bp', measurement: measurement };
       } else if ('context' in measurement) {
-        obj = { type: 'glucose', measurement: measurement as GlucoseMeasurement };
+        obj = {
+          type: 'glucose',
+          measurement: measurement as GlucoseMeasurement,
+        };
       } else if ('value' in measurement) {
         obj = { type: 'weight', measurement: measurement };
       } else {

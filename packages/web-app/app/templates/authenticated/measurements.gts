@@ -47,12 +47,10 @@ export default class Measurements extends Component<MeasurementsSignature> {
   };
 
   loadWeights = async () => {
-    const weights = await collections['app-users'](this.uid).weights.findMany(
-      {
-        name: 'all-weights',
-        limit: 2000,
-      }
-    );
+    const weights = await collections['app-users'](this.uid).weights.findMany({
+      name: 'all-weights',
+      limit: 2000,
+    });
     this.measurementData.allMeasurements.weights = weights;
   };
 
