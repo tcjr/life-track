@@ -47,7 +47,7 @@ export default class NewWeight extends Component<NewWeightSignature> {
 
   get prefillValues() {
     return {
-      value: '150',
+      value: '250',
       time: '',
     };
   }

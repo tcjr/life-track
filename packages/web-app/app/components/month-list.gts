@@ -9,11 +9,11 @@ import {
 import HeartUrl from '#app/icons/heart.svg';
 import BloodPressureUrl from '#app/icons/blood-pressure.svg';
 import BloodDropUrl from '#app/icons/blood-drop.svg';
-import WeightUrl from '#app/icons/weight.svg';
+import WeightUrl from '#app/icons/weight-scale.svg';
 import Heart from '#app/icons/heart.svg?component';
 import BloodPressure from '#app/icons/blood-pressure.svg?component';
 import BloodDrop from '#app/icons/blood-drop.svg?component';
-import WeightIcon from '#app/icons/weight.svg?component';
+import WeightIcon from '#app/icons/weight-scale.svg?component';
 import { cached, tracked } from '@glimmer/tracking';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
