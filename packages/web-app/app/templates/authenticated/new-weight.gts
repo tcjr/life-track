@@ -7,7 +7,7 @@ import { collections } from '#app/models/collections.ts';
 import { service } from '@ember/service';
 import type FirebaseService from '#app/services/firebase.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
-import InputNumber from '#app/components/input-number.gts';
+import InputDecimal from '#app/components/input-decimal.gts';
 import type RouterService from '@ember/routing/router-service';
 import { parseTimeToDate } from '#app/utils/timepicker.ts';
 import InputTime from '#app/components/input-time.gts';
@@ -60,7 +60,7 @@ export default class NewWeight extends Component<NewWeightSignature> {
         <div class="text-2xl font-bold text-center">Weight</div>
         <div class="flex flex-col">
           <label for="value" class="text-center italic text-sm">lbs</label>
-          <InputNumber @name="value" @value={{this.prefillValues.value}} />
+          <InputDecimal @name="value" @value={{this.prefillValues.value}} />
         </div>
 
         <div class="text-2xl font-bold text-center mt-4">Time</div>
