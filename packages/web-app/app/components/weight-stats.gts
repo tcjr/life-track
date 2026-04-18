@@ -25,8 +25,6 @@ export default class WeightStats extends Component<WeightStatsSignature> {
     // Return the difference between the first and last values
     const first = this.args.weights?.at(0)?.value || 0;
     const last = this.args.weights?.at(-1)?.value || 0;
-    console.log('first', first);
-    console.log('last', last);
     const diff = last - first;
     return `${diff > 0 ? '+' : ''}${diff.toFixed(1)}`;
   }

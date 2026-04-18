@@ -26,7 +26,7 @@ export default class InputDecimal extends Component<InputDecimalSignature> {
   incrementBy = task({ drop: true }, async (inc: number) => {
     let delay = 400;
     while (true) {
-      this.currentValue += inc;
+      this.currentValue = Math.round((this.currentValue + inc) * 10) / 10;
       this.args.onChange?.(this.currentValue, this.args.name);
       await timeout(delay);
       delay = Math.max(50, delay * 0.8);
