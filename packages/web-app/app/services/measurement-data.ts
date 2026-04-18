@@ -1,12 +1,14 @@
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
+import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import { asYYYYMMDD } from '#app/utils/dates.ts';
 import { trackedObject } from '@ember/reactive/collections';
 import Service from '@ember/service';
 
 export type MeasurementValue =
   | { type: 'bp'; measurement: BpMeasurement }
-  | { type: 'glucose'; measurement: GlucoseMeasurement };
+  | { type: 'glucose'; measurement: GlucoseMeasurement }
+  | { type: 'weight'; measurement: WeightMeasurement };
 
 type DayMap = Map<string, MeasurementValue[]>;
 
@@ -15,6 +17,7 @@ export default class MeasurementDataService extends Service {
   allMeasurements = trackedObject({
     bps: [] as BpMeasurement[],
     glucoses: [] as GlucoseMeasurement[],
+    weights: [] as WeightMeasurement[],
   });
 
   // Return a Map with keys in the form "YYYY-MM-DD" with the measurements
@@ -31,7 +34,11 @@ export default class MeasurementDataService extends Service {
   // }
   //
   get allByDay() {
-    const all = [...this.allMeasurements.bps, ...this.allMeasurements.glucoses];
+    const all = [
+      ...this.allMeasurements.bps,
+      ...this.allMeasurements.glucoses,
+      ...this.allMeasurements.weights,
+    ];
 
     const dayMap: DayMap = new Map();
 
@@ -49,9 +56,14 @@ export default class MeasurementDataService extends Service {
       // NOTE: This is hacky because I don't have the type name anywhere right now.
       //       Maybe I can have the zod collections put it in there like the id.
       if ('systolic' in measurement) {
-        obj = { type: 'bp', measurement };
+        obj = { type: 'bp', measurement: measurement };
+      } else if ('context' in measurement) {
+        obj = {
+          type: 'glucose',
+          measurement: measurement as GlucoseMeasurement,
+        };
       } else if ('value' in measurement) {
-        obj = { type: 'glucose', measurement };
+        obj = { type: 'weight', measurement: measurement };
       } else {
         // throw out the unknown measurements for now
         continue;

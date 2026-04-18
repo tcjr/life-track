@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
 import BloodDrop from '#app/icons/blood-drop.svg?component';
 import BloodPressure from '#app/icons/blood-pressure.svg?component';
+import Weight from '#app/icons/weight-scale.svg?component';
 
 export interface NewMeasurementSignature {
   Element: HTMLDivElement;
@@ -21,6 +22,11 @@ export default class NewMeasurement extends Component<NewMeasurementSignature> {
           <a class="btn btn-secondary btn-xl w-full" href="/new-glucose">
             <BloodDrop class="h-8" />
             Glucose
+          </a></li>
+        <li>
+          <a class="btn btn-secondary btn-xl w-full" href="/new-weight">
+            <Weight class="h-8" />
+            Weight
           </a></li>
       </ul>
     </div>

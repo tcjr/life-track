@@ -19,6 +19,7 @@ export default class Measurements extends Component<MeasurementsSignature> {
     super(owner, args);
     void this.loadBps();
     void this.loadGlucoses();
+    void this.loadWeights();
   }
 
   get uid() {
@@ -43,6 +44,14 @@ export default class Measurements extends Component<MeasurementsSignature> {
       }
     );
     this.measurementData.allMeasurements.glucoses = glucoses;
+  };
+
+  loadWeights = async () => {
+    const weights = await collections['app-users'](this.uid).weights.findMany({
+      name: 'all-weights',
+      limit: 2000,
+    });
+    this.measurementData.allMeasurements.weights = weights;
   };
 
   <template>

@@ -4,6 +4,7 @@ import { AppUserSchema } from '../models/app-user.mjs';
 import { ReportSchema } from '../models/report.mjs';
 import { BpSchema } from '../models/bp.mjs';
 import { GlucoseSchema } from '../models/glucose.mjs';
+import { WeightSchema } from '../models/weight.mjs';
 import { initializeApp } from 'firebase-admin/app';
 import * as logger from 'firebase-functions/logger';
 import { convertTimestampsToDates } from './timestamp-converter.mjs';
@@ -16,6 +17,9 @@ const schema = {
     },
     glucoses: {
       zod: GlucoseSchema,
+    },
+    weights: {
+      zod: WeightSchema,
     },
   },
   'notices': {
