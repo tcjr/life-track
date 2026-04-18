@@ -20,16 +20,15 @@ export default class WeightStats extends Component<WeightStatsSignature> {
     ).toFixed(1);
   }
 
-  get minValue() {
+  get changeValue() {
     if (!this.args.weights || this.args.weights.length === 0) return '0.0';
-    const weights = this.args.weights;
-    return Math.min(...weights.map((w) => w.value)).toFixed(1);
-  }
-
-  get maxValue() {
-    if (!this.args.weights || this.args.weights.length === 0) return '0.0';
-    const weights = this.args.weights;
-    return Math.max(...weights.map((w) => w.value)).toFixed(1);
+    // Return the difference between the first and last values
+    const first = this.args.weights?.at(0)?.value || 0;
+    const last = this.args.weights?.at(-1)?.value || 0;
+    console.log('first', first);
+    console.log('last', last);
+    const diff = last - first;
+    return `${diff > 0 ? '+' : ''}${diff.toFixed(1)}`;
   }
 
   <template>
@@ -44,19 +43,9 @@ export default class WeightStats extends Component<WeightStatsSignature> {
       </div>
 
       <div class="stat place-items-center">
-        <div class="stat-figure">
-          <WeightIcon class="text-info" />
-        </div>
-        <div class="stat-title">Min</div>
-        <div class="stat-value text-info">{{this.minValue}}</div>
-      </div>
-
-      <div class="stat place-items-center">
-        <div class="stat-figure">
-          <WeightIcon class="text-secondary" />
-        </div>
-        <div class="stat-title">Max</div>
-        <div class="stat-value text-secondary">{{this.maxValue}}</div>
+        <div class="stat-title">Change</div>
+        <div class="stat-value">{{this.changeValue}}</div>
+        <div class="stat-desc">&nbsp;</div>
       </div>
 
     </div>
