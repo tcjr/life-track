@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
-import BloodDrop from '#app/icons/blood-drop.svg?component';
-import BloodPressure from '#app/icons/blood-pressure.svg?component';
-import Weight from '#app/icons/weight-scale.svg?component';
+import BloodDrop from '~icons/custom/blood-drop.svg';
+import BloodPressure from '~icons/custom/blood-pressure.svg';
+import Weight from '~icons/custom/weight-scale.svg';
 
 export interface NewMeasurementSignature {
   Element: HTMLDivElement;

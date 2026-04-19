@@ -13,7 +13,7 @@ import {
   asLocalDate,
 } from '#app/utils/dates.ts';
 import type { FlashMessagesService } from 'ember-cli-flash';
-import ChartLine from '#app/icons/chart-line.svg?component';
+import ChartLine from '~icons/custom/chart-line.svg';
 
 export default class Reports extends Component {
   @service declare firebase: FirebaseService;

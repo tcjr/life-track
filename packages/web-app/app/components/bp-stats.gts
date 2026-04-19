@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
-import BloodPressure from '#app/icons/blood-pressure.svg?component';
-import Heart from '#app/icons/heart.svg?component';
+import BloodPressure from '~icons/custom/blood-pressure.svg';
+import Heart from '~icons/custom/heart.svg';
 
 type PartialBpHrMeasurement = Pick<
   BpMeasurement,
