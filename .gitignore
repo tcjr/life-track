@@ -4,6 +4,7 @@ node_modules
 *.local
 /.pnp*
 /.eslintcache
+.ackrc
 
 # Firebase emulators data
 /firebase-dev-data/

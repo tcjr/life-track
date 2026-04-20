@@ -6,7 +6,7 @@ import {
   getGlucoseQuality,
   GLUCOSE_COLORS,
 } from '#app/utils/glucose.ts';
-import BloodDrop from '~icons/custom/blood-drop.svg';
+import BloodDrop from '#app/icons/blood-drop.svg?component';
 
 interface MeasurementGlucoseSignature {
   Args: {

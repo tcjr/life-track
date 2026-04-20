@@ -4,10 +4,10 @@ import type { GlucoseMeasurement } from '#app/models/measurements/glucose.ts';
 import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import { cached, tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
-import Heart from '~icons/custom/heart.svg';
-import BloodPressure from '~icons/custom/blood-pressure.svg';
-import BloodDrop from '~icons/custom/blood-drop.svg';
-import WeightScale from '~icons/custom/weight-scale.svg';
+import Heart from '#app/icons/heart.svg?component';
+import BloodPressure from '#app/icons/blood-pressure.svg?component';
+import BloodDrop from '#app/icons/blood-drop.svg?component';
+import WeightScale from '#app/icons/weight-scale.svg?component';
 import Glucose from '#app/components/measurement/glucose.gts';
 import Bp from '#app/components/measurement/bp.gts';
 import Weight from '#app/components/measurement/weight.gts';
@@ -157,16 +157,19 @@ export default class MeasurementRangeList extends Component<MeasurementRangeList
           {{#each mwks as |measurementWithKind|}}
             {{#if this.includeGlucoses}}
               {{#if (eq measurementWithKind.kind "glucose")}}
+                {{! @glint-expect-error: narrowing should work here}}
                 <Glucose @measurement={{measurementWithKind.measurement}} />
               {{/if}}
             {{/if}}
             {{#if this.includeBps}}
               {{#if (eq measurementWithKind.kind "bp")}}
+                {{! @glint-expect-error: narrowing should work here}}
                 <Bp @measurement={{measurementWithKind.measurement}} />
               {{/if}}
             {{/if}}
             {{#if this.includeWeights}}
               {{#if (eq measurementWithKind.kind "weight")}}
+                {{! @glint-expect-error: narrowing should work here}}
                 <Weight @measurement={{measurementWithKind.measurement}} />
               {{/if}}
             {{/if}}

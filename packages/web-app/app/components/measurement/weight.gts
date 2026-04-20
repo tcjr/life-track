@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import { asLocalTime, asISO } from '#app/utils/dates.ts';
 import { getWeightQuality, WEIGHT_COLORS } from '#app/utils/weight.ts';
-import WeightScale from '~icons/custom/weight-scale.svg';
+import WeightScale from '#app/icons/weight-scale.svg?component';
 
 interface MeasurementWeightSignature {
   Args: {

@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
 import { asLocalTime, asISO } from '#app/utils/dates.ts';
 import { getBpQuality, BP_COLORS } from '#app/utils/bp.ts';
-import Heart from '~icons/custom/heart.svg';
-import BloodPressure from '~icons/custom/blood-pressure.svg';
+import Heart from '#app/icons/heart.svg?component';
+import BloodPressure from '#app/icons/blood-pressure.svg?component';
 
 interface MeasurementBpSignature {
   Args: {
