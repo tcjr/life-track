@@ -29,18 +29,22 @@ export const GLUCOSE_COLORS = {
   high: {
     bg: 'var(--color-error)',
     fg: 'var(--color-error-content)',
+    bgClass: 'bg-error',
   },
   elevated: {
     bg: 'var(--color-warning)',
     fg: 'var(--color-warning-content)',
+    bgClass: 'bg-warning',
   },
   low: {
     bg: 'var(--color-info)',
     fg: 'var(--color-info-content)',
+    bgClass: 'bg-info',
   },
   normal: {
     bg: 'var(--color-success)',
     fg: 'var(--color-success-content)',
+    bgClass: 'bg-success',
   },
 };
 

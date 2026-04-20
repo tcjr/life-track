@@ -39,6 +39,13 @@ const asYYYYMMDD = (timestamp: Date) => {
   return `${year}-${month}-${day}`;
 };
 
+const asISO = (timestamp: Date) => {
+  if (!timestamp) {
+    return '';
+  }
+  return timestamp.toISOString();
+};
+
 const toStartOfLocalDay = (dateStr: string) => {
   const [year, month, day] = dateStr.split('-').map(Number);
   if (year === undefined || month === undefined || day === undefined) {
@@ -60,6 +67,7 @@ export {
   asLocalTime,
   asLocalDate,
   asYYYYMMDD,
+  asISO,
   toStartOfLocalDay,
   toEndOfLocalDay,
 };
