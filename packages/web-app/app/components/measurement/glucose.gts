@@ -14,10 +14,8 @@ interface MeasurementGlucoseSignature {
   };
 }
 
-const getGlucoseBg = (glucose: GlucoseMeasurement) => {
-  console.log('*** glucose is', glucose);
-  return GLUCOSE_COLORS[getGlucoseQuality(glucose)].bgClass;
-};
+const getGlucoseBg = (glucose: GlucoseMeasurement) =>
+  GLUCOSE_COLORS[getGlucoseQuality(glucose)].bgClass;
 
 export default class MeasurementGlucose extends Component<MeasurementGlucoseSignature> {
   <template>
@@ -30,7 +28,7 @@ export default class MeasurementGlucose extends Component<MeasurementGlucoseSign
             datetime={{asISO @measurement.timestamp}}
           >{{asLocalTime @measurement.timestamp}}</time>
           <h4 class="text-md">
-            <BloodDrop class="inline-block align-text-bottom h-5 w-5" />
+            <BloodDrop class="inline-block h-5 w-5" />
             Glucose
             {{@measurement.value}}
             ({{getGlucoseContextName @measurement.context}})
