@@ -1,6 +1,6 @@
 import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import Component from '@glimmer/component';
-import WeightIcon from '~icons/custom/weight-scale.svg';
+import WeightIcon from '#app/icons/weight-scale.svg?component';
 
 type PartialWeightMeasurement = Pick<WeightMeasurement, 'value' | 'timestamp'>;
 

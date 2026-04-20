@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { pageTitle } from 'ember-page-title';
-import Clinical from '~icons/custom/clinical-fe.svg';
+import Clinical from '#app/icons/clinical-fe.svg?component';
 
 export interface IndexSignature {
   Element: HTMLDivElement;
