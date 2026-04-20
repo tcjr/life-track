@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { extensions, ember, optimizeDeps } from '@embroider/vite';
+import { extensions, ember } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
 import { webdriverio } from '@vitest/browser-webdriverio';
