@@ -40,6 +40,25 @@ interface WeightKind {
 }
 
 export default class MeasurementRangeList extends Component<MeasurementRangeListSignature> {
+  @tracked includeBps = true;
+  @tracked includeGlucoses = true;
+  @tracked includeWeights = true;
+
+  updatedOptions = (evt: Event) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.currentTarget as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+    this.includeBps = data.withBps === 'on';
+    this.includeGlucoses = data.withGlucoses === 'on';
+    this.includeWeights = data.withWeights === 'on';
+  };
+
+  /**
+   * This represents all the data, flattened into a single array with a 'kind'
+   * discrimanator of 'bp', 'glucose', or 'weight'.  Since it's cached, it should
+   * only rebuild this when the measurements data changes.
+   */
   @cached
   get allKinds() {
     const ms = this.args.measurements;
@@ -59,40 +78,54 @@ export default class MeasurementRangeList extends Component<MeasurementRangeList
     );
   }
 
-  get allKindsByDay() {
+  /**
+   * Here is where we limit the array to items matching the boolean conditions.
+   * This is also cached, so it will get rebuilt when any of the checkboxes cause
+   * one of the booleans to change.
+   */
+  @cached
+  get filteredKinds() {
+    const kinds = this.allKinds;
+    // Here, we want to only include the kinds where the checkbox is checked
+    return kinds.filter((k) => {
+      switch (k.kind) {
+        case 'bp':
+          return this.includeBps;
+        case 'glucose':
+          return this.includeGlucoses;
+        case 'weight':
+          return this.includeWeights;
+      }
+    });
+  }
+
+  /**
+   * This groups the filtered kinds by day. It is done last so we only have keys
+   * for days with a measurement.
+   */
+  get filteredKindsByDay() {
     const dayMap = new Map<string, (BpKind | GlucoseKind | WeightKind)[]>();
-    for (const mwk of this.allKinds) {
+    for (const mwk of this.filteredKinds) {
       const date = asYYYYMMDD(mwk.measurement.timestamp);
       if (!dayMap.has(date)) {
         dayMap.set(date, []);
       }
       dayMap.get(date)?.push(mwk);
     }
+
+    return dayMap;
     // Sort the keys
-    // TODO: check to see if they are already sorted because the records are sorted
-    const sorted = [...dayMap.keys()]
-      .sort((a, b) => a.localeCompare(b))
-      .reduce(
-        (r, key) => r.set(key, dayMap.get(key)!),
-        new Map<string, (BpKind | GlucoseKind | WeightKind)[]>()
-      );
+    // We don't need to sort the keys because the records are sorted already.
+    // TODO: Verify this.
+    // const sorted = [...dayMap.keys()]
+    //   .sort((a, b) => a.localeCompare(b))
+    //   .reduce(
+    //     (r, key) => r.set(key, dayMap.get(key)!),
+    //     new Map<string, (BpKind | GlucoseKind | WeightKind)[]>()
+    //   );
 
-    return sorted;
+    // return sorted;
   }
-
-  @tracked includeBps = true;
-  @tracked includeGlucoses = true;
-  @tracked includeWeights = true;
-
-  updatedOptions = (evt: Event) => {
-    evt.preventDefault();
-
-    const formData = new FormData(evt.currentTarget as HTMLFormElement);
-    const data = Object.fromEntries(formData.entries());
-    this.includeBps = data.withBps === 'on';
-    this.includeGlucoses = data.withGlucoses === 'on';
-    this.includeWeights = data.withWeights === 'on';
-  };
 
   <template>
     <div>
@@ -145,7 +178,7 @@ export default class MeasurementRangeList extends Component<MeasurementRangeList
 
     <hr />
     <div>
-      {{#each-in this.allKindsByDay as |day mwks|}}
+      {{#each-in this.filteredKindsByDay as |day mwks|}}
         <div>
           DAY:
           {{day}}
@@ -155,23 +188,17 @@ export default class MeasurementRangeList extends Component<MeasurementRangeList
 
         <div>
           {{#each mwks as |measurementWithKind|}}
-            {{#if this.includeGlucoses}}
-              {{#if (eq measurementWithKind.kind "glucose")}}
-                {{! @glint-expect-error: narrowing should work here}}
-                <Glucose @measurement={{measurementWithKind.measurement}} />
-              {{/if}}
+            {{#if (eq measurementWithKind.kind "glucose")}}
+              {{! @glint-expect-error: narrowing should work here}}
+              <Glucose @measurement={{measurementWithKind.measurement}} />
             {{/if}}
-            {{#if this.includeBps}}
-              {{#if (eq measurementWithKind.kind "bp")}}
-                {{! @glint-expect-error: narrowing should work here}}
-                <Bp @measurement={{measurementWithKind.measurement}} />
-              {{/if}}
+            {{#if (eq measurementWithKind.kind "bp")}}
+              {{! @glint-expect-error: narrowing should work here}}
+              <Bp @measurement={{measurementWithKind.measurement}} />
             {{/if}}
-            {{#if this.includeWeights}}
-              {{#if (eq measurementWithKind.kind "weight")}}
-                {{! @glint-expect-error: narrowing should work here}}
-                <Weight @measurement={{measurementWithKind.measurement}} />
-              {{/if}}
+            {{#if (eq measurementWithKind.kind "weight")}}
+              {{! @glint-expect-error: narrowing should work here}}
+              <Weight @measurement={{measurementWithKind.measurement}} />
             {{/if}}
           {{/each}}
         </div>
