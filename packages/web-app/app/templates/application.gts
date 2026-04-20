@@ -57,13 +57,13 @@ export default class Application extends Component<ApplicationComponentSignature
                 <span>{{this.firebase.signedInUser.email}}</span>
               </li> --}}
               <li>
-                <a href="/settings">Settings</a>
+                <a href="/settings">Stngs</a>
               </li>
               <li>
-                <a href="/measurements">Measurements</a>
+                <a href="/measurements">Msmts</a>
               </li>
               <li>
-                <a href="/reports">Reports</a>
+                <a href="/reports">Rpts</a>
               </li>
               <li>
                 <button
