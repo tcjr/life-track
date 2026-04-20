@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { extensions, ember } from '@embroider/vite';
+import { extensions, ember, optimizeDeps } from '@embroider/vite';
 import { babel } from '@rollup/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
 import { webdriverio } from '@vitest/browser-webdriverio';
@@ -23,6 +23,9 @@ export default defineConfig({
   ],
 
   test: {
+    optimizeDeps: {
+      include: ['ember-source/@ember/template-compiler/index.js'],
+    },
     include: ['tests/**/*-test.{gjs,gts}', 'tests/**/*-test.{js,ts}'],
     maxConcurrency: 1,
     browser: {
