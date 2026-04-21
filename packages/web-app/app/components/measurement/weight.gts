@@ -8,6 +8,7 @@ interface MeasurementWeightSignature {
   Args: {
     measurement: WeightMeasurement;
   };
+  Element: HTMLDivElement;
 }
 
 const getWeightBg = (weight: WeightMeasurement) =>
@@ -16,7 +17,7 @@ const getWeightBg = (weight: WeightMeasurement) =>
 export default class MeasurementWeight extends Component<MeasurementWeightSignature> {
   <template>
     {{#if @measurement}}
-      <article class="flex flex-row relative py-1 px-2 text-sm">
+      <article class="flex flex-row relative py-1 px-2 text-sm" ...attributes>
         <div class="w-1 rounded-sm mr-2 {{getWeightBg @measurement}}"></div>
         <div class="flex flex-col">
           <time
@@ -29,7 +30,6 @@ export default class MeasurementWeight extends Component<MeasurementWeightSignat
             {{@measurement.value}}
           </h4>
         </div>
-
       </article>
     {{/if}}
   </template>

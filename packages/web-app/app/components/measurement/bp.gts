@@ -9,6 +9,7 @@ interface MeasurementBpSignature {
   Args: {
     measurement: BpMeasurement;
   };
+  Element: HTMLDivElement;
 }
 
 const getBpBg = (bp: BpMeasurement) => BP_COLORS[getBpQuality(bp)].bgClass;
@@ -16,7 +17,7 @@ const getBpBg = (bp: BpMeasurement) => BP_COLORS[getBpQuality(bp)].bgClass;
 export default class MeasurementBp extends Component<MeasurementBpSignature> {
   <template>
     {{#if @measurement}}
-      <article class="flex flex-row relative py-1 px-2 text-sm">
+      <article class="flex flex-row relative py-1 px-2 text-sm" ...attributes>
         <div class="w-1 rounded-sm mr-2 {{getBpBg @measurement}}"></div>
         <div class="flex flex-col">
           <time
@@ -32,7 +33,6 @@ export default class MeasurementBp extends Component<MeasurementBpSignature> {
             {{@measurement.heartRate}}
           </h4>
         </div>
-
       </article>
     {{/if}}
   </template>

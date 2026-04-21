@@ -12,6 +12,7 @@ interface MeasurementGlucoseSignature {
   Args: {
     measurement: GlucoseMeasurement;
   };
+  Element: HTMLDivElement;
 }
 
 const getGlucoseBg = (glucose: GlucoseMeasurement) =>
@@ -20,7 +21,7 @@ const getGlucoseBg = (glucose: GlucoseMeasurement) =>
 export default class MeasurementGlucose extends Component<MeasurementGlucoseSignature> {
   <template>
     {{#if @measurement}}
-      <article class="flex flex-row relative py-1 px-2 text-sm">
+      <article class="flex flex-row relative py-1 px-2 text-sm" ...attributes>
         <div class="w-1 rounded-sm mr-2 {{getGlucoseBg @measurement}}"></div>
         <div class="flex flex-col">
           <time
@@ -34,7 +35,6 @@ export default class MeasurementGlucose extends Component<MeasurementGlucoseSign
             ({{getGlucoseContextName @measurement.context}})
           </h4>
         </div>
-
       </article>
     {{/if}}
   </template>
