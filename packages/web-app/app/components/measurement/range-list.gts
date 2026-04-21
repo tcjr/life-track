@@ -13,6 +13,7 @@ import Bp from '#app/components/measurement/bp.gts';
 import Weight from '#app/components/measurement/weight.gts';
 import { eq } from 'ember-truth-helpers';
 import { asYYYYMMDD } from '#app/utils/dates.ts';
+import DateParts from '../date-parts.gts';
 
 interface MeasurementRangeListSignature {
   Args: {
@@ -177,16 +178,23 @@ export default class MeasurementRangeList extends Component<MeasurementRangeList
     </div>
 
     <hr />
-    <div>
+    <div class="flex flex-col bg-base-100">
       {{#each-in this.filteredKindsByDay as |day mwks|}}
-        <div>
-          DAY:
-          {{day}}
-          (count:
-          {{mwks.length}})
+        <div
+          class="flex flex-row justify-between border border-base-300 rounded px-3 py-2 mt-2 bg-primary text-primary-content"
+        >
+          <DateParts @date={{day}} as |d|>
+            <div>
+              {{d.weekday}}
+            </div>
+            <div>
+              {{d.month}}
+              {{d.day}}
+            </div>
+          </DateParts>
         </div>
 
-        <div>
+        <div class="flex flex-col gap-2">
           {{#each mwks as |measurementWithKind|}}
             {{#if (eq measurementWithKind.kind "glucose")}}
               {{! @glint-expect-error: narrowing should work here}}
