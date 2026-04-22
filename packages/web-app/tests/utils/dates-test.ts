@@ -3,6 +3,9 @@ import {
   toStartOfLocalDay,
   toEndOfLocalDay,
   asYYYYMMDD,
+  asLocal,
+  asLocalTime,
+  asLocalDate,
 } from '#app/utils/dates.ts';
 
 describe('Unit | Utility | dates', () => {
@@ -37,5 +40,46 @@ describe('Unit | Utility | dates', () => {
     expect(diff).toBe(24 * 60 * 60 * 1000 - 1);
 
     expect(start.toISOString()).toMatch(/T/);
+  });
+
+  test('asYYYYMMDD accepts a date string', () => {
+    const dateStr = '2026-03-30';
+    expect(asYYYYMMDD(dateStr)).toBe(dateStr);
+
+    const isoStr = '2026-03-30T12:00:00Z';
+    const date = new Date(isoStr);
+    expect(asYYYYMMDD(isoStr)).toBe(asYYYYMMDD(date));
+  });
+
+  test('asLocal accepts a date string', () => {
+    const dateStr = '2026-03-30';
+    expect(asLocal(dateStr)).toBe(asLocal(toStartOfLocalDay(dateStr)));
+
+    const isoStr = '2026-03-30T12:00:00Z';
+    const date = new Date(isoStr);
+    expect(asLocal(isoStr)).toBe(asLocal(date));
+  });
+
+  test('asLocalTime accepts a date string', () => {
+    const dateStr = '2026-03-30';
+    expect(asLocalTime(dateStr)).toBe(asLocalTime(toStartOfLocalDay(dateStr)));
+
+    const isoStr = '2026-03-30T12:00:00Z';
+    const date = new Date(isoStr);
+    expect(asLocalTime(isoStr)).toBe(asLocalTime(date));
+  });
+
+  test('asLocalDate accepts a date string', () => {
+    const dateStr = '2026-03-30';
+    expect(asLocalDate(dateStr)).toBe(asLocalDate(toStartOfLocalDay(dateStr)));
+
+    const isoStr = '2026-03-30T12:00:00Z';
+    const date = new Date(isoStr);
+    expect(asLocalDate(isoStr)).toBe(asLocalDate(date));
+  });
+
+  test('utility functions throw on invalid date string', () => {
+    expect(() => asLocal('invalid')).toThrow();
+    expect(() => asYYYYMMDD('invalid')).toThrow();
   });
 });
