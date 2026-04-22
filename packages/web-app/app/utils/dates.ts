@@ -19,20 +19,24 @@ const ttf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
-const asLocal = (date: Date) => {
+
+const asLocal = (date: Date | string) => {
+  date = parseDate(date);
   return dtf.format(date);
 };
 
-const asLocalTime = (date: Date) => {
+const asLocalTime = (date: Date | string) => {
+  date = parseDate(date);
   return ttf.format(date);
 };
 
-const asLocalDate = (date: Date) => {
+const asLocalDate = (date: Date | string) => {
+  date = parseDate(date);
   return df.format(date);
 };
 
-const asYYYYMMDD = (timestamp: Date) => {
-  const date = new Date(timestamp);
+const asYYYYMMDD = (timestamp: Date | string) => {
+  const date = parseDate(timestamp);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -45,6 +49,16 @@ const toStartOfLocalDay = (dateStr: string) => {
     throw new Error(`Invalid date string: ${dateStr}`);
   }
   return new Date(year, month - 1, day, 0, 0, 0, 0);
+};
+
+const parseDate = (d: Date | string) => {
+  if (typeof d === 'string') {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
+      return toStartOfLocalDay(d);
+    }
+    return new Date(d);
+  }
+  return d;
 };
 
 const toEndOfLocalDay = (dateStr: string) => {
