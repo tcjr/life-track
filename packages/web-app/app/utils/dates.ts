@@ -30,7 +30,7 @@ const parseDate = (d: Date | string): Date => {
       : d;
 
   if (isNaN(date.getTime())) {
-    throw new Error('Invalid date: ' + d);
+    throw new Error('Invalid date');
   }
   return date;
 };
