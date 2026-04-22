@@ -1,3 +1,5 @@
+const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 const dtf = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
   year: 'numeric',
@@ -28,39 +30,56 @@ const mdf = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
 });
 
-const asLocal = (date: Date) => {
+const parseDate = (d: Date | string): Date => {
+  const date =
+    typeof d === 'string'
+      ? ISO_DATE_REGEX.test(d)
+        ? toStartOfLocalDay(d)
+        : new Date(d)
+      : d;
+
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date');
+  }
+  return date;
+};
+
+const asLocal = (input: Date | string) => {
+  const date = parseDate(input);
   return dtf.format(date);
 };
 
-const asLocalTime = (date: Date) => {
+const asLocalTime = (input: Date | string) => {
+  const date = parseDate(input);
   return ttf.format(date);
 };
 
-const asLocalDate = (date: Date) => {
+const asLocalDate = (input: Date | string) => {
+  const date = parseDate(input);
   return df.format(date);
 };
 
-const asDow = (date: Date) => {
+const asDow = (input: Date | string) => {
+  const date = parseDate(input);
   return dowf.format(date);
 };
 
-const asMonthDay = (date: Date) => {
+const asMonthDay = (input: Date | string) => {
+  const date = parseDate(input);
   return mdf.format(date);
 };
 
-const asYYYYMMDD = (timestamp: Date) => {
-  const date = new Date(timestamp);
+const asYYYYMMDD = (timestamp: Date | string) => {
+  const date = parseDate(timestamp);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
-const asISO = (timestamp: Date) => {
-  if (!timestamp) {
-    return '';
-  }
-  return timestamp.toISOString();
+const asISO = (timestamp: Date | string) => {
+  const date = parseDate(timestamp);
+  return date.toISOString();
 };
 
 const toStartOfLocalDay = (dateStr: string) => {
