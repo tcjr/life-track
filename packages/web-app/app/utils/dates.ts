@@ -21,6 +21,15 @@ const ttf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
+const dowf = new Intl.DateTimeFormat('en-US', {
+  weekday: 'long',
+});
+
+const mdf = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+});
+
 const parseDate = (d: Date | string): Date => {
   const date =
     typeof d === 'string'
@@ -50,12 +59,27 @@ const asLocalDate = (input: Date | string) => {
   return df.format(date);
 };
 
+const asDow = (input: Date | string) => {
+  const date = parseDate(input);
+  return dowf.format(date);
+};
+
+const asMonthDay = (input: Date | string) => {
+  const date = parseDate(input);
+  return mdf.format(date);
+};
+
 const asYYYYMMDD = (timestamp: Date | string) => {
   const date = parseDate(timestamp);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+};
+
+const asISO = (timestamp: Date | string) => {
+  const date = parseDate(timestamp);
+  return date.toISOString();
 };
 
 const toStartOfLocalDay = (dateStr: string) => {
@@ -79,6 +103,9 @@ export {
   asLocalTime,
   asLocalDate,
   asYYYYMMDD,
+  asISO,
+  asDow,
+  asMonthDay,
   toStartOfLocalDay,
   toEndOfLocalDay,
 };

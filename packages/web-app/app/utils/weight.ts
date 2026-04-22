@@ -14,6 +14,7 @@ export const WEIGHT_COLORS = {
   normal: {
     bg: 'var(--color-neutral)',
     fg: 'var(--color-neutral-content)',
+    bgClass: 'bg-neutral',
   },
 };
 

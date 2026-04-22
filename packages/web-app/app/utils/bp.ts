@@ -43,25 +43,31 @@ export const BP_COLORS = {
   'hypertension-crisis': {
     bg: 'var(--color-error)',
     fg: 'var(--color-error-content)',
+    bgClass: 'bg-error',
   },
   'hypertension-2': {
     bg: 'var(--color-error)',
     fg: 'var(--color-error-content)',
+    bgClass: 'bg-error',
   },
   'hypertension-1': {
     bg: 'var(--color-warning)',
     fg: 'var(--color-warning-content)',
+    bgClass: 'bg-warning',
   },
   elevated: {
     bg: 'var(--color-warning)',
     fg: 'var(--color-warning-content)',
+    bgClass: 'bg-warning',
   },
   low: {
     bg: 'var(--color-info)',
     fg: 'var(--color-info-content)',
+    bgClass: 'bg-info',
   },
   normal: {
     bg: 'var(--color-success)',
     fg: 'var(--color-success-content)',
+    bgClass: 'bg-success',
   },
 };
