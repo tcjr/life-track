@@ -39,7 +39,8 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
   @tracked includeBps = true;
   @tracked includeGlucoses = true;
   @tracked includeWeights = true;
-  @tracked startDate = asYYYYMMDD(new Date(Date.now() - 14 * DAY_IN_MS));
+  // Show one week by default
+  @tracked startDate = asYYYYMMDD(new Date(Date.now() - 7 * DAY_IN_MS));
   @tracked endDate = asYYYYMMDD(new Date(Date.now()));
 
   constructor(
@@ -199,13 +200,13 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
   @cached
   get filteredKindsByDay() {
     console.log('COMPUTING filteredKindsByDay()');
-    const dayMap = new Map<string, (BpKind | GlucoseKind | WeightKind)[]>();
+    const dayMap: Record<string, (BpKind | GlucoseKind | WeightKind)[]> = {};
     for (const mwk of this.filteredKinds) {
       const date = asYYYYMMDD(mwk.measurement.timestamp);
-      if (!dayMap.has(date)) {
-        dayMap.set(date, []);
+      if (!dayMap[date]) {
+        dayMap[date] = [];
       }
-      dayMap.get(date)?.push(mwk);
+      dayMap[date].push(mwk);
     }
 
     return dayMap;

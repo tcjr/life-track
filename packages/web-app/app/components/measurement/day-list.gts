@@ -8,7 +8,7 @@ import { asDow, asMonthDay, toStartOfLocalDay } from '#app/utils/dates.ts';
 
 interface DayListSignature {
   Args: {
-    days: Map<string, (BpKind | GlucoseKind | WeightKind)[]>;
+    days: Record<string, (BpKind | GlucoseKind | WeightKind)[]>;
   };
 }
 
