@@ -77,4 +77,9 @@ describe('Unit | Utility | dates', () => {
     const date = new Date(isoStr);
     expect(asLocalDate(isoStr)).toBe(asLocalDate(date));
   });
+
+  test('utility functions throw on invalid date string', () => {
+    expect(() => asLocal('invalid')).toThrow();
+    expect(() => asYYYYMMDD('invalid')).toThrow();
+  });
 });

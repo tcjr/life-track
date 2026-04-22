@@ -1,3 +1,5 @@
+const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 const dtf = new Intl.DateTimeFormat('en-US', {
   weekday: 'short',
   year: 'numeric',
@@ -19,18 +21,32 @@ const ttf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
-const asLocal = (date: Date | string) => {
-  date = parseDate(date);
+const parseDate = (d: Date | string): Date => {
+  const date =
+    typeof d === 'string'
+      ? ISO_DATE_REGEX.test(d)
+        ? toStartOfLocalDay(d)
+        : new Date(d)
+      : d;
+
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date: ' + d);
+  }
+  return date;
+};
+
+const asLocal = (input: Date | string) => {
+  const date = parseDate(input);
   return dtf.format(date);
 };
 
-const asLocalTime = (date: Date | string) => {
-  date = parseDate(date);
+const asLocalTime = (input: Date | string) => {
+  const date = parseDate(input);
   return ttf.format(date);
 };
 
-const asLocalDate = (date: Date | string) => {
-  date = parseDate(date);
+const asLocalDate = (input: Date | string) => {
+  const date = parseDate(input);
   return df.format(date);
 };
 
@@ -48,16 +64,6 @@ const toStartOfLocalDay = (dateStr: string) => {
     throw new Error(`Invalid date string: ${dateStr}`);
   }
   return new Date(year, month - 1, day, 0, 0, 0, 0);
-};
-
-const parseDate = (d: Date | string) => {
-  if (typeof d === 'string') {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
-      return toStartOfLocalDay(d);
-    }
-    return new Date(d);
-  }
-  return d;
 };
 
 const toEndOfLocalDay = (dateStr: string) => {
