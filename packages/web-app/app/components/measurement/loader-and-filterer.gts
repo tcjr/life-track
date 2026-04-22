@@ -25,13 +25,13 @@ import { task } from 'ember-concurrency';
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 export interface MeasurementLoaderAndFiltererSignature {
-  Args: {};
+  Args: object;
   Blocks: {
     default: [
       filteredKindsByDay: Map<string, (BpKind | GlucoseKind | WeightKind)[]>,
     ];
   };
-  Element: null;
+  Element: HTMLDivElement;
 }
 
 export default class MeasurementLoaderAndFilterer extends Component<MeasurementLoaderAndFiltererSignature> {
@@ -47,7 +47,7 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     args: MeasurementLoaderAndFiltererSignature['Args']
   ) {
     super(owner, args);
-    this.loadData.perform();
+    void this.loadData.perform();
   }
 
   get uid() {
@@ -213,12 +213,6 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
 
   <template>
     <div ...attributes>
-      <div>
-        <button
-          class="btn"
-          {{on "click" this.loadData.perform}}
-        >(refresh)</button>
-      </div>
 
       <div data-docs="FILTERS">
         <form {{on "change" this.updatedOptions}}>

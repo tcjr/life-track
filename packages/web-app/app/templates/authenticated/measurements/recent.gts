@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import '@event-calendar/core/index.css';
 import { pageTitle } from 'ember-page-title';
 import LoaderAndFilterer from '#app/components/measurement/loader-and-filterer.gts';
 
