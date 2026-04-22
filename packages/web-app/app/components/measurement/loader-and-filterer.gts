@@ -20,6 +20,7 @@ import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import { collections } from '#app/models/collections.ts';
 import type FirebaseService from '#app/services/firebase.ts';
 import type Owner from '@ember/owner';
+import { task } from 'ember-concurrency';
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -46,7 +47,7 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     args: MeasurementLoaderAndFiltererSignature['Args']
   ) {
     super(owner, args);
-    this.loadData();
+    this.loadData.perform();
   }
 
   get uid() {
@@ -59,8 +60,8 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     weights: [] as WeightMeasurement[],
   });
 
-  loadData = async () => {
-    console.log('load data');
+  loadData = task({ restartable: true }, async () => {
+    console.groupCollapsed('loadData...');
 
     const start = toStartOfLocalDay(this.startDate);
     const end = toEndOfLocalDay(this.endDate);
@@ -104,6 +105,17 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     this.#measurements.glucoses = glucoses;
     this.#measurements.bps = bps;
     this.#measurements.weights = weights;
+    console.groupEnd();
+  });
+
+  updateFilter = (
+    key: 'includeBps' | 'includeGlucoses' | 'includeWeights',
+    value: boolean
+  ) => {
+    // Only set the value if it has changed
+    if (this[key] !== value) {
+      this[key] = value;
+    }
   };
 
   /**
@@ -116,12 +128,20 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
 
     const formData = new FormData(evt.currentTarget as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    this.includeBps = data.withBps === 'on';
-    this.includeGlucoses = data.withGlucoses === 'on';
-    this.includeWeights = data.withWeights === 'on';
+    this.updateFilter('includeBps', data.withBps === 'on');
+    this.updateFilter('includeGlucoses', data.withGlucoses === 'on');
+    this.updateFilter('includeWeights', data.withWeights === 'on');
 
-    this.startDate = (data.startDate as string) ?? '';
-    this.endDate = (data.endDate as string) ?? '';
+    if (
+      this.startDate !== (data.startDate as string) ||
+      this.endDate !== (data.endDate as string)
+    ) {
+      this.startDate = (data.startDate as string) ?? '';
+      this.endDate = (data.endDate as string) ?? '';
+      console.log('DATES HAVE CHANGED');
+      void this.loadData.perform();
+    }
+
     console.log('dates:', this.startDate, this.endDate);
   };
 
@@ -194,7 +214,10 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
   <template>
     <div ...attributes>
       <div>
-        <button class="btn" {{on "click" this.loadData}}>(refresh)</button>
+        <button
+          class="btn"
+          {{on "click" this.loadData.perform}}
+        >(refresh)</button>
       </div>
 
       <div data-docs="FILTERS">
