@@ -8,6 +8,7 @@ import BloodDrop from '#app/icons/blood-drop.svg?component';
 import WeightScale from '#app/icons/weight-scale.svg?component';
 import DayList from './day-list.gts';
 import {
+  asMonthDay,
   asYYYYMMDD,
   toEndOfLocalDay,
   toStartOfLocalDay,
@@ -21,6 +22,7 @@ import { collections } from '#app/models/collections.ts';
 import type FirebaseService from '#app/services/firebase.ts';
 import type Owner from '@ember/owner';
 import { task } from 'ember-concurrency';
+import { pageTitle } from 'ember-page-title';
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -62,21 +64,19 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
   });
 
   loadData = task({ restartable: true }, async () => {
-    console.groupCollapsed('loadData...');
+    console.groupCollapsed('[loader-and-filterer] loadData...');
 
     const start = toStartOfLocalDay(this.startDate);
     const end = toEndOfLocalDay(this.endDate);
 
     const queryPieces = {
-      limit: 100, // dev safeguard, DELETE THIS
+      limit: 900, // safeguard to prevent big queries
       where: [
         ['timestamp', '>=', start] as ['timestamp', '>=', Date],
         ['timestamp', '<=', end] as ['timestamp', '<=', Date],
       ],
       orderBy: [['timestamp', 'asc'] as ['timestamp', 'asc']],
     };
-
-    console.log('MAKING QUERIES WITH', queryPieces);
 
     const glucosesPromise = collections['app-users'](
       this.uid
@@ -100,9 +100,18 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
       bpsPromise,
       weightsPromise,
     ]);
-    console.log(`Loaded ${glucoses.length} glucoses: `, glucoses);
-    console.log(`Loaded ${weights.length} weights: `, weights);
-    console.log(`Loaded ${bps.length} bps: `, bps);
+
+    console.log(
+      `Loaded ${glucoses.length} glucoses, ${weights.length} weights, ${bps.length} bps`
+    );
+    if (
+      glucoses.length === 900 ||
+      weights.length === 900 ||
+      bps.length === 900
+    ) {
+      console.warn(`Max records returned, check logic`);
+    }
+
     this.#measurements.glucoses = glucoses;
     this.#measurements.bps = bps;
     this.#measurements.weights = weights;
@@ -123,8 +132,6 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
    * Action called for every change in the form (check/uncheck).
    */
   updatedOptions = (evt: Event) => {
-    console.log('Form changes');
-
     evt.preventDefault();
 
     const formData = new FormData(evt.currentTarget as HTMLFormElement);
@@ -139,11 +146,8 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     ) {
       this.startDate = (data.startDate as string) ?? '';
       this.endDate = (data.endDate as string) ?? '';
-      console.log('DATES HAVE CHANGED');
       void this.loadData.perform();
     }
-
-    console.log('dates:', this.startDate, this.endDate);
   };
 
   /**
@@ -153,7 +157,6 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
    */
   @cached
   get allKinds() {
-    console.log('COMPUTING allKinds()');
     const ms = this.#measurements;
     const all = [
       ...ms.bps.map((m) => ({ kind: 'bp', measurement: m }) as BpKind),
@@ -178,7 +181,6 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
    */
   @cached
   get filteredKinds() {
-    console.log('COMPUTING filteredKinds()');
     const kinds = this.allKinds;
     // Here, we want to only include the kinds where the checkbox is checked
     return kinds.filter((k) => {
@@ -199,7 +201,6 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
    */
   @cached
   get filteredKindsByDay() {
-    console.log('COMPUTING filteredKindsByDay()');
     const dayMap: Record<string, (BpKind | GlucoseKind | WeightKind)[]> = {};
     for (const mwk of this.filteredKinds) {
       const date = asYYYYMMDD(mwk.measurement.timestamp);
@@ -213,6 +214,8 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
   }
 
   <template>
+    {{pageTitle (asMonthDay this.startDate) " - " (asMonthDay this.endDate)}}
+
     <div ...attributes>
 
       <div data-docs="FILTERS">
