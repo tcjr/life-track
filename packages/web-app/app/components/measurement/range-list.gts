@@ -14,6 +14,27 @@ import Weight from '#app/components/measurement/weight.gts';
 import { eq } from 'ember-truth-helpers';
 import { asYYYYMMDD } from '#app/utils/dates.ts';
 import DateParts from '../date-parts.gts';
+import type { BpKind, GlucoseKind, WeightKind } from './types';
+
+/*
+
+TODO:
+Update this to accept the already filtered data that looks like filteredKindsByDay.
+It should only display the data, not do any of the filtering, etc.
+
+Create a new provider component that does the loading and filtering and yields
+the data. It will only show the filters NOT the data.
+
+<MeasurementLoaderAndFilterer as |filteredKindsByDay|>
+  <MeasurementRangeList @measurements={{filteredKindsByDay}} />
+</MeasurementLoaderAndFilterer>
+
+Doing it this way will let me play around with the display independent from the
+filtering and loading.
+
+The above names are placeholders, obviously.
+
+*/
 
 interface MeasurementRangeListSignature {
   Args: {
@@ -25,20 +46,20 @@ interface MeasurementRangeListSignature {
   };
 }
 
-interface BpKind {
-  kind: 'bp';
-  measurement: BpMeasurement;
-}
+// interface BpKind {
+//   kind: 'bp';
+//   measurement: BpMeasurement;
+// }
 
-interface GlucoseKind {
-  kind: 'glucose';
-  measurement: GlucoseMeasurement;
-}
+// interface GlucoseKind {
+//   kind: 'glucose';
+//   measurement: GlucoseMeasurement;
+// }
 
-interface WeightKind {
-  kind: 'weight';
-  measurement: WeightMeasurement;
-}
+// interface WeightKind {
+//   kind: 'weight';
+//   measurement: WeightMeasurement;
+// }
 
 export default class MeasurementRangeList extends Component<MeasurementRangeListSignature> {
   @tracked includeBps = true;
