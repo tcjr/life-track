@@ -7,7 +7,11 @@ import BloodPressure from '#app/icons/blood-pressure.svg?component';
 import BloodDrop from '#app/icons/blood-drop.svg?component';
 import WeightScale from '#app/icons/weight-scale.svg?component';
 import DayList from './day-list.gts';
-import { asYYYYMMDD } from '#app/utils/dates.ts';
+import {
+  asYYYYMMDD,
+  toEndOfLocalDay,
+  toStartOfLocalDay,
+} from '#app/utils/dates.ts';
 import { service } from '@ember/service';
 import { trackedObject } from '@ember/reactive/collections';
 import type { BpMeasurement } from '#app/models/measurements/bp.ts';
@@ -16,6 +20,8 @@ import type { WeightMeasurement } from '#app/models/measurements/weight.ts';
 import { collections } from '#app/models/collections.ts';
 import type FirebaseService from '#app/services/firebase.ts';
 import type Owner from '@ember/owner';
+
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
 export interface MeasurementLoaderAndFiltererSignature {
   Args: {};
@@ -32,6 +38,8 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
   @tracked includeBps = true;
   @tracked includeGlucoses = true;
   @tracked includeWeights = true;
+  @tracked startDate = asYYYYMMDD(new Date(Date.now() - 14 * DAY_IN_MS));
+  @tracked endDate = asYYYYMMDD(new Date(Date.now()));
 
   constructor(
     owner: Owner,
@@ -53,10 +61,9 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
 
   loadData = async () => {
     console.log('load data');
-    const DAY_IN_MS = 24 * 60 * 60 * 1000;
-    const now = Date.now();
-    const start = new Date(now - 60 * DAY_IN_MS);
-    const end = new Date(now);
+
+    const start = toStartOfLocalDay(this.startDate);
+    const end = toEndOfLocalDay(this.endDate);
 
     const queryPieces = {
       limit: 100, // dev safeguard, DELETE THIS
@@ -66,6 +73,8 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
       ],
       orderBy: [['timestamp', 'asc'] as ['timestamp', 'asc']],
     };
+
+    console.log('MAKING QUERIES WITH', queryPieces);
 
     const glucosesPromise = collections['app-users'](
       this.uid
@@ -110,6 +119,10 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     this.includeBps = data.withBps === 'on';
     this.includeGlucoses = data.withGlucoses === 'on';
     this.includeWeights = data.withWeights === 'on';
+
+    this.startDate = (data.startDate as string) ?? '';
+    this.endDate = (data.endDate as string) ?? '';
+    console.log('dates:', this.startDate, this.endDate);
   };
 
   /**
@@ -186,49 +199,83 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
 
       <div data-docs="FILTERS">
         <form {{on "change" this.updatedOptions}}>
-          <fieldset
-            class="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4"
-          >
-            <legend class="fieldset-legend">Display Measurements</legend>
-            <label class="label">
-              <input
-                type="checkbox"
-                checked={{this.includeBps}}
-                class="checkbox"
-                name="withBps"
-              />
-              <span>
-                <BloodPressure class="inline-block h-5" />
-                BP
-                <Heart class="inline-block h-5" />
-                HR
-              </span>
-            </label>
-            <label class="label">
-              <input
-                type="checkbox"
-                checked={{this.includeGlucoses}}
-                class="checkbox"
-                name="withGlucoses"
-              />
-              <span>
-                <BloodDrop class="inline-block h-5" />
-                Glucose
-              </span>
-            </label>
-            <label class="label">
-              <input
-                type="checkbox"
-                checked={{this.includeWeights}}
-                class="checkbox"
-                name="withWeights"
-              />
-              <span>
-                <WeightScale class="inline-block h-5" />
-                Weight
-              </span>
-            </label>
-          </fieldset>
+          <div class="flex flex-col md:flex-row gap-2">
+            <fieldset
+              class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4"
+            >
+              <legend class="fieldset-legend">Display Measurements</legend>
+              <label class="label">
+                <input
+                  type="checkbox"
+                  checked={{this.includeBps}}
+                  class="checkbox"
+                  name="withBps"
+                />
+                <span>
+                  <BloodPressure class="inline-block h-5" />
+                  BP
+                  <Heart class="inline-block h-5" />
+                  HR
+                </span>
+              </label>
+              <label class="label">
+                <input
+                  type="checkbox"
+                  checked={{this.includeGlucoses}}
+                  class="checkbox"
+                  name="withGlucoses"
+                />
+                <span>
+                  <BloodDrop class="inline-block h-5" />
+                  Glucose
+                </span>
+              </label>
+              <label class="label">
+                <input
+                  type="checkbox"
+                  checked={{this.includeWeights}}
+                  class="checkbox"
+                  name="withWeights"
+                />
+                <span>
+                  <WeightScale class="inline-block h-5" />
+                  Weight
+                </span>
+              </label>
+            </fieldset>
+
+            <fieldset
+              class="fieldset bg-base-100 border-base-300 rounded-box w-full border p-4"
+            >
+              <legend class="fieldset-legend">Date Range</legend>
+              <div class="form-control">
+                <label class="label" for="start-date">
+                  <span class="label-text">Start Date</span>
+                </label>
+                <input
+                  id="start-date"
+                  name="startDate"
+                  type="date"
+                  class="input input-bordered w-full"
+                  value={{this.startDate}}
+                  required
+                />
+              </div>
+              <div class="form-control">
+                <label class="label" for="end-date">
+                  <span class="label-text">End Date</span>
+                </label>
+                <input
+                  id="end-date"
+                  name="endDate"
+                  type="date"
+                  class="input input-bordered w-full"
+                  value={{this.endDate}}
+                  required
+                />
+              </div>
+            </fieldset>
+          </div>
         </form>
 
       </div>

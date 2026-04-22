@@ -19,6 +19,15 @@ const ttf = new Intl.DateTimeFormat('en-US', {
   minute: 'numeric',
 });
 
+const dowf = new Intl.DateTimeFormat('en-US', {
+  weekday: 'long',
+});
+
+const mdf = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+});
+
 const asLocal = (date: Date) => {
   return dtf.format(date);
 };
@@ -29,6 +38,14 @@ const asLocalTime = (date: Date) => {
 
 const asLocalDate = (date: Date) => {
   return df.format(date);
+};
+
+const asDow = (date: Date) => {
+  return dowf.format(date);
+};
+
+const asMonthDay = (date: Date) => {
+  return mdf.format(date);
 };
 
 const asYYYYMMDD = (timestamp: Date) => {
@@ -68,6 +85,8 @@ export {
   asLocalDate,
   asYYYYMMDD,
   asISO,
+  asDow,
+  asMonthDay,
   toStartOfLocalDay,
   toEndOfLocalDay,
 };

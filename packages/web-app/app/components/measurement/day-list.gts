@@ -3,8 +3,8 @@ import Glucose from '#app/components/measurement/glucose.gts';
 import Bp from '#app/components/measurement/bp.gts';
 import Weight from '#app/components/measurement/weight.gts';
 import { eq } from 'ember-truth-helpers';
-import DateParts from '#app/components/date-parts.gts';
 import type { BpKind, GlucoseKind, WeightKind } from './types';
+import { asDow, asMonthDay, toStartOfLocalDay } from '#app/utils/dates.ts';
 
 interface DayListSignature {
   Args: {
@@ -19,15 +19,8 @@ export default class DayList extends Component<DayListSignature> {
         <div
           class="flex flex-row justify-between border border-base-300 rounded px-3 py-2 mt-2 bg-primary text-primary-content"
         >
-          <DateParts @date={{day}} as |d|>
-            <div>
-              {{d.weekday}}
-            </div>
-            <div>
-              {{d.month}}
-              {{d.day}}
-            </div>
-          </DateParts>
+          <div>{{asDow (toStartOfLocalDay day)}}</div>
+          <div>{{asMonthDay (toStartOfLocalDay day)}}</div>
         </div>
 
         <div class="flex flex-col gap-2">
