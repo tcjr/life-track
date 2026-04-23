@@ -4,8 +4,8 @@ import { pageTitle } from 'ember-page-title';
 import type FirebaseService from '#services/firebase';
 import type RouterService from '@ember/routing/router-service';
 import { action } from '@ember/object';
-import { on } from '@ember/modifier';
 import FlashMessages from '#app/components/flash-messages.gts';
+import Navbar from '#app/components/navbar.gts';
 
 interface ApplicationComponentSignature {
   Args: {
@@ -44,40 +44,7 @@ export default class Application extends Component<ApplicationComponentSignature
     <FlashMessages />
 
     <header>
-      <div class="navbar bg-base-100 shadow-sm">
-        <div class="flex-1">
-          {{#if this.firebase.signedInUser}}
-            <a href="/" class="btn btn-ghost text-xl">home</a>
-          {{/if}}
-        </div>
-        <div class="flex-none">
-          <ul class="menu menu-horizontal px-1">
-            {{#if this.firebase.signedInUser}}
-              {{!-- <li>
-                <span>{{this.firebase.signedInUser.email}}</span>
-              </li> --}}
-              <li>
-                <a href="/settings">Settings</a>
-              </li>
-              <li>
-                <a href="/measurements">Measurements</a>
-              </li>
-              <li>
-                <a href="/reports">Reports</a>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  class="btn btn-ghost btn-sm"
-                  {{on "click" this.logout}}
-                >
-                  Logout
-                </button>
-              </li>
-            {{/if}}
-          </ul>
-        </div>
-      </div>
+      <Navbar @onLogout={{this.logout}} @user={{this.firebase.signedInUser}} />
     </header>
 
     <main class="container mx-auto px-4 min-h-screen">
