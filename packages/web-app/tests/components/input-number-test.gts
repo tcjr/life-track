@@ -135,4 +135,34 @@ describe('Component | InputNumber', () => {
 
     expect(handleChange).toHaveBeenCalledWith(101, 'changeme');
   });
+
+  renderingTest('manual input works', async () => {
+    const { input, plus } = await setup();
+
+    fireEvent.input(input, { target: { value: '15' } });
+    expect(input.value).toBe('15');
+
+    await mouseClick(plus);
+    expect(input.value).toBe('16');
+  });
+
+  renderingTest('it calls onChange on manual input', async () => {
+    const value = 100;
+    const handleChange = vi.fn();
+
+    await render(
+      <template>
+        <InputNumber
+          @name="changeme"
+          @value={{value}}
+          @onChange={{handleChange}}
+        />
+      </template>
+    );
+
+    const input: HTMLInputElement = await screen.findByRole('textbox');
+    fireEvent.input(input, { target: { value: '105' } });
+
+    expect(handleChange).toHaveBeenCalledWith(105, 'changeme');
+  });
 });
