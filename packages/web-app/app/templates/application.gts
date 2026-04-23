@@ -4,6 +4,7 @@ import { pageTitle } from 'ember-page-title';
 import type FirebaseService from '#services/firebase';
 import type RouterService from '@ember/routing/router-service';
 import { action } from '@ember/object';
+import type { FlashMessagesService } from 'ember-cli-flash';
 import FlashMessages from '#app/components/flash-messages.gts';
 import Navbar from '#app/components/navbar.gts';
 
@@ -16,6 +17,7 @@ interface ApplicationComponentSignature {
 export default class Application extends Component<ApplicationComponentSignature> {
   @service declare firebase: FirebaseService;
   @service declare router: RouterService;
+  @service declare flashMessages: FlashMessagesService;
 
   @action
   async logout() {
@@ -23,7 +25,7 @@ export default class Application extends Component<ApplicationComponentSignature
       await this.firebase.logout();
     } catch (error) {
       console.error('Logout failed:', error);
-      // TODO: Display a user-friendly error message
+      this.flashMessages.danger('Logout failed. Please try again.');
     } finally {
       // Redirect to login page after logout
       this.router.transitionTo('login');
