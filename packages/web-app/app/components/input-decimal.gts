@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 import cancelAll from 'ember-concurrency/helpers/cancel-all';
 import { fn } from '@ember/helper';
+import { action } from '@ember/object';
 
 interface InputDecimalSignature {
   Args: {
@@ -20,6 +21,16 @@ const displayValue = (value: number) => {
 
 export default class InputDecimal extends Component<InputDecimalSignature> {
   @tracked currentValue: number = parseFloat(this.args.value.toString());
+
+  @action
+  handleInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const parsed = parseFloat(target.value);
+    if (!isNaN(parsed)) {
+      this.currentValue = parsed;
+      this.args.onChange?.(this.currentValue, this.args.name);
+    }
+  }
 
   // This task lets us hold down the +/- buttons to continue to increment/decrement the value.
   // It will decrease the delay the longer it's held down, causing the rate of change to speed up.
@@ -53,6 +64,7 @@ export default class InputDecimal extends Component<InputDecimalSignature> {
         name={{@name}}
         id={{@name}}
         value={{displayValue this.currentValue}}
+        {{on "input" this.handleInput}}
         step="0.1"
         class="w-full bg-primary text-primary-content font-bold text-center rounded-full"
         inputmode="decimal"
