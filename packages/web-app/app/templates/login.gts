@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import FirebaseService from '#services/firebase';
 import { on } from '@ember/modifier';
 import type RouterService from '@ember/routing/router-service';
+import type { FlashMessagesService } from 'ember-cli-flash';
 
 export interface LoginSignature {
   Element: HTMLDivElement;
@@ -13,6 +14,7 @@ export interface LoginSignature {
 export default class Login extends Component<LoginSignature> {
   @service declare firebase: FirebaseService;
   @service declare router: RouterService;
+  @service declare flashMessages: FlashMessagesService;
 
   @action
   async login(evt: SubmitEvent) {
@@ -23,7 +25,7 @@ export default class Login extends Component<LoginSignature> {
       this.router.transitionTo('authenticated.index');
     } catch (error) {
       console.error('Login failed:', error);
-      // TODO: Display a user-friendly error message
+      this.flashMessages.danger('Login failed. Please try again.');
     }
   }
 
