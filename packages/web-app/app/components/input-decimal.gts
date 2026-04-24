@@ -43,7 +43,7 @@ export default class InputDecimal extends Component<InputDecimalSignature> {
   });
 
   <template>
-    {{! template-lint-disable no-pointer-down-event-binding }}
+    {{! eslint-disable ember/template-no-pointer-down-event-binding }}
     <div
       class="flex gap-2 items-center justify-between text-5xl"
       ...attributes

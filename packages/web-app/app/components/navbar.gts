@@ -33,7 +33,7 @@ export default class Navbar extends Component<NavbarSignature> {
           popovertarget="popover-main-nav"
           class="btn btn-ghost btn-circle"
           type="button"
-          {{! template-lint-disable no-inline-styles }}
+          {{! eslint-disable-next-line ember/template-no-inline-styles }}
           style="anchor-name:--anchor-main-nav"
         >
           <Menu />
@@ -42,7 +42,7 @@ export default class Navbar extends Component<NavbarSignature> {
           class="dropdown menu menu-lg bg-base-100 rounded-box z-1 mt-3 p-2 shadow w-60"
           popover
           id="popover-main-nav"
-          {{! template-lint-disable no-inline-styles }}
+          {{! eslint-disable-next-line ember/template-no-inline-styles }}
           style="position-anchor:--anchor-main-nav"
         >
           {{#if @user}}

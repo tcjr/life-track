@@ -19,6 +19,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import ts from 'typescript-eslint';
 
 import ember from 'eslint-plugin-ember/recommended';
+import templateConfig from 'eslint-plugin-ember/configs/template-lint-migration';
 
 import eslintConfigPrettier from 'eslint-config-prettier';
 import vitest from '@vitest/eslint-plugin';
@@ -83,6 +84,8 @@ export default defineConfig([
       'ember/no-empty-glimmer-component-classes': 'off',
     },
   },
+  // Template-only rules (from ember-template-lint)
+  ...templateConfig,
   {
     files: ['tests/**/*-test.{js,gjs,ts,gts}'],
     plugins: { vitest },
