@@ -23,6 +23,9 @@ import type FirebaseService from '#app/services/firebase.ts';
 import type Owner from '@ember/owner';
 import { task } from 'ember-concurrency';
 import { pageTitle } from 'ember-page-title';
+import BpChart from '#app/components/bp-chart.gts';
+import GlucoseChart from '#app/components/glucose-chart.gts';
+import WeightChart from '#app/components/weight-chart.gts';
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -213,6 +216,27 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
     return dayMap;
   }
 
+  @cached
+  get filteredBps() {
+    return this.filteredKinds
+      .filter((k) => k.kind === 'bp')
+      .map((k) => k.measurement);
+  }
+
+  @cached
+  get filteredGlucoses() {
+    return this.filteredKinds
+      .filter((k) => k.kind === 'glucose')
+      .map((k) => k.measurement);
+  }
+
+  @cached
+  get filteredWeights() {
+    return this.filteredKinds
+      .filter((k) => k.kind === 'weight')
+      .map((k) => k.measurement);
+  }
+
   <template>
     {{pageTitle (asMonthDay this.startDate) " - " (asMonthDay this.endDate)}}
 
@@ -299,6 +323,17 @@ export default class MeasurementLoaderAndFilterer extends Component<MeasurementL
           </div>
         </form>
 
+      </div>
+      <div data-docs="CHARTS">
+        {{#if this.includeBps}}
+          <BpChart @bps={{this.filteredBps}} />
+        {{/if}}
+        {{#if this.includeGlucoses}}
+          <GlucoseChart @glucoses={{this.filteredGlucoses}} />
+        {{/if}}
+        {{#if this.includeWeights}}
+          <WeightChart @weights={{this.filteredWeights}} />
+        {{/if}}
       </div>
       <div data-docs="LIST">
         <DayList @days={{this.filteredKindsByDay}} />
