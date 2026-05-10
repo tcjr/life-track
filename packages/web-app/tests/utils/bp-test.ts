@@ -4,25 +4,47 @@ import { getBpQuality } from '#app/utils/bp.ts';
 describe('Unit | Utility | bp', () => {
   describe('getBpQuality', () => {
     test('identifies hypertension-crisis', () => {
-      expect(getBpQuality({ systolic: 181, diastolic: 80 })).toBe('hypertension-crisis');
-      expect(getBpQuality({ systolic: 120, diastolic: 121 })).toBe('hypertension-crisis');
-      expect(getBpQuality({ systolic: 181, diastolic: 121 })).toBe('hypertension-crisis');
+      expect(getBpQuality({ systolic: 181, diastolic: 80 })).toBe(
+        'hypertension-crisis'
+      );
+      expect(getBpQuality({ systolic: 120, diastolic: 121 })).toBe(
+        'hypertension-crisis'
+      );
+      expect(getBpQuality({ systolic: 181, diastolic: 121 })).toBe(
+        'hypertension-crisis'
+      );
     });
 
     test('identifies hypertension-2', () => {
-      expect(getBpQuality({ systolic: 140, diastolic: 80 })).toBe('hypertension-2');
-      expect(getBpQuality({ systolic: 120, diastolic: 90 })).toBe('hypertension-2');
-      expect(getBpQuality({ systolic: 140, diastolic: 90 })).toBe('hypertension-2');
+      expect(getBpQuality({ systolic: 140, diastolic: 80 })).toBe(
+        'hypertension-2'
+      );
+      expect(getBpQuality({ systolic: 120, diastolic: 90 })).toBe(
+        'hypertension-2'
+      );
+      expect(getBpQuality({ systolic: 140, diastolic: 90 })).toBe(
+        'hypertension-2'
+      );
       // Just below crisis
-      expect(getBpQuality({ systolic: 180, diastolic: 120 })).toBe('hypertension-2');
+      expect(getBpQuality({ systolic: 180, diastolic: 120 })).toBe(
+        'hypertension-2'
+      );
     });
 
     test('identifies hypertension-1', () => {
-      expect(getBpQuality({ systolic: 130, diastolic: 70 })).toBe('hypertension-1');
-      expect(getBpQuality({ systolic: 110, diastolic: 80 })).toBe('hypertension-1');
-      expect(getBpQuality({ systolic: 130, diastolic: 80 })).toBe('hypertension-1');
+      expect(getBpQuality({ systolic: 130, diastolic: 70 })).toBe(
+        'hypertension-1'
+      );
+      expect(getBpQuality({ systolic: 110, diastolic: 80 })).toBe(
+        'hypertension-1'
+      );
+      expect(getBpQuality({ systolic: 130, diastolic: 80 })).toBe(
+        'hypertension-1'
+      );
       // Just below hypertension-2
-      expect(getBpQuality({ systolic: 139, diastolic: 89 })).toBe('hypertension-1');
+      expect(getBpQuality({ systolic: 139, diastolic: 89 })).toBe(
+        'hypertension-1'
+      );
     });
 
     test('identifies elevated', () => {
