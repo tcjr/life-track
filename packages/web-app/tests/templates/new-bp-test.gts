@@ -1,8 +1,9 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, vi } from 'vitest';
 import { renderingTest } from 'ember-vitest';
-import { find, render } from '@ember/test-helpers';
+import { click, fillIn, find, render } from '@ember/test-helpers';
 import App from '#app/app.ts';
 import NewBp from '#app/templates/authenticated/new-bp.gts';
+import { collections } from '#app/models/collections.ts';
 
 describe('Template | authenticated/new-bp', () => {
   renderingTest.override('app', { scope: 'test' }, () => App);
@@ -20,7 +21,50 @@ describe('Template | authenticated/new-bp', () => {
     expect(diaInput.value).toBe('80');
   });
 
-  // TODO: Test to write:
-  // - on "save" click, it calls add() on correct collection with correct data
-  //   and shows "BP added" flash message
+  renderingTest('it saves new BP measurement', async ({ context }) => {
+    const firebaseService = context.owner.lookup('service:firebase');
+    const uidSpy = vi.spyOn(firebaseService, 'uid', 'get').mockReturnValue('test-uid');
+
+    const flashMessages = context.owner.lookup('service:flash-messages');
+    const flashSpy = vi.spyOn(flashMessages, 'success');
+
+    const router = context.owner.lookup('service:router');
+    const transitionToSpy = vi
+      .spyOn(router, 'transitionTo')
+      .mockImplementation(() => Promise.resolve() as any);
+
+    const addSpy = vi.fn().mockResolvedValue({});
+    const collectionsSpy = vi.spyOn(collections, 'app-users').mockReturnValue({
+      bps: {
+        add: addSpy,
+      },
+    } as any);
+
+    try {
+      await render(<template><NewBp /></template>);
+
+      await fillIn('#systolic', '130');
+      await fillIn('#diastolic', '90');
+      await fillIn('#heartRate', '85');
+
+      await click('button[type="submit"]');
+
+      expect(collectionsSpy).toHaveBeenCalledWith('test-uid');
+      expect(addSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          systolic: 130,
+          diastolic: 90,
+          heartRate: 85,
+          timestamp: expect.any(Date),
+        })
+      );
+      expect(flashSpy).toHaveBeenCalledWith('BP added');
+      expect(transitionToSpy).toHaveBeenCalledWith('authenticated.new-measurement');
+    } finally {
+      uidSpy.mockRestore();
+      flashSpy.mockRestore();
+      transitionToSpy.mockRestore();
+      collectionsSpy.mockRestore();
+    }
+  });
 });
