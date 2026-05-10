@@ -23,7 +23,9 @@ describe('Template | authenticated/new-bp', () => {
 
   renderingTest('it saves new BP measurement', async ({ context }) => {
     const firebaseService = context.owner.lookup('service:firebase');
-    const uidSpy = vi.spyOn(firebaseService, 'uid', 'get').mockReturnValue('test-uid');
+    const uidSpy = vi
+      .spyOn(firebaseService, 'uid', 'get')
+      .mockReturnValue('test-uid');
 
     const flashMessages = context.owner.lookup('service:flash-messages');
     const flashSpy = vi.spyOn(flashMessages, 'success');
@@ -59,7 +61,9 @@ describe('Template | authenticated/new-bp', () => {
         })
       );
       expect(flashSpy).toHaveBeenCalledWith('BP added');
-      expect(transitionToSpy).toHaveBeenCalledWith('authenticated.new-measurement');
+      expect(transitionToSpy).toHaveBeenCalledWith(
+        'authenticated.new-measurement'
+      );
     } finally {
       uidSpy.mockRestore();
       flashSpy.mockRestore();
