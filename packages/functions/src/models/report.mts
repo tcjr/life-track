@@ -5,7 +5,7 @@ import { GlucoseSchema } from './glucose.mjs';
 import { WeightSchema } from './weight.mjs';
 
 export const ReportSchema = z.object({
-  title: z.string(),
+  title: z.string().min(1).max(100),
   userId: z.string(),
   startDate: z.date(),
   endDate: z.date(),

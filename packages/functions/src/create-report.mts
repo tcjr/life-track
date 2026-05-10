@@ -1,6 +1,14 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import setup from './utils/setup.mjs';
+import { z } from 'zod';
+
+const CreateReportSchema = z.object({
+  title: z.string().min(1).max(100),
+  startDate: z.string().datetime(),
+  endDate: z.string().datetime(),
+  measurements: z.array(z.enum(['bps', 'glucoses', 'weights'])),
+});
 
 interface CreateReportData {
   title: string;
@@ -21,7 +29,16 @@ export const createReport = onCall<CreateReportData>(
     }
 
     const { collections } = await setup();
-    const { title, startDate, endDate, measurements } = request.data;
+
+    const validationResult = CreateReportSchema.safeParse(request.data);
+    if (!validationResult.success) {
+      throw new HttpsError(
+        'invalid-argument',
+        `Invalid report data: ${validationResult.error.message}`,
+      );
+    }
+
+    const { title, startDate, endDate, measurements } = validationResult.data;
     const uid = request.auth.uid;
 
     const start = new Date(startDate);
