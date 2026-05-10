@@ -4,6 +4,8 @@ import { find, render, click, fillIn } from '@ember/test-helpers';
 import App from '#app/app.ts';
 import NewBp from '#app/templates/authenticated/new-bp.gts';
 import { collections } from '#app/models/collections.ts';
+import type { FlashMessagesService } from 'ember-cli-flash';
+import type RouterService from '@ember/routing/router-service';
 
 describe('Template | authenticated/new-bp', () => {
   renderingTest.override('app', { scope: 'test' }, () => App);
@@ -27,25 +29,27 @@ describe('Template | authenticated/new-bp', () => {
       const firebase = context.owner.lookup('service:firebase');
       vi.spyOn(firebase, 'uid', 'get').mockReturnValue('test-uid');
 
-      const flashMessages = context.owner.lookup('service:flash-messages');
+      const flashMessages = context.owner.lookup(
+        'service:flash-messages'
+      ) as FlashMessagesService;
       const successSpy = vi.spyOn(flashMessages, 'success');
 
       const router = context.owner.lookup('service:router');
-      const transitionSpy = vi.spyOn(router, 'transitionTo');
-
+      const transitionToSpy = vi
+        .spyOn(router, 'transitionTo')
+        .mockImplementation((() =>
+          Promise.resolve()) as unknown as RouterService['transitionTo']);
       const addSpy = vi.fn().mockResolvedValue({});
-      // @ts-expect-error - we are mocking the collection
-      vi.spyOn(collections, 'app-users').mockReturnValue({
-        bps: {
-          add: addSpy,
-        },
-      });
 
-      await render(
-        <template>
-          <NewBp />
-        </template>
-      );
+      const collectionsSpy = vi
+        .spyOn(collections, 'app-users')
+        .mockReturnValue({
+          bps: {
+            add: addSpy,
+          },
+        } as unknown as ReturnType<(typeof collections)['app-users']>);
+
+      await render(<template><NewBp /></template>);
 
       await fillIn('#systolic', '130');
       await fillIn('#diastolic', '85');
@@ -53,18 +57,19 @@ describe('Template | authenticated/new-bp', () => {
 
       await click('button[type="submit"]');
 
-      expect(collections['app-users']).toHaveBeenCalledWith('test-uid');
+      expect(collectionsSpy).toHaveBeenCalledWith('test-uid');
       expect(addSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           systolic: 130,
           diastolic: 85,
           heartRate: 75,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           timestamp: expect.any(Date),
         })
       );
 
       expect(successSpy).toHaveBeenCalledWith('BP added');
-      expect(transitionSpy).toHaveBeenCalledWith(
+      expect(transitionToSpy).toHaveBeenCalledWith(
         'authenticated.new-measurement'
       );
     }
