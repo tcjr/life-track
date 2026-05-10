@@ -4,6 +4,8 @@ import { click, fillIn, find, render } from '@ember/test-helpers';
 import App from '#app/app.ts';
 import NewBp from '#app/templates/authenticated/new-bp.gts';
 import { collections } from '#app/models/collections.ts';
+import type { FlashMessagesService } from 'ember-cli-flash';
+import type RouterService from '@ember/routing/router-service';
 
 describe('Template | authenticated/new-bp', () => {
   renderingTest.override('app', { scope: 'test' }, () => App);
@@ -27,20 +29,23 @@ describe('Template | authenticated/new-bp', () => {
       .spyOn(firebaseService, 'uid', 'get')
       .mockReturnValue('test-uid');
 
-    const flashMessages = context.owner.lookup('service:flash-messages');
+    const flashMessages = context.owner.lookup(
+      'service:flash-messages'
+    ) as FlashMessagesService;
     const flashSpy = vi.spyOn(flashMessages, 'success');
 
     const router = context.owner.lookup('service:router');
     const transitionToSpy = vi
       .spyOn(router, 'transitionTo')
-      .mockImplementation(() => Promise.resolve() as any);
+      .mockImplementation((() =>
+        Promise.resolve()) as unknown as RouterService['transitionTo']);
 
     const addSpy = vi.fn().mockResolvedValue({});
     const collectionsSpy = vi.spyOn(collections, 'app-users').mockReturnValue({
       bps: {
         add: addSpy,
       },
-    } as any);
+    } as unknown as ReturnType<(typeof collections)['app-users']>);
 
     try {
       await render(<template><NewBp /></template>);
@@ -57,6 +62,7 @@ describe('Template | authenticated/new-bp', () => {
           systolic: 130,
           diastolic: 90,
           heartRate: 85,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           timestamp: expect.any(Date),
         })
       );
