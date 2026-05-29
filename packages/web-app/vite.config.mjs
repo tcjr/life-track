@@ -17,6 +17,9 @@ export default defineConfig({
   ],
 
   test: {
+    optimizeDeps: {
+      include: ['ember-source/@ember/template-compiler/index.js'],
+    },
     include: ['tests/**/*-test.{gjs,gts}', 'tests/**/*-test.{js,ts}'],
     maxConcurrency: 1,
     browser: {
